@@ -1,0 +1,12 @@
+# ESP32-C3 Configuration
+CONFIG_IDF_TARGET="esp32c3"
+
+# SPI Configuration
+CONFIG_SPI_MASTER_IN_IRAM=y
+CONFIG_SPI_MASTER_ISR_IN_IRAM=y
+
+# Memory Configuration
+CONFIG_SPIRAM_SUPPORT=n
+
+# FreeRTOS Configuration
+CONFIG_FREERTOS_HZ=1000

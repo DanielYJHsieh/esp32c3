@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "C:/Users/danielyjhsieh/esp/v5.5.1"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../../esp32-c3/02_GDEQ0426T82_ESP32C3"
+		},
+		{
+			"path": "../../epaper_display/epaper_display/wifi_led_control"
+		},
+		{
+			"path": "../../epaper_display/epaper_display/wifi_spi_display"
+		}
+	],
+	"settings": {}
+}
