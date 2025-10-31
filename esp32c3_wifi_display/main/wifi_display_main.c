@@ -61,11 +61,11 @@
 #define DISPLAY_WIDTH           800
 #define DISPLAY_HEIGHT          480
 
-// 分區定義（800x480 分成 3 個水平條帶）
-#define TILE_COUNT              3
-#define TILE_WIDTH              800
-#define TILE_HEIGHT             160     // 480 / 3 = 160
-#define TILE_BUFFER_SIZE        (TILE_WIDTH * TILE_HEIGHT / 8)  // 16000 bytes
+// 分區定義（800x480 分成 3 個水平條帶）- 已廢棄，改用完整畫面模式
+// #define TILE_COUNT              3
+// #define TILE_WIDTH              800
+// #define TILE_HEIGHT             160     // 480 / 3 = 160
+// #define TILE_BUFFER_SIZE        (TILE_WIDTH * TILE_HEIGHT / 8)  // 16000 bytes
 
 // WiFi 事件標誌
 #define WIFI_CONNECTED_BIT  BIT0
@@ -94,16 +94,17 @@ typedef struct {
     uint32_t length;     // Payload 長度
 } __attribute__((packed)) packet_header_t;
 
-static uint8_t *tile_buffer = NULL;  // 分區緩衝區 (16KB)
+// 完整畫面模式：不再需要 tile_buffer 和 image_buffer
+// static uint8_t *tile_buffer = NULL;  // 已移除（改用完整畫面模式）
 static uint32_t packet_buffer_pos = 0;
-static uint8_t packet_buffer[20480];  // 20KB 封包接收緩衝
-static uint16_t last_tile_seq_id = 0;  // 追蹤 tile 序列
+static uint8_t packet_buffer[50000];  // 50KB 封包接收緩衝（足夠容納 48KB 完整畫面 + 標頭）
+// static uint16_t last_tile_seq_id = 0;  // 已移除（tile 模式廢棄）
 
-// 圖片接收緩衝區（舊版協議使用）
-#define MAX_IMAGE_SIZE  (20 * 1024)  // 20KB（協議模式主要使用 tile_buffer）
-static uint8_t *image_buffer = NULL;
-static size_t image_buffer_pos = 0;
-static bool receiving_image = false;
+// 舊版緩衝區已移除
+// #define MAX_IMAGE_SIZE  (20 * 1024)
+// static uint8_t *image_buffer = NULL;
+// static size_t image_buffer_pos = 0;
+// static bool receiving_image = false;
 
 // ============================================
 // WiFi 事件處理
@@ -342,8 +343,10 @@ static void send_nak(uint16_t seq_id)
 }
 
 /**
- * 處理分區更新（TILE）
+ * 處理分區更新（已廢棄，改用完整畫面模式）
+ * 保留程式碼僅供參考
  */
+#if 0  // Tile mode deprecated, use full-screen mode instead
 static void handle_tile_update(const uint8_t *payload, uint32_t length, uint16_t seq_id)
 {
     if (length < 1) {
@@ -379,13 +382,13 @@ static void handle_tile_update(const uint8_t *payload, uint32_t length, uint16_t
     // 記憶體監控
     ESP_LOGI(TAG, "Free heap: %lu bytes", esp_get_free_heap_size());
     
-    // 如果是第一個 tile 且序號不連續（與上一組差距 > 3），表示新的圖片開始，先清除螢幕移除殘影
-    if (tile_index == 0 && (last_tile_seq_id == 0 || seq_id > last_tile_seq_id + 3)) {
-        ESP_LOGI(TAG, "New image sequence detected (last_seq: %d, current_seq: %d), clearing screen...", 
-                 last_tile_seq_id, seq_id);
+    // 如果是第一個 tile，表示新的圖片開始，先清除螢幕移除殘影
+    // 修復：移除序號檢查，每次收到第一個 tile 都清除，確保沒有殘影
+    if (tile_index == 0) {
+        ESP_LOGI(TAG, "First tile detected (seq_id=%d), clearing screen to remove ghosting...", seq_id);
         memset(epaper.framebuffer, 0xFF, EPAPER_BUFFER_SIZE);  // 全白
         epaper_display_full(&epaper);
-        vTaskDelay(pdMS_TO_TICKS(500));  // 等待清除完成
+        vTaskDelay(pdMS_TO_TICKS(800));  // 等待清除完成（增加延遲確保清除徹底）
     }
     last_tile_seq_id = seq_id;
     
@@ -421,6 +424,7 @@ static void handle_tile_update(const uint8_t *payload, uint32_t length, uint16_t
     esp_websocket_client_send_text(ws_client, "READY", 5, portMAX_DELAY);
     ESP_LOGI(TAG, "========================================");
 }
+#endif  // 0
 
 /**
  * 處理完整螢幕更新
@@ -428,8 +432,8 @@ static void handle_tile_update(const uint8_t *payload, uint32_t length, uint16_t
 static void handle_full_update(const uint8_t *payload, uint32_t length, uint16_t seq_id)
 {
     ESP_LOGI(TAG, "========================================");
-    ESP_LOGI(TAG, "Full Screen Update");
-    ESP_LOGI(TAG, "Free heap: %lu bytes", esp_get_free_heap_size());
+    ESP_LOGI(TAG, "Full Screen Update (800x480)");
+    ESP_LOGI(TAG, "Free heap before: %lu bytes", esp_get_free_heap_size());
     
     // 完整螢幕大小：800x480 = 48000 bytes
     const uint32_t FULL_SCREEN_SIZE = (DISPLAY_WIDTH * DISPLAY_HEIGHT) / 8;
@@ -443,21 +447,23 @@ static void handle_full_update(const uint8_t *payload, uint32_t length, uint16_t
     
     uint32_t start_time = xTaskGetTickCount();
     
-    ESP_LOGI(TAG, "Clearing previous screen content...");
+    ESP_LOGI(TAG, "Step 1: Clearing screen to remove ghosting...");
     // 清除 E-Paper 顯示器（移除殘影）
     memset(epaper.framebuffer, 0xFF, EPAPER_BUFFER_SIZE);  // 全白
     epaper_display_full(&epaper);
-    vTaskDelay(pdMS_TO_TICKS(1000));  // 等待清除完成
+    vTaskDelay(pdMS_TO_TICKS(800));  // 等待清除完成
     
-    ESP_LOGI(TAG, "Writing new image data...");
-    // 複製完整圖片數據到 framebuffer
+    ESP_LOGI(TAG, "Step 2: Writing new image data (48000 bytes)...");
+    // 直接複製完整圖片數據到 framebuffer（無需額外緩衝區）
     memcpy(epaper.framebuffer, payload, FULL_SCREEN_SIZE);
     
+    ESP_LOGI(TAG, "Step 3: Displaying full screen...");
     // 執行完整更新
     epaper_display_full(&epaper);
     
     uint32_t elapsed = pdTICKS_TO_MS(xTaskGetTickCount() - start_time);
-    ESP_LOGI(TAG, "Full screen displayed in %lu ms", elapsed);
+    ESP_LOGI(TAG, "Full screen update completed in %lu ms", elapsed);
+    ESP_LOGI(TAG, "Free heap after: %lu bytes", esp_get_free_heap_size());
     
     // 發送 ACK
     send_ack(seq_id);
@@ -468,7 +474,7 @@ static void handle_full_update(const uint8_t *payload, uint32_t length, uint16_t
 }
 
 /**
- * 處理完整封包
+ * 處理完整封包（優化為完整畫面模式）
  */
 static void handle_packet(const uint8_t *data, uint32_t length)
 {
@@ -495,12 +501,16 @@ static void handle_packet(const uint8_t *data, uint32_t length)
     const uint8_t *payload = data + PROTO_HEADER_SIZE;
     
     switch (header.type) {
-        case PROTO_TYPE_TILE:
-            handle_tile_update(payload, header.length, header.seq_id);
+        case PROTO_TYPE_FULL:
+            // 優先處理完整畫面更新（推薦模式，無殘影）
+            handle_full_update(payload, header.length, header.seq_id);
             break;
             
-        case PROTO_TYPE_FULL:
-            handle_full_update(payload, header.length, header.seq_id);
+        case PROTO_TYPE_TILE:
+            // Tile 模式已廢棄，建議使用 PROTO_TYPE_FULL
+            ESP_LOGW(TAG, "Tile mode is deprecated, please use PROTO_TYPE_FULL for full screen update");
+            ESP_LOGW(TAG, "Sending NAK to request full screen mode");
+            send_nak(header.seq_id);
             break;
             
         case PROTO_TYPE_CMD:
@@ -569,8 +579,7 @@ static void websocket_event_handler(void *handler_args, esp_event_base_t base,
             
         case WEBSOCKET_EVENT_DISCONNECTED:
             ESP_LOGW(TAG, "WebSocket disconnected");
-            receiving_image = false;
-            image_buffer_pos = 0;
+            // 完整畫面模式：只需重置封包緩衝
             packet_buffer_pos = 0;
             break;
             
@@ -583,20 +592,9 @@ static void websocket_event_handler(void *handler_args, esp_event_base_t base,
                 msg[len] = '\0';
                 ESP_LOGI(TAG, "Text message: %s", msg);
                 
-                // 檢查舊版圖片傳輸協議（保留向後相容）
-                if (strncmp((char*)data->data_ptr, "IMAGE_START:", 12) == 0) {
-                    receiving_image = true;
-                    image_buffer_pos = 0;
-                    ESP_LOGI(TAG, "Starting old-style image reception");
-                } else if (strncmp((char*)data->data_ptr, "IMAGE_END", 9) == 0) {
-                    receiving_image = false;
-                    ESP_LOGI(TAG, "Image reception complete: %d bytes", image_buffer_pos);
-                    
-                    if (image_buffer_pos > 0) {
-                        process_image_data(image_buffer, image_buffer_pos);
-                    }
-                    image_buffer_pos = 0;
-                }
+                // 完整畫面模式：移除舊版圖片傳輸協議（IMAGE_START/IMAGE_END）
+                // 所有圖片都透過協議封包 (PROTO_TYPE_FULL) 傳輸
+                
             } else if (data->op_code == 0x02) {
                 // 二進制數據 - WebSocket 可能分片傳送
                 // 累積所有片段直到 fin=1
@@ -613,15 +611,10 @@ static void websocket_event_handler(void *handler_args, esp_event_base_t base,
                         // 檢查是否為協議封包
                         if (packet_buffer_pos >= PROTO_HEADER_SIZE && 
                             packet_buffer[0] == PROTO_HEADER) {
-                            // 處理協議封包
+                            // 處理協議封包（完整畫面模式）
                             handle_packet(packet_buffer, packet_buffer_pos);
-                        } else if (receiving_image) {
-                            // 舊版圖片數據模式
-                            if (image_buffer_pos + packet_buffer_pos < MAX_IMAGE_SIZE) {
-                                memcpy(image_buffer + image_buffer_pos, packet_buffer, packet_buffer_pos);
-                                image_buffer_pos += packet_buffer_pos;
-                                ESP_LOGI(TAG, "Image data accumulated: %d bytes", image_buffer_pos);
-                            }
+                        } else {
+                            ESP_LOGW(TAG, "Unknown binary data format (not protocol packet)");
                         }
                         
                         // 重置緩衝區準備下一個封包
@@ -711,26 +704,16 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
 
-    // 分配圖片緩衝區（舊版協議使用）
-    image_buffer = (uint8_t *)malloc(MAX_IMAGE_SIZE);
-    if (image_buffer == NULL) {
-        ESP_LOGE(TAG, "Failed to allocate image buffer");
-        return;
-    }
-    ESP_LOGI(TAG, "Image buffer allocated: %d bytes", MAX_IMAGE_SIZE);
-    
-    // 分配 Tile 緩衝區（協議模式使用）
-    tile_buffer = (uint8_t *)malloc(TILE_BUFFER_SIZE);
-    if (tile_buffer == NULL) {
-        ESP_LOGE(TAG, "Failed to allocate tile buffer");
-        free(image_buffer);
-        return;
-    }
-    ESP_LOGI(TAG, "Tile buffer allocated: %d bytes", TILE_BUFFER_SIZE);
+    // 完整畫面模式：不需要額外緩衝區，直接使用 framebuffer (48KB)
+    // 舊版 image_buffer (20KB) 和 tile_buffer (16KB) 已移除，節省 36KB 記憶體
     
     // 初始化協議變數
     packet_buffer_pos = 0;
     memset(packet_buffer, 0, sizeof(packet_buffer));
+    
+    ESP_LOGI(TAG, "=== Full Screen Mode (Optimized) ===");
+    ESP_LOGI(TAG, "Packet buffer: %d bytes (for receiving)", sizeof(packet_buffer));
+    ESP_LOGI(TAG, "Framebuffer: allocated by epaper driver (48000 bytes)");
     
     // 記憶體狀態報告
     ESP_LOGI(TAG, "=== Memory Status ===");
@@ -743,7 +726,7 @@ void app_main(void)
     ret = epaper_init(&epaper);
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to initialize E-Paper display!");
-        free(image_buffer);
+        // 完整畫面模式：無需釋放額外緩衝區
         return;
     }
     ESP_LOGI(TAG, "E-Paper display initialized successfully!");
