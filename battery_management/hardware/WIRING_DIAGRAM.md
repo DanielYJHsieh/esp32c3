@@ -100,14 +100,14 @@ graph LR
                 
                 subgraph TP4054_TOP["TP4054 上排"]
                     direction LR
-                    TP_PROG["Pin 2<br/>PROG"]
+                    TP_NC["Pin 5<br/>NC"]
                     TP_VCC["Pin 4<br/>VCC"]
                 end
                 
                 subgraph TP4054_BOTTOM["TP4054 下排"]
                     direction LR
                     TP_GND["Pin 1<br/>GND"]
-                    TP_NC["Pin 5<br/>NC"]
+                    TP_PROG["Pin 2<br/>PROG"]
                     TP_BAT["Pin 3<br/>BAT"]
                 end
                 
@@ -124,7 +124,7 @@ graph LR
             end
             
             subgraph RIGHT_CIRCUIT["右側：切換電路"]
-                direction LR
+                direction TB
                 
                 subgraph AO3401_LEFT["AO3401 左側"]
                     direction TB
@@ -133,11 +133,17 @@ graph LR
                 end
                 
                 subgraph AO3401_RIGHT["右側"]
+                    direction TB
+                    SPACE1[" "]
                     AO_DRAIN["Pin 3<br/>Drain"]
+                    SPACE2[" "]
                 end
                 
                 AO3401_LEFT -.->|SOT-23| AO3401_RIGHT
                 AO_SOURCE -.->|MOS內部| AO_DRAIN
+                
+                style SPACE1 fill:none,stroke:none
+                style SPACE2 fill:none,stroke:none
             end
             
             R_GATE["100kΩ<br/>Gate下拉"]
