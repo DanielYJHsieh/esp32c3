@@ -55,8 +55,10 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
                     │      └─────┬───────┘       │
                     │            │               │
                     │       ┌────▼────┐          │
-                    │       │  電池+   │          │
-                    │       │  500mAh  │          │
+                    │       │🔋 電池   │          │
+                    │       │ (+) 正極 │          │
+                    │       │ 500mAh   │          │
+                    │       │ (-) 負極 │          │
                     │       └────┬────┘          │
                     │            │               │
                     │       電量監測              │
@@ -125,10 +127,12 @@ graph TB
             R_GATE --> GND2["GND"]
         end
         
-        BATTERY["🔋 鋰電池<br/>3.7V 500mAh"]
+        BATTERY["🔋 鋰電池<br/>3.7V 500mAh<br/>(+) 正極 / (-) 負極"]
+        BAT_NEG["電池 (-) 負極"]
         
-        TP_BAT --> BATTERY
-        BATTERY --> AO_SOURCE
+        TP_BAT -->|充電| BATTERY
+        BATTERY -->|供電| AO_SOURCE
+        BAT_NEG --> PCB_GND
     end
     
     %% 連接兩個區域
@@ -169,9 +173,11 @@ graph LR
     
     USB["USB 5V<br/>(透過 W5)"] -->|供電| PIN4
     PIN4 -->|充電輸出| PIN3
-    PIN3 --> BAT["電池正極 (+)<br/>3.7V 500mAh"]
+    PIN3 --> BAT["🔋 電池<br/>3.7V 500mAh<br/>(+) 正極"]
+    BAT -.->|負極| BAT_NEG["電池 (-) 負極"]
+    BAT_NEG -.-> GND1["GND"]
     PIN2 --> R_PROG["10kΩ 電阻"]
-    R_PROG --> GND1["GND"]
+    R_PROG --> GND1
     PIN1 --> GND1
     
     style TP4054 fill:#e1f5ff
@@ -216,7 +222,8 @@ graph TB
         DRAIN["Pin 3: Drain (D)"]
     end
     
-    BAT_P["電池正極 (+)<br/>3.7V"] --> SOURCE
+    BAT_P["🔋 電池<br/>(+) 正極 3.7V"] --> SOURCE
+    BAT_N["電池<br/>(-) 負極"] -.-> GND2
     SOURCE -.->|P-MOS 導通時| DRAIN
     DRAIN --> VSYS
     
@@ -259,7 +266,8 @@ AO3401 (SOT-23) 接線:
 
 ```mermaid
 graph TB
-    BAT_P2["電池正極 (+)<br/>3.0V - 4.2V"] --> R1["R1: 100kΩ<br/>分壓上"]
+    BAT_P2["🔋 電池<br/>(+) 正極<br/>3.0V - 4.2V"] --> R1["R1: 100kΩ<br/>分壓上"]
+    BAT_N2["電池<br/>(-) 負極"] -.-> GND3
     R1 --> MID["中點電壓<br/>1.5V - 2.1V"]
     MID --> GPIO0["GPIO0<br/>(ADC1_CH0)"]
     MID --> R2["R2: 100kΩ<br/>分壓下"]
@@ -327,8 +335,9 @@ ADC 讀值 → ADC 電壓 (0-2.5V) → 電池電壓 × 2 (1:1 分壓)
 
 ```mermaid
 graph LR
-    BAT_P3["電池正極 (+)"] --> CAP["10μF 電容<br/>(0805)"]  
-    CAP --> GND4["GND"]
+    BAT_P3["🔋 電池<br/>(+) 正極"] --> CAP["10μF 電容<br/>(0805)"]
+    BAT_N3["電池<br/>(-) 負極"] -.-> GND4["GND"]
+    CAP --> GND4
     
     NOTE["作用:<br/>✓ 增加電源穩定度<br/>✓ 抑制瞬態電流<br/>✓ 減少電壓波動"]
     

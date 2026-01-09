@@ -105,9 +105,11 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
                     │      └─────┬───────┘       │
                     │            │               │
                     │       ┌────▼────┐          │
-                    │       │  電池+   │          │
+                    │       │🔋 電池   │          │
+                    │       │ (+) 正極 │          │
                     │       │  3.7V   │          │
                     │       │ 500mAh  │          │
+                    │       │ (-) 負極 │          │
                     │       └────┬────┘          │
                     │            │               │
                     │       電量監測              │
@@ -180,10 +182,12 @@ graph TB
             R_GATE --> GND2["GND"]
         end
         
-        BATTERY["🔋 鋰電池<br/>3.7V 500mAh"]
+        BATTERY["🔋 鋰電池<br/>3.7V 500mAh<br/>(+) 正極 / (-) 負極"]
+        BAT_NEG["電池 (-) 負極"]
         
-        TP_BAT --> BATTERY
-        BATTERY --> AO_SOURCE
+        TP_BAT -->|充電| BATTERY
+        BATTERY -->|供電| AO_SOURCE
+        BAT_NEG --> GND1
     end
     
     %% 連接兩個區域
