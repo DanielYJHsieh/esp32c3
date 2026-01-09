@@ -286,15 +286,18 @@ graph LR
         PIN5["Pin 5: NC"]
     end
     
-    USB["USB 5V<br/>(透過 W5)"] -->|供電| PIN4
-    PIN4 -->|充電輸出| PIN3
-    PIN3 --> BAT["🔋 電池<br/>3.7V 500mAh<br/>(+) 正極"]
-    BAT -.->|負極| BAT_NEG["電池 (-) 負極"]
-    BAT_NEG -.-> GND1["GND"]
-    PIN2 --> R_PROG["10kΩ 電阻"]
-    R_PROG --> GND1
-    PIN1 --> GND1
+    USB["USB 5V<br/>(透過 W5)"] ==>|"🔧 焦接"| PIN4
+    PIN4 -.->|IC內部| PIN3
+    PIN3 ==>|"🔧 焦接"| BAT["🔋 電池<br/>3.7V 500mAh<br/>(+) 正極"]
+    BAT -.->|電池內部| BAT_NEG["電池 (-) 負極"]
+    BAT_NEG ==>|"🔧 GND線"| GND1["GND"]
+    PIN2 ==>|"🔧 焦接"| R_PROG["10kΩ 電阻"]
+    R_PROG ==>|"🔧 焦接"| GND1
+    PIN1 ==>|"🔧 GND線"| GND1
     
+    LEGEND["📊 圖例：<br/>🔧 ===> 需焦接<br/>-.-> IC/電池內部"]:::legendStyle
+    
+    classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
     style TP4054 fill:#e1f5ff
     style BAT fill:#fff9c4
     style USB fill:#ffebee
@@ -337,19 +340,22 @@ graph TB
         DRAIN["Pin 3: Drain (D)"]
     end
     
-    BAT_P["🔋 電池<br/>(+) 正極 3.7V"] --> SOURCE
-    BAT_N["電池<br/>(-) 負極"] -.-> GND2
-    SOURCE -.->|P-MOS 導通時| DRAIN
-    DRAIN --> VSYS
+    BAT_P["🔋 電池<br/>(+) 正極 3.7V"] ==>|"🔧 焦接"| SOURCE
+    BAT_N["電池<br/>(-) 負極"] ==>|"🔧 GND線"| GND2
+    SOURCE -.->|MOS內部| DRAIN
+    DRAIN ==>|"🔧 VSYS線"| VSYS
     
     USB5V --> TP4054_VCC
-    TP4054_VCC -->|控制信號| GATE
-    GATE --> R_GATE["100kΩ 下拉"]
-    R_GATE --> GND2["GND"]
+    TP4054_VCC ==>|"🔧 控制線"| GATE
+    GATE ==>|"🔧 焦接"| R_GATE["100kΩ 下拉"]
+    R_GATE ==>|"🔧 GND線"| GND2["GND"]
     
     USB_ON["USB 插入:"] -.-> STATE1["Gate = 4.4V<br/>Vgs = +0.7V<br/>P-MOS 關閉"]
     USB_OFF["USB 拔除:"] -.-> STATE2["Gate = 0V<br/>Vgs = -3.7V<br/>P-MOS 導通"]
     
+    LEGEND["📊 圖例：<br/>🔧 ===> 需焦接<br/>-.-> MOS內部通道"]:::legendStyle
+    
+    classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
     style AO3401 fill:#e8f5e9
     style POWER_PATH fill:#fff3e0
     style STATE1 fill:#ffcdd2
@@ -381,12 +387,12 @@ AO3401 (SOT-23) 接線:
 
 ```mermaid
 graph TB
-    BAT_P2["🔋 電池<br/>(+) 正極<br/>3.0V - 4.2V"] --> R1["R1: 100kΩ<br/>分壓上"]
-    BAT_N2["電池<br/>(-) 負極"] -.-> GND3
-    R1 --> MID["中點電壓<br/>1.5V - 2.1V"]
-    MID --> GPIO0["GPIO0<br/>(ADC1_CH0)"]
-    MID --> R2["R2: 100kΩ<br/>分壓下"]
-    R2 --> DRAIN
+    BAT_P2["🔋 電池<br/>(+) 正極<br/>3.0V - 4.2V"] ==>|"🔧 焦接"| R1["R1: 100kΩ<br/>分壓上"]
+    BAT_N2["電池<br/>(-) 負極"] ==>|"🔧 GND線"| GND3
+    R1 ==>|"🔧 焦接"| MID["中點電壓<br/>1.5V - 2.1V"]
+    MID ==>|"🔧 ADC線"| GPIO0["GPIO0<br/>(ADC1_CH0)"]
+    MID ==>|"🔧 焦接"| R2["R2: 100kΩ<br/>分壓下"]
+    R2 ==>|"🔧 焦接"| DRAIN
     
     subgraph NMOS["2N7002 N-MOSFET (SOT-23)"]
         GATE2["Pin 1: Gate (G)"]
@@ -394,18 +400,21 @@ graph TB
         DRAIN["Pin 3: Drain (D)"]
     end
     
-    GPIO2["GPIO2<br/>(控制開關)"] --> GATE2
-    GATE2 --> R_GATE2["10kΩ 下拉"]
-    R_GATE2 --> GND3["GND"]
-    SOURCE2 --> GND3
+    GPIO2["GPIO2<br/>(控制開關)"] ==>|"🔧 控制線"| GATE2
+    GATE2 ==>|"🔧 焦接"| R_GATE2["10kΩ 下拉"]
+    R_GATE2 ==>|"🔧 GND線"| GND3["GND"]
+    SOURCE2 ==>|"🔧 GND線"| GND3
     
-    DRAIN -.->|N-MOS 導通時| SOURCE2
+    DRAIN -.->|MOS內部| SOURCE2
     
     subgraph STATES["工作模式"]
         OFF["省電模式:<br/>GPIO2 = LOW<br/>N-MOS 關閉<br/>ADC 斷路<br/>功耗: 0μA"]
         ON["測量模式:<br/>GPIO2 = HIGH<br/>N-MOS 導通<br/>ADC 接地<br/>功耗: 17μA"]
     end
     
+    LEGEND["📊 圖例：<br/>🔧 ===> 需焦接<br/>-.-> MOS內部通道"]:::legendStyle
+    
+    classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
     style NMOS fill:#e1bee7
     style GPIO0 fill:#fff59d
     style GPIO2 fill:#81c784
@@ -450,12 +459,15 @@ ADC 讀值 → ADC 電壓 (0-2.5V) → 電池電壓 × 2 (1:1 分壓)
 
 ```mermaid
 graph LR
-    BAT_P3["🔋 電池<br/>(+) 正極"] --> CAP["10μF 電容<br/>(0805)"]
-    BAT_N3["電池<br/>(-) 負極"] -.-> GND4["GND"]
-    CAP --> GND4
+    BAT_P3["🔋 電池<br/>(+) 正極"] ==>|"🔧 焦接"| CAP["10μF 電容<br/>(0805)"]
+    BAT_N3["電池<br/>(-) 負極"] ==>|"🔧 GND線"| GND4["GND"]
+    CAP ==>|"🔧 GND線"| GND4
     
     NOTE["作用:<br/>✓ 增加電源穩定度<br/>✓ 抑制瞬態電流<br/>✓ 減少電壓波動"]
     
+    LEGEND["📊 圖例：<br/>🔧 ===> 需焦接"]:::legendStyle
+    
+    classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
     style CAP fill:#b3e5fc
     style NOTE fill:#fff9c4
 ```
