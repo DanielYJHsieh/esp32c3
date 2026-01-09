@@ -76,77 +76,196 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
 
 #### Step 1: TP4054 充電 IC
 
+```mermaid
+graph LR
+    subgraph TP4054["TP4054 充電 IC (SOT-23-5)"]
+        PIN1["Pin 1: GND"]
+        PIN2["Pin 2: PROG"]
+        PIN3["Pin 3: BAT"]
+        PIN4["Pin 4: VCC"]
+        PIN5["Pin 5: NC"]
+    end
+    
+    USB["USB 5V<br/>(透過 W5)"] -->|供電| PIN4
+    PIN4 -->|充電輸出| PIN3
+    PIN3 --> BAT["電池正極 (+)<br/>3.7V 1200mAh"]
+    PIN2 --> R_PROG["3kΩ 電阻"]
+    R_PROG --> GND1["GND"]
+    PIN1 --> GND1
+    
+    style TP4054 fill:#e1f5ff
+    style BAT fill:#fff9c4
+    style USB fill:#ffebee
+```
+
+**文字說明**:
 ```
 TP4054 (SOT-23-5) 接線:
 ┌─────────────┐
 │ 1: GND      │ ← GND
 │ 2: PROG     │ ← 3kΩ 接地（設定充電電流 333mA）
 │ 3: BAT      │ ← 電池正極 (+)
-│ 4: VCC      │ ← SuperMini VCC（USB 5V 入口）
+│ 4: VCC      │ ← SuperMini VCC（USB 5V 入口，透過 W5）
 │ 5: NC       │   （不接）
 └─────────────┘
 
 連接:
-1. Pin 4 (VCC) ──> SuperMini VCC
+1. Pin 4 (VCC) ──> USB 5V (透過 W5 保護)
 2. Pin 3 (BAT) ──> 電池 (+)
 3. Pin 2 (PROG) ──> 3kΩ 電阻 ──> GND
 4. Pin 1 (GND) ──> GND
+
+充電電流計算:
+I_CHG = 1000mV / 3kΩ = 333mA
 ```
 
 #### Step 2: P-MOSFET (AO3401) 自動切換
 
+```mermaid
+graph TB
+    subgraph POWER_PATH["電源路徑"]
+        USB5V["USB 5V<br/>(透過 W5)"] 
+        TP4054_VCC["TP4054 VCC<br/>(約 4.4V)"]
+        VSYS["SuperMini VSYS<br/>(系統 5V)"]
+    end
+    
+    subgraph AO3401["AO3401 P-MOSFET (SOT-23)"]
+        GATE["Pin 1: Gate (G)"]
+        SOURCE["Pin 2: Source (S)"]
+        DRAIN["Pin 3: Drain (D)"]
+    end
+    
+    BAT_P["電池正極 (+)<br/>3.7V"] --> SOURCE
+    SOURCE -.->|P-MOS 導通時| DRAIN
+    DRAIN --> VSYS
+    
+    USB5V --> TP4054_VCC
+    TP4054_VCC -->|控制信號| GATE
+    GATE --> R_GATE["100kΩ 下拉"]
+    R_GATE --> GND2["GND"]
+    
+    USB_ON["USB 插入:"] -.-> STATE1["Gate = 4.4V<br/>Vgs = +0.7V<br/>P-MOS 關閉"]
+    USB_OFF["USB 拔除:"] -.-> STATE2["Gate = 0V<br/>Vgs = -3.7V<br/>P-MOS 導通"]
+    
+    style AO3401 fill:#e8f5e9
+    style POWER_PATH fill:#fff3e0
+    style STATE1 fill:#ffcdd2
+    style STATE2 fill:#c8e6c9
+```
+
+**文字說明**:
 ```
 AO3401 (SOT-23) 接線:
 ┌─────────────┐
-│ 1: G (Gate) │ ← SuperMini VCC + 100kΩ 下拉到 GND
+│ 1: G (Gate) │ ← TP4054 VCC (透過 W5，約 4.4V) + 100kΩ 下拉到 GND
 │ 2: S (Source)│ ← 電池正極 (+)
-│ 3: D (Drain)│ ← SuperMini VCC
+│ 3: D (Drain)│ ← SuperMini VSYS
 └─────────────┘
 
 連接:
 1. Source (S) ──> 電池 (+)
-2. Drain (D) ──> SuperMini VCC
-3. Gate (G) ──> SuperMini VCC
+2. Drain (D) ──> SuperMini VSYS (系統主幹線)
+3. Gate (G) ──> TP4054 VCC (透過 W5)
 4. Gate (G) ──> 100kΩ 電阻 ──> GND
 
-原理: USB 插上時 G=5V (P-MOS 關閉)
-     USB 拔掉時 G=0V (P-MOS 導通，電池供電)
+工作原理:
+✅ USB 插入: Gate = 4.4V, Vgs = +0.7V → P-MOS 關閉 (USB 供電)
+✅ USB 拔除: Gate = 0V, Vgs = -3.7V → P-MOS 導通 (電池供電)
+✅ 壓降極低: RDS(on) ≤ 200mΩ，壓降約 0.02V，效率 >99%
 ```
 
 #### Step 3: N-MOSFET (2N7002) 省電 ADC
 
+```mermaid
+graph TB
+    BAT_P2["電池正極 (+)<br/>3.0V - 4.2V"] --> R1["R1: 100kΩ<br/>分壓上"]
+    R1 --> MID["中點電壓<br/>1.5V - 2.1V"]
+    MID --> GPIO0["GPIO0<br/>(ADC1_CH0)"]
+    MID --> R2["R2: 100kΩ<br/>分壓下"]
+    R2 --> DRAIN
+    
+    subgraph NMOS["2N7002 N-MOSFET (SOT-23)"]
+        GATE2["Pin 1: Gate (G)"]
+        SOURCE2["Pin 2: Source (S)"]
+        DRAIN["Pin 3: Drain (D)"]
+    end
+    
+    GPIO2["GPIO2<br/>(控制開關)"] --> GATE2
+    GATE2 --> R_GATE2["10kΩ 下拉"]
+    R_GATE2 --> GND3["GND"]
+    SOURCE2 --> GND3
+    
+    DRAIN -.->|N-MOS 導通時| SOURCE2
+    
+    subgraph STATES["工作模式"]
+        OFF["省電模式:<br/>GPIO2 = LOW<br/>N-MOS 關閉<br/>ADC 斷路<br/>功耗: 0μA"]
+        ON["測量模式:<br/>GPIO2 = HIGH<br/>N-MOS 導通<br/>ADC 接地<br/>功耗: 17μA"]
+    end
+    
+    style NMOS fill:#e1bee7
+    style GPIO0 fill:#fff59d
+    style GPIO2 fill:#81c784
+    style OFF fill:#ffcdd2
+    style ON fill:#c8e6c9
+```
+
+**文字說明**:
 ```
 2N7002 (SOT-23) 接線:
 ┌─────────────┐
 │ 1: G (Gate) │ ← GPIO2 + 10kΩ 下拉到 GND
 │ 2: S (Source)│ ← GND
-│ 3: D (Drain)│ ← 分壓電路下端
+│ 3: D (Drain)│ ← 分壓電路下端 (R2)
 └─────────────┘
 
-分壓電路:
+分壓電路 (1:1 分壓):
 電池 (+) ──┬── 100kΩ (R1) ──┬── GPIO0 (ADC)
            │                │
            │                └── 100kΩ (R2) ──┬── 2N7002 Drain (D)
            │                                 │
            └─────────────────────────────────┘
 
-2N7002 控制:
+控制邏輯:
 Gate (G) ──> GPIO2 ──[10kΩ]──> GND
 Source (S) ──> GND
 
-原理: GPIO2=LOW 時 N-MOS 關閉（ADC 斷路，0μA）
-     GPIO2=HIGH 時 N-MOS 導通（ADC 接地，可測量）
+工作原理:
+⚡ 省電模式: GPIO2 = LOW → N-MOS 關閉 → ADC 斷路 → 0μA
+📊 測量模式: GPIO2 = HIGH → N-MOS 導通 → ADC 接地 → 17μA
+💡 測量步驟:
+   1. GPIO2 拉高 (N-MOS 導通)
+   2. 延遲 10ms 穩定
+   3. 讀取 GPIO0 ADC
+   4. GPIO2 拉低 (N-MOS 關閉，省電)
+
+電壓換算:
+ADC 讀值 → ADC 電壓 (0-2.5V) → 電池電壓 × 2 (1:1 分壓)
 ```
 
 #### Step 4: 穩定電容
 
+```mermaid
+graph LR
+    BAT_P3["電池正極 (+)"] --> CAP["10μF 電容<br/>(0805)"]  
+    CAP --> GND4["GND"]
+    
+    NOTE["作用:<br/>✓ 增加電源穩定度<br/>✓ 抑制瞬態電流<br/>✓ 減少電壓波動"]
+    
+    style CAP fill:#b3e5fc
+    style NOTE fill:#fff9c4
+```
+
+**文字說明**:
 ```
 電池穩定:
 電池 (+) ──┬── 10μF 電容 ──┬── GND
            │              │
            └──────────────┘
 
-作用: 增加電源穩定度，抑制瞬態電流
+作用: 
+✓ 增加電源穩定度
+✓ 抑制瞬態電流
+✓ 減少 ESP32-C3 WiFi 傳輸時的電壓波動
 ```
 
 ---
