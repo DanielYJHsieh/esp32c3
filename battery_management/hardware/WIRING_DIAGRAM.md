@@ -100,56 +100,58 @@ graph LR
                 TP_VCC["TP4054<br/>Pin 4: VCC"]
                 TP_BAT["Pin 3: BAT<br/>充電輸出"]
                 TP_PROG["Pin 2: PROG"]
-                R_PROG["10kΩ"]
                 TP_GND["Pin 1: GND"]
                 TP_NC["Pin 5: NC"]
-                
-                TP_VCC --> TP_BAT
-                TP_PROG --> R_PROG
-                R_PROG --> TP_GND
             end
+            
+            R_PROG["10kΩ<br/>PROG電阻"]
             
             subgraph CENTER_CIRCUIT["中央：電池"]
                 direction TB
                 BAT_POS["🔋 500mAh<br/>(+) 正極"]
                 BAT_NEG["(-) 負極"]
-                BAT_POS -.->|GND| BAT_NEG
+                BAT_POS -.->|電池內部| BAT_NEG
             end
             
             subgraph RIGHT_CIRCUIT["右側：切換電路"]
                 direction TB
                 AO_GATE["AO3401<br/>Pin 1: Gate<br/>控制"]
-                R_GATE["100kΩ"]
                 AO_SOURCE["Pin 2: Source<br/>電池輸入"]
                 AO_DRAIN["Pin 3: Drain<br/>VSYS 輸出"]
-                
-                AO_GATE --> R_GATE
-                AO_SOURCE --> AO_DRAIN
+                AO_SOURCE -.->|MOS內部| AO_DRAIN
             end
             
-            TP_BAT -->|充電| BAT_POS
-            BAT_POS -->|供電| AO_SOURCE
-            TP_VCC -.->|控制信號| AO_GATE
+            R_GATE["100kΩ<br/>Gate下拉"]
+            
+            TP_PROG ==>|"🔧 焦接"| R_PROG
+            R_PROG ==>|"🔧 焦接"| TP_GND
+            TP_BAT ==>|"🔧 充電線"| BAT_POS
+            BAT_POS ==>|"🔧 供電線"| AO_SOURCE
+            AO_GATE ==>|"🔧 焦接"| R_GATE
         end
         
         OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
         GND_MODULE["⏚ GND<br/>共地"]
         
-        INPUT --> TP_VCC
-        AO_DRAIN --> OUTPUT
-        TP_GND -.-> GND_MODULE
-        BAT_NEG -.-> GND_MODULE
-        R_GATE -.-> GND_MODULE
+        INPUT ==>|"🔧 VCC線"| TP_VCC
+        INPUT ==>|"🔧 控制線"| AO_GATE
+        AO_DRAIN ==>|"🔧 VSYS線"| OUTPUT
+        TP_GND ==>|"🔧 GND線"| GND_MODULE
+        BAT_NEG ==>|"🔧 GND線"| GND_MODULE
+        R_GATE ==>|"🔧 GND線"| GND_MODULE
         
         NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電 130mA<br/>✓ 自動供電切換<br/>✓ 壓降僅 0.02V"]:::noteStyle
+        
+        LEGEND["📊 圖例：<br/>🔧 ===> 需要焦接的實體線<br/>-.-> IC/電池內部連接"]:::legendStyle
     end
     
     USB --> W5_OUT
-    W5_OUT ==>|"USB 5V<br/>(4.4V)"| INPUT
-    OUTPUT ==>|"VSYS<br/>3.7V-5V"| VSYS_IN
-    GND_MODULE ==>|"共地"| PCB_GND1
+    W5_OUT ==>|"🔧 USB 5V<br/>(4.4V)"| INPUT
+    OUTPUT ==>|"🔧 VSYS<br/>3.7V-5V"| VSYS_IN
+    GND_MODULE ==>|"🔧 共地"| PCB_GND1
     
     classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
     
     style SUPERMINI fill:#ffebee,stroke:#e53935,stroke-width:3px
     style BATTERY_MODULE fill:#e8f5e9,stroke:#43a047,stroke-width:3px

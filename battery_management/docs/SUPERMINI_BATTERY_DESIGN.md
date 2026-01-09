@@ -155,14 +155,11 @@ graph LR
                 TP_VCC["TP4054<br/>Pin 4: VCC"]
                 TP_BAT["Pin 3: BAT<br/>充電輸出"]
                 TP_PROG["Pin 2: PROG"]
-                R_PROG["10kΩ"]
                 TP_GND["Pin 1: GND"]
                 TP_NC["Pin 5: NC"]
-                
-                TP_VCC -.->|IC內部| TP_BAT
-                TP_PROG ==>|"🔧 焦接"| R_PROG
-                R_PROG ==>|"🔧 焦接"| TP_GND
             end
+            
+            R_PROG["10kΩ<br/>PROG電阻"]
             
             subgraph CENTER_CIRCUIT["中央：電池"]
                 direction TB
@@ -174,23 +171,25 @@ graph LR
             subgraph RIGHT_CIRCUIT["右側：切換電路"]
                 direction TB
                 AO_GATE["AO3401<br/>Pin 1: Gate<br/>控制"]
-                R_GATE["100kΩ"]
                 AO_SOURCE["Pin 2: Source<br/>電池輸入"]
                 AO_DRAIN["Pin 3: Drain<br/>VSYS 輸出"]
-                
-                AO_GATE ==>|"🔧 焦接"| R_GATE
                 AO_SOURCE -.->|MOS內部| AO_DRAIN
             end
             
+            R_GATE["100kΩ<br/>Gate下拉"]
+            
+            TP_PROG ==>|"🔧 焦接"| R_PROG
+            R_PROG ==>|"🔧 焦接"| TP_GND
             TP_BAT ==>|"🔧 充電線"| BAT_POS
             BAT_POS ==>|"🔧 供電線"| AO_SOURCE
-            TP_VCC ==>|"🔧 控制線"| AO_GATE
+            AO_GATE ==>|"🔧 焦接"| R_GATE
         end
         
         OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
         GND_MODULE["⏚ GND<br/>共地"]
         
         INPUT ==>|"🔧 VCC線"| TP_VCC
+        INPUT ==>|"🔧 控制線"| AO_GATE
         AO_DRAIN ==>|"🔧 VSYS線"| OUTPUT
         TP_GND ==>|"🔧 GND線"| GND_MODULE
         BAT_NEG ==>|"🔧 GND線"| GND_MODULE
@@ -198,7 +197,7 @@ graph LR
         
         NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電 130mA<br/>✓ 自動供電切換<br/>✓ 壓降僅 0.02V"]:::noteStyle
         
-        LEGEND["📊 圖例：<br/>🔧 ===> 需要焦接的實體線<br/>---> IC內部信號流向<br/>-.-> 接地/內部連接"]:::legendStyle
+        LEGEND["📊 圖例：<br/>🔧 ===> 需要焦接的實體線<br/>-.-> IC/電池內部連接"]:::legendStyle
     end
     
     USB --> W5_OUT
@@ -237,7 +236,7 @@ graph LR
    - Pin 1 (GND) → GND
 
 2. **AO3401 電源切換**
-   - Pin 1 (Gate) ← TP4054 VCC + 100kΩ 下拉到 GND
+   - Pin 1 (Gate) ← USB 5V 輸入（與 TP4054 VCC 共點）+ 100kΩ 下拉到 GND
    - Pin 2 (Source) ← 電池正極
    - Pin 3 (Drain) → VSYS 輸出
 
