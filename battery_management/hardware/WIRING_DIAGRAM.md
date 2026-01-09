@@ -79,7 +79,7 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
 將 **TP4054 + AO3401 + 電池** 視為一個完整的電池管理模組，對外只有 3 個接口：
 
 ```mermaid
-graph TB
+graph LR
     subgraph SUPERMINI["ESP32-C3 SuperMini 板子"]
         USB["USB Type-C<br/>5V 輸入"]
         W5_OUT["綠點 B<br/>(透過 W5)"] 
@@ -87,73 +87,76 @@ graph TB
         PCB_GND1["板子 GND"]
     end
     
-    subgraph BATTERY_MODULE["🔋 電池管理模組<br/>(TP4054 + AO3401 + 電池)"]
-        direction TB
+    subgraph BATTERY_MODULE["🔋 電池管理模組 (TP4054 + AO3401 + 電池)"]
+        direction LR
         
         INPUT["⚡ 輸入<br/>USB 5V<br/>(透過 W5)"]
-        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
-        GND_MODULE["⏚ GND"]
         
         subgraph INTERNAL["內部電路詳細接線"]
-            direction TB
+            direction LR
             
-            subgraph TP4054_DETAIL["TP4054 (SOT-23-5)"]
-                TP_PIN1["Pin 1: GND"]
-                TP_PIN2["Pin 2: PROG"]
-                TP_PIN3["Pin 3: BAT"]
-                TP_PIN4["Pin 4: VCC"]
-                TP_PIN5["Pin 5: NC"]
+            subgraph LEFT_CIRCUIT["左側：充電電路"]
+                direction TB
+                TP_VCC["TP4054<br/>Pin 4: VCC"]
+                TP_BAT["Pin 3: BAT<br/>充電輸出"]
+                TP_PROG["Pin 2: PROG"]
+                R_PROG["10kΩ"]
+                TP_GND["Pin 1: GND"]
+                TP_NC["Pin 5: NC"]
+                
+                TP_VCC --> TP_BAT
+                TP_PROG --> R_PROG
+                R_PROG --> TP_GND
             end
             
-            R_PROG["10kΩ<br/>PROG 電阻"]
-            
-            subgraph BATTERY_DETAIL["🔋 電池 500mAh"]
-                BAT_POS["(+) 正極"]
+            subgraph CENTER_CIRCUIT["中央：電池"]
+                direction TB
+                BAT_POS["🔋 500mAh<br/>(+) 正極"]
                 BAT_NEG["(-) 負極"]
+                BAT_POS -.->|GND| BAT_NEG
             end
             
-            subgraph AO3401_DETAIL["AO3401 (SOT-23)"]
-                AO_PIN1["Pin 1: Gate"]
-                AO_PIN2["Pin 2: Source"]
-                AO_PIN3["Pin 3: Drain"]
+            subgraph RIGHT_CIRCUIT["右側：切換電路"]
+                direction TB
+                AO_GATE["AO3401<br/>Pin 1: Gate<br/>控制"]
+                R_GATE["100kΩ"]
+                AO_SOURCE["Pin 2: Source<br/>電池輸入"]
+                AO_DRAIN["Pin 3: Drain<br/>VSYS 輸出"]
+                
+                AO_GATE --> R_GATE
+                AO_SOURCE --> AO_DRAIN
             end
             
-            R_GATE["100kΩ<br/>Gate 下拉"]
-            
-            %% TP4054 連接
-            TP_PIN4 -.->|VCC 輸入| INPUT
-            TP_PIN2 --> R_PROG
-            R_PROG --> TP_PIN1
-            TP_PIN3 -->|充電| BAT_POS
-            TP_PIN1 -.-> GND_MODULE
-            
-            %% 電池連接
-            BAT_POS -->|供電| AO_PIN2
-            BAT_NEG -.-> GND_MODULE
-            
-            %% AO3401 連接
-            TP_PIN4 -->|控制信號| AO_PIN1
-            AO_PIN1 --> R_GATE
-            R_GATE -.-> GND_MODULE
-            AO_PIN3 -.->|輸出| OUTPUT
+            TP_BAT -->|充電| BAT_POS
+            BAT_POS -->|供電| AO_SOURCE
+            TP_VCC -.->|控制信號| AO_GATE
         end
         
-        NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電管理 (130mA)<br/>✓ 電池供電切換<br/>✓ 自動路徑選擇<br/>✓ 壓降僅 0.02V"]:::noteStyle
+        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
+        GND_MODULE["⏚ GND<br/>共地"]
+        
+        INPUT --> TP_VCC
+        AO_DRAIN --> OUTPUT
+        TP_GND -.-> GND_MODULE
+        BAT_NEG -.-> GND_MODULE
+        R_GATE -.-> GND_MODULE
+        
+        NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電 130mA<br/>✓ 自動供電切換<br/>✓ 壓降僅 0.02V"]:::noteStyle
     end
     
     USB --> W5_OUT
-    W5_OUT ==>|"USB 5V (4.4V)"| INPUT
-    OUTPUT ==>|"VSYS"| VSYS_IN
-    GND_MODULE ==>|"GND"| PCB_GND1
+    W5_OUT ==>|"USB 5V<br/>(4.4V)"| INPUT
+    OUTPUT ==>|"VSYS<br/>3.7V-5V"| VSYS_IN
+    GND_MODULE ==>|"共地"| PCB_GND1
     
     classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
     
     style SUPERMINI fill:#ffebee,stroke:#e53935,stroke-width:3px
     style BATTERY_MODULE fill:#e8f5e9,stroke:#43a047,stroke-width:3px
     style INTERNAL fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
-    style TP4054_DETAIL fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
-    style BATTERY_DETAIL fill:#fff9c4,stroke:#f9a825,stroke-width:2px
-    style AO3401_DETAIL fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
+    style LEFT_CIRCUIT fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style CENTER_CIRCUIT fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style RIGHT_CIRCUIT fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
     style INPUT fill:#ffccbc,stroke:#ff5722,stroke-width:2px
     style OUTPUT fill:#c5e1a5,stroke:#689f38,stroke-width:2px
     style GND_MODULE fill:#b0bec5,stroke:#455a64,stroke-width:2px
