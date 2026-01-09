@@ -74,6 +74,71 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
                     └─────────────────────────────┘
 ```
 
+### 模組化視圖（電池管理模組）
+
+將 **TP4054 + AO3401 + 電池** 視為一個完整的電池管理模組，對外只有 3 個接口：
+
+```mermaid
+graph LR
+    subgraph SUPERMINI["ESP32-C3 SuperMini 板子"]
+        USB["USB Type-C<br/>5V 輸入"]
+        W5_OUT["綠點 B<br/>(透過 W5)"] 
+        VSYS_IN["藍點 A<br/>VSYS 輸入"]
+        PCB_GND1["板子 GND"]
+    end
+    
+    subgraph BATTERY_MODULE["🔋 電池管理模組<br/>(TP4054 + AO3401 + 電池)"]
+        direction TB
+        
+        INPUT["⚡ 輸入<br/>USB 5V<br/>(透過 W5)"]
+        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
+        GND_MODULE["⏚ GND"]
+        
+        subgraph INTERNAL["內部電路"]
+            TP4054_INT["TP4054<br/>充電管理"]
+            AO3401_INT["AO3401<br/>電源切換"]
+            BATTERY_INT["🔋 電池<br/>500mAh<br/>(+)/(-)"]            
+        end
+        
+        INPUT --> TP4054_INT
+        TP4054_INT --> BATTERY_INT
+        BATTERY_INT --> AO3401_INT
+        AO3401_INT --> OUTPUT
+        BATTERY_INT -.-> GND_MODULE
+        
+        NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電管理<br/>✓ 電池供電切換<br/>✓ 自動路徑選擇"]:::noteStyle
+    end
+    
+    USB --> W5_OUT
+    W5_OUT ==>|"USB 5V"| INPUT
+    OUTPUT ==>|"VSYS"| VSYS_IN
+    GND_MODULE ==>|"GND"| PCB_GND1
+    
+    classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    
+    style SUPERMINI fill:#ffebee,stroke:#e53935,stroke-width:3px
+    style BATTERY_MODULE fill:#e8f5e9,stroke:#43a047,stroke-width:3px
+    style INTERNAL fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style INPUT fill:#ffccbc,stroke:#ff5722,stroke-width:2px
+    style OUTPUT fill:#c5e1a5,stroke:#689f38,stroke-width:2px
+    style GND_MODULE fill:#b0bec5,stroke:#455a64,stroke-width:2px
+```
+
+**模組接口說明**：
+
+| 接口 | 類型 | 連接目標 | 說明 |
+|------|------|----------|------|
+| **USB 5V** | 輸入 | SuperMini 綠點 B (透過 W5) | USB 供電輸入，約 4.4V |
+| **VSYS** | 輸出 | SuperMini 藍點 A | 系統供電輸出，3.7V-5V |
+| **GND** | 接地 | SuperMini GND | 共地 |
+
+**模組內部功能**：
+- ✅ **USB 插入時**：TP4054 充電，VSYS = USB 5V (透過 W5)
+- ✅ **USB 拔除時**：AO3401 導通，VSYS = 電池 3.7V
+- ✅ **完全自動**：無需手動切換，即插即用
+
+---
+
 ### 整體電路架構（TP4054 + AO3401）
 
 ```mermaid
