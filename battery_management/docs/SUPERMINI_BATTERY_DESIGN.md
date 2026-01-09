@@ -129,6 +129,83 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
 
 ### 第一部分：充電與自動路徑切換（Power Path）
 
+```mermaid
+graph TB
+    subgraph ORIGINAL["ESP32-C3 SuperMini 板子（改造區域）"]
+        direction TB
+        USB_PORT["USB Type-C<br/>5V 輸入"]
+        PAD_B["綠點 B 焊盤<br/>USB VBUS"]
+        W5["W5 保護二極體<br/>保留 USB 端"]
+        PAD_A["藍點 A 焊盤<br/>VSYS 系統"]
+        PCB_GND["板子 GND"]
+        
+        USB_PORT --> PAD_B
+        PAD_B --> W5
+        W5 -.->|已斷開| PAD_A
+        
+        NOTE1["⚙️ 改造：W5 只斷開 VSYS 端<br/>保留 USB 端保護 TP4054"]:::noteStyle
+    end
+    
+    subgraph NEW_CIRCUIT["新增電路（TP4054 + AO3401）"]
+        direction TB
+        
+        subgraph TP4054_BLOCK["TP4054 充電管理"]
+            TP4054["TP4054<br/>(SOT-23-5)"]
+            TP_VCC["Pin 4: VCC"]
+            TP_BAT["Pin 3: BAT"]
+            TP_PROG["Pin 2: PROG"]
+            TP_GND["Pin 1: GND"]
+            R_PROG["10kΩ<br/>充電電流 130mA"]
+            
+            TP4054 --- TP_VCC
+            TP4054 --- TP_BAT
+            TP4054 --- TP_PROG
+            TP4054 --- TP_GND
+            TP_PROG --> R_PROG
+            R_PROG --> GND1["GND"]
+            TP_GND --> GND1
+        end
+        
+        subgraph AO3401_BLOCK["AO3401 電源切換"]
+            AO3401["AO3401<br/>P-MOSFET<br/>(SOT-23)"]
+            AO_GATE["Pin 1: Gate (G)"]
+            AO_SOURCE["Pin 2: Source (S)"]
+            AO_DRAIN["Pin 3: Drain (D)"]
+            R_GATE["100kΩ<br/>下拉電阻"]
+            
+            AO3401 --- AO_GATE
+            AO3401 --- AO_SOURCE
+            AO3401 --- AO_DRAIN
+            AO_GATE --> R_GATE
+            R_GATE --> GND2["GND"]
+        end
+        
+        BATTERY["🔋 鋰電池<br/>3.7V 500mAh"]
+        
+        TP_BAT --> BATTERY
+        BATTERY --> AO_SOURCE
+    end
+    
+    %% 連接兩個區域
+    W5 ==>|保留連接| TP_VCC
+    TP_VCC ==>|控制信號| AO_GATE
+    AO_DRAIN ==>|電池供電路徑| PAD_A
+    
+    %% 工作狀態標註
+    STATE_USB["🔌 USB 插入：<br/>Gate=4.4V, P-MOS 關閉<br/>TP4054 充電"]:::stateOn
+    STATE_BAT["🔋 USB 拔除：<br/>Gate=0V, P-MOS 導通<br/>電池供電"]:::stateOff
+    
+    %% 樣式定義
+    classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    classDef stateOn fill:#c8e6c9,stroke:#4caf50,stroke-width:2px
+    classDef stateOff fill:#bbdefb,stroke:#2196f3,stroke-width:2px
+    
+    style ORIGINAL fill:#ffebee,stroke:#e53935,stroke-width:3px
+    style NEW_CIRCUIT fill:#e8f5e9,stroke:#43a047,stroke-width:3px
+    style TP4054_BLOCK fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style AO3401_BLOCK fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
+```
+
 #### TP4054 充電 IC 接線
 
 ```
