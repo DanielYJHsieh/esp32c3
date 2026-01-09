@@ -152,11 +152,21 @@ graph LR
             
             subgraph LEFT_CIRCUIT["左側：充電電路"]
                 direction TB
-                TP_VCC["TP4054<br/>Pin 4: VCC"]
-                TP_BAT["Pin 3: BAT<br/>充電輸出"]
-                TP_PROG["Pin 2: PROG"]
-                TP_GND["Pin 1: GND"]
-                TP_NC["Pin 5: NC"]
+                
+                subgraph TP4054_TOP["TP4054 上排"]
+                    direction LR
+                    TP_PROG["Pin 2<br/>PROG"]
+                    TP_VCC["Pin 4<br/>VCC"]
+                end
+                
+                subgraph TP4054_BOTTOM["TP4054 下排"]
+                    direction LR
+                    TP_GND["Pin 1<br/>GND"]
+                    TP_NC["Pin 5<br/>NC"]
+                    TP_BAT["Pin 3<br/>BAT"]
+                end
+                
+                TP4054_TOP -.->|SOT-23-5| TP4054_BOTTOM
             end
             
             R_PROG["10kΩ<br/>PROG電阻"]
@@ -169,10 +179,19 @@ graph LR
             end
             
             subgraph RIGHT_CIRCUIT["右側：切換電路"]
-                direction TB
-                AO_GATE["AO3401<br/>Pin 1: Gate<br/>控制"]
-                AO_SOURCE["Pin 2: Source<br/>電池輸入"]
-                AO_DRAIN["Pin 3: Drain<br/>VSYS 輸出"]
+                direction LR
+                
+                subgraph AO3401_LEFT["AO3401 左側"]
+                    direction TB
+                    AO_GATE["Pin 1<br/>Gate"]
+                    AO_SOURCE["Pin 2<br/>Source"]
+                end
+                
+                subgraph AO3401_RIGHT["右側"]
+                    AO_DRAIN["Pin 3<br/>Drain"]
+                end
+                
+                AO3401_LEFT -.->|SOT-23| AO3401_RIGHT
                 AO_SOURCE -.->|MOS內部| AO_DRAIN
             end
             
