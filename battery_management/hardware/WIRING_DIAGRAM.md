@@ -79,7 +79,7 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
 將 **TP4054 + AO3401 + 電池** 視為一個完整的電池管理模組，對外只有 3 個接口：
 
 ```mermaid
-graph LR
+graph TB
     subgraph SUPERMINI["ESP32-C3 SuperMini 板子"]
         USB["USB Type-C<br/>5V 輸入"]
         W5_OUT["綠點 B<br/>(透過 W5)"] 
@@ -94,23 +94,55 @@ graph LR
         OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
         GND_MODULE["⏚ GND"]
         
-        subgraph INTERNAL["內部電路"]
-            TP4054_INT["TP4054<br/>充電管理"]
-            AO3401_INT["AO3401<br/>電源切換"]
-            BATTERY_INT["🔋 電池<br/>500mAh<br/>(+)/(-)"]            
+        subgraph INTERNAL["內部電路詳細接線"]
+            direction TB
+            
+            subgraph TP4054_DETAIL["TP4054 (SOT-23-5)"]
+                TP_PIN1["Pin 1: GND"]
+                TP_PIN2["Pin 2: PROG"]
+                TP_PIN3["Pin 3: BAT"]
+                TP_PIN4["Pin 4: VCC"]
+                TP_PIN5["Pin 5: NC"]
+            end
+            
+            R_PROG["10kΩ<br/>PROG 電阻"]
+            
+            subgraph BATTERY_DETAIL["🔋 電池 500mAh"]
+                BAT_POS["(+) 正極"]
+                BAT_NEG["(-) 負極"]
+            end
+            
+            subgraph AO3401_DETAIL["AO3401 (SOT-23)"]
+                AO_PIN1["Pin 1: Gate"]
+                AO_PIN2["Pin 2: Source"]
+                AO_PIN3["Pin 3: Drain"]
+            end
+            
+            R_GATE["100kΩ<br/>Gate 下拉"]
+            
+            %% TP4054 連接
+            TP_PIN4 -.->|VCC 輸入| INPUT
+            TP_PIN2 --> R_PROG
+            R_PROG --> TP_PIN1
+            TP_PIN3 -->|充電| BAT_POS
+            TP_PIN1 -.-> GND_MODULE
+            
+            %% 電池連接
+            BAT_POS -->|供電| AO_PIN2
+            BAT_NEG -.-> GND_MODULE
+            
+            %% AO3401 連接
+            TP_PIN4 -->|控制信號| AO_PIN1
+            AO_PIN1 --> R_GATE
+            R_GATE -.-> GND_MODULE
+            AO_PIN3 -.->|輸出| OUTPUT
         end
         
-        INPUT --> TP4054_INT
-        TP4054_INT --> BATTERY_INT
-        BATTERY_INT --> AO3401_INT
-        AO3401_INT --> OUTPUT
-        BATTERY_INT -.-> GND_MODULE
-        
-        NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電管理<br/>✓ 電池供電切換<br/>✓ 自動路徑選擇"]:::noteStyle
+        NOTE_MODULE["📦 模組功能：<br/>✓ USB 充電管理 (130mA)<br/>✓ 電池供電切換<br/>✓ 自動路徑選擇<br/>✓ 壓降僅 0.02V"]:::noteStyle
     end
     
     USB --> W5_OUT
-    W5_OUT ==>|"USB 5V"| INPUT
+    W5_OUT ==>|"USB 5V (4.4V)"| INPUT
     OUTPUT ==>|"VSYS"| VSYS_IN
     GND_MODULE ==>|"GND"| PCB_GND1
     
@@ -119,6 +151,9 @@ graph LR
     style SUPERMINI fill:#ffebee,stroke:#e53935,stroke-width:3px
     style BATTERY_MODULE fill:#e8f5e9,stroke:#43a047,stroke-width:3px
     style INTERNAL fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    style TP4054_DETAIL fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style BATTERY_DETAIL fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style AO3401_DETAIL fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
     style INPUT fill:#ffccbc,stroke:#ff5722,stroke-width:2px
     style OUTPUT fill:#c5e1a5,stroke:#689f38,stroke-width:2px
     style GND_MODULE fill:#b0bec5,stroke:#455a64,stroke-width:2px
@@ -132,12 +167,24 @@ graph LR
 | **VSYS** | 輸出 | SuperMini 藍點 A | 系統供電輸出，3.7V-5V |
 | **GND** | 接地 | SuperMini GND | 共地 |
 
-**模組內部功能**：
-- ✅ **USB 插入時**：TP4054 充電，VSYS = USB 5V (透過 W5)
-- ✅ **USB 拔除時**：AO3401 導通，VSYS = 電池 3.7V
-- ✅ **完全自動**：無需手動切換，即插即用
+**模組內部接線細節**：
 
----
+1. **TP4054 充電管理**
+   - Pin 4 (VCC) ← USB 5V 輸入
+   - Pin 3 (BAT) → 電池正極
+   - Pin 2 (PROG) → 10kΩ 電阻 → GND（設定充電電流 130mA）
+   - Pin 1 (GND) → GND
+
+2. **AO3401 電源切換**
+   - Pin 1 (Gate) ← TP4054 VCC + 100kΩ 下拉到 GND
+   - Pin 2 (Source) ← 電池正極
+   - Pin 3 (Drain) → VSYS 輸出
+
+3. **電池連接**
+   - 正極 (+) → TP4054 BAT & AO3401 Source
+   - 負極 (-) → GND
+
+**模組工作模式**：
 
 ### 整體電路架構（TP4054 + AO3401）
 
