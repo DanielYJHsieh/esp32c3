@@ -79,13 +79,14 @@ USB 5V ──[W5]──> VSYS (4.4V) ──┬──> TP4054 VCC (充電)
 
 ### 系統架構
 
-這套電路將 **SuperMini 的 VCC 作為系統主幹線**，並分為「充電入」與「系統出」兩條路徑。
+這套電路將 **SuperMini 的 VSYS 作為系統主幹線**，並分為「充電入」與「系統出」兩條路徑。
 
 ```
                     ESP32-C3 SuperMini
                     ┌─────────────────────────────┐
                     │                             │
-USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
+USB 5V (Type-C) ────┼─> [W5] ─> VSYS (系統主幹線) │
+                    │   降壓      4.4V/3.7V       │
                     │      │                      │
                     │      ├─────────────┐        │
                     │      │             │        │
@@ -205,7 +206,7 @@ graph LR
             AO_GATE ==>|"🔧 焦接"| R_GATE
         end
         
-        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
+        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-4.4V"]
         GND_MODULE["⏚ GND<br/>共地"]
         
         INPUT ==>|"🔧 VCC線"| TP_VCC
@@ -220,7 +221,7 @@ graph LR
         LEGEND["📊 圖例：<br/>🔧 ===> 需要焦接的實體線<br/>-.-> IC/電池內部連接"]:::legendStyle
     end
     
-    USB --> W5_OUT
+    USB --> W5
     W5 ==>|VSYS 4.4V| VSYS_IN
     VSYS_IN ==>|"🔧 VSYS"| INPUT
     OUTPUT ==>|"🔧 VSYS<br/>3.7V-4.4V"| VSYS_IN
