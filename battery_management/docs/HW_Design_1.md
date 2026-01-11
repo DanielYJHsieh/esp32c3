@@ -1,16 +1,16 @@
 ```mermaid
 graph TD
     %% --- 定義區域 ---
-    subgraph ORIGINAL_PCB ["原始 ESP32-C3 SuperMini 板 - 背面 Rework 區"]
+    subgraph ORIGINAL_PCB ["原始 ESP32-C3 SuperMini 板 - 保持原始狀態"]
         direction TB
         PAD_A["藍點 A 焊盤<br/>連接到 VSYS - 板子 5V 系統入口"]
         PAD_B["綠點 B 焊盤<br/>連接到 USB VBUS - USB Type-C 5V 來源"]
         PCB_GND["板子 GND<br/>任意 GND 焊點"]
-        W5_PARTIAL["W5 - PD1 保護二極體<br/>保留 USB 端，斷開 VSYS 端"]:::modifiedStyle
-        PAD_B --- W5_PARTIAL
-        W5_PARTIAL -.->|已斷開| PAD_A
+        W5_INTACT["W5 - PD1 保護二極體<br/>完整保留，不做任何修改"]:::intactStyle
+        PAD_B --- W5_INTACT
+        W5_INTACT ==>|保持連接| PAD_A
         
-        note1["註: W5 保留 USB 端保護 TP4054，斷開 VSYS 端<br/>讓電池供電透過 AO3401 高效率路徑"]:::noteStyle
+        note1["註: W5/PD1 保持原始狀態，不做任何修改<br/>USB 5V 透過 W5 降至約 4.4V 供給 VSYS"]:::noteStyle
     end
 
     subgraph NEW_CIRCUIT ["新增充電與管理電路 - 外部搭建"]
@@ -33,13 +33,15 @@ graph TD
 
     %% --- 連接線路 ---
 
-    %% 1. USB 供電路徑 (紅色線: USB 5V 透過 W5 保護)
-    PAD_B ==>|USB 5V 透過 W5| TP4054_VCC["Pin 4 VCC"]
+    %% 1. USB 供電路徑 (紅色線: USB 5V 透過 W5 降壓至 VSYS)
+    PAD_B ==>|USB 5V| W5_INTACT
+    W5_INTACT ==>|透過 W5 降至 4.4V| PAD_A
+    PAD_A ==>|VSYS 4.4V| TP4054_VCC["Pin 4 VCC"]
     
     %% 2. TP4054 VCC 到 AO3401 Gate 控制 (橙色線: 控制信號)
     TP4054_VCC ==>|控制信號| PMOS_G["Gate 極"]
 
-    %% 3. 系統主要供電匯流排 (紫色線: 系統輸入)
+    %% 3. 電池供電路徑 (紫色線: 電池電壓)
     PMOS_D["Drain 極"] ==> PAD_A
 
     %% 4. 電池路徑 (藍色線: 電池電壓)
@@ -62,6 +64,6 @@ graph TD
     CTRL_PIN(("GPIO 控制腳<br/>例如 GPIO2")) -.-> NMOS_G["Gate 極"]
 
     %% --- 樣式設定 ---
-    classDef modifiedStyle fill:#ffa,stroke:#f80,stroke-width:2px,stroke-dasharray:5 5
+    classDef intactStyle fill:#9f9,stroke:#080,stroke-width:2px
     classDef noteStyle fill:#ffe,stroke:#aa0,stroke-width:1px
 ```

@@ -82,15 +82,18 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
 graph LR
     subgraph SUPERMINI["ESP32-C3 SuperMini 板子"]
         USB["USB Type-C<br/>5V 輸入"]
-        W5_OUT["綠點 B<br/>(透過 W5)"] 
-        VSYS_IN["藍點 A<br/>VSYS 輸入"]
+        W5["W5/PD1<br/>保持完整"]
+        VSYS["VSYS<br/>系統供電"]
         PCB_GND1["板子 GND"]
+        
+        USB --> W5
+        W5 ==>|4.4V| VSYS
     end
     
     subgraph BATTERY_MODULE["🔋 電池管理模組 (TP4054 + AO3401 + 電池)"]
         direction LR
         
-        INPUT["⚡ 輸入<br/>USB 5V<br/>(透過 W5)"]
+        INPUT["⚡ 輸入<br/>VSYS<br/>(USB 時 4.4V)"]
         
         subgraph INTERNAL["內部電路詳細接線"]
             direction LR
@@ -170,9 +173,10 @@ graph LR
         LEGEND["📊 圖例：<br/>🔧 ===> 需要焦接的實體線<br/>-.-> IC/電池內部連接"]:::legendStyle
     end
     
-    USB --> W5_OUT
-    W5_OUT ==>|"🔧 USB 5V<br/>(4.4V)"| INPUT
-    OUTPUT ==>|"🔧 VSYS<br/>3.7V-5V"| VSYS_IN
+    USB --> W5
+    W5 ==>|VSYS 4.4V| VSYS
+    VSYS ==>|"🔧 VSYS"| INPUT
+    OUTPUT ==>|"🔧 VSYS<br/>3.7V-4.4V"| VSYS
     GND_MODULE ==>|"🔧 共地"| PCB_GND1
     
     classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
@@ -193,8 +197,8 @@ graph LR
 
 | 接口 | 類型 | 連接目標 | 說明 |
 |------|------|----------|------|
-| **USB 5V** | 輸入 | SuperMini 綠點 B (透過 W5) | USB 供電輸入，約 4.4V |
-| **VSYS** | 輸出 | SuperMini 藍點 A | 系統供電輸出，3.7V-5V |
+| **VSYS** | 輸入 | SuperMini VSYS | USB 時 4.4V（透過 W5），供電給 TP4054 |
+| **VSYS** | 輸出 | SuperMini VSYS | 電池供電時 3.7V，回饋給系統 |
 | **GND** | 接地 | SuperMini GND | 共地 |
 
 **模組內部接線細節**：
@@ -220,19 +224,17 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph ORIGINAL["ESP32-C3 SuperMini 板子（改造區域）"]
+    subgraph ORIGINAL["ESP32-C3 SuperMini 板子（保持原始狀態）"]
         direction TB
         USB_PORT["USB Type-C<br/>5V 輸入"]
-        PAD_B["綠點 B 焊盤<br/>USB VBUS"]
-        W5["W5 保護二極體<br/>保留 USB 端"]
-        PAD_A["藍點 A 焊盤<br/>VSYS 系統"]
+        W5["W5 保護二極體<br/>保持完整"]
+        VSYS["VSYS 系統<br/>USB 時 4.4V"]
         PCB_GND["板子 GND"]
         
-        USB_PORT --> PAD_B
-        PAD_B --> W5
-        W5 -.->|已斷開| PAD_A
+        USB_PORT --> W5
+        W5 ==>|4.4V| VSYS
         
-        NOTE1["⚙️ 改造：W5 只斷開 VSYS 端<br/>保留 USB 端保護 TP4054"]:::noteStyle
+        NOTE1["⚙️ W5/PD1 保持原始狀態，不做任何修改<br/>USB 5V 透過 W5 降至約 4.4V"]:::noteStyle
     end
     
     subgraph NEW_CIRCUIT["新增電路（TP4054 + AO3401）"]
@@ -278,13 +280,13 @@ graph TB
     end
     
     %% 連接兩個區域
-    W5 ==>|保留連接| TP_VCC
+    VSYS ==>|USB 時供電給 TP4054| TP_VCC
     TP_VCC ==>|控制信號| AO_GATE
-    AO_DRAIN ==>|電池供電路徑| PAD_A
+    AO_DRAIN ==>|電池供電路徑| VSYS
     
     %% 工作狀態標註
-    STATE_USB["🔌 USB 插入：<br/>Gate=4.4V, P-MOS 關閉<br/>TP4054 充電"]:::stateOn
-    STATE_BAT["🔋 USB 拔除：<br/>Gate=0V, P-MOS 導通<br/>電池供電"]:::stateOff
+    STATE_USB["🔌 USB 插入：<br/>VSYS=4.4V, Gate=4.4V<br/>P-MOS 關閉, TP4054 充電"]:::stateOn
+    STATE_BAT["🔋 USB 拔除：<br/>VSYS 由電池供電<br/>Gate=0V, P-MOS 導通"]:::stateOff
     
     %% 樣式定義
     classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
@@ -313,7 +315,7 @@ graph LR
         PIN5["Pin 5: NC"]
     end
     
-    USB["USB 5V<br/>(透過 W5)"] ==>|"🔧 焦接"| PIN4
+    USB["VSYS<br/>(USB 時 4.4V)"] ==>|"🔧 焦接"| PIN4
     PIN4 -.->|IC內部| PIN3
     PIN3 ==>|"🔧 焦接"| BAT["🔋 電池<br/>3.7V 500mAh<br/>(+) 正極"]
     BAT -.->|電池內部| BAT_NEG["電池 (-) 負極"]
@@ -337,12 +339,12 @@ TP4054 (SOT-23-5) 接線:
 │ 1: GND      │ ← GND
 │ 2: PROG     │ ← 10kΩ 接地（設定充電電流 130mA）
 │ 3: BAT      │ ← 電池正極 (+)
-│ 4: VCC      │ ← SuperMini VCC（USB 5V 入口，透過 W5）
+│ 4: VCC      │ ← SuperMini VSYS（USB 時 4.4V 透過 W5）
 │ 5: NC       │   （不接）
 └─────────────┘
 
 連接:
-1. Pin 4 (VCC) ──> USB 5V (透過 W5 保護)
+1. Pin 4 (VCC) ──> VSYS (USB 時 4.4V 透過 W5)
 2. Pin 3 (BAT) ──> 電池 (+)
 3. Pin 2 (PROG) ──> 10kΩ 電阻 ──> GND
 4. Pin 1 (GND) ──> GND
@@ -356,9 +358,8 @@ I_CHG = 1000mV / 10kΩ = 130mA (適合 500mAh 電池，0.26C 充電率)
 ```mermaid
 graph TB
     subgraph POWER_PATH["電源路徑"]
-        USB5V["USB 5V<br/>(透過 W5)"] 
-        TP4054_VCC["TP4054 VCC<br/>(約 4.4V)"]
-        VSYS["SuperMini VSYS<br/>(系統 5V)"]
+        VSYS_USB["VSYS<br/>(USB 時 4.4V)"] 
+        VSYS_SYS["VSYS<br/>(系統主幹線)"]
     end
     
     subgraph AO3401["AO3401 P-MOSFET (SOT-23)"]
@@ -370,10 +371,9 @@ graph TB
     BAT_P["🔋 電池<br/>(+) 正極 3.7V"] ==>|"🔧 焦接"| SOURCE
     BAT_N["電池<br/>(-) 負極"] ==>|"🔧 GND線"| GND2
     SOURCE -.->|MOS內部| DRAIN
-    DRAIN ==>|"🔧 VSYS線"| VSYS
+    DRAIN ==>|"🔧 VSYS線"| VSYS_SYS
     
-    USB5V --> TP4054_VCC
-    TP4054_VCC ==>|"🔧 控制線"| GATE
+    VSYS_USB ==>|"🔧 控制線"| GATE
     GATE ==>|"🔧 焦接"| R_GATE["100kΩ 下拉"]
     R_GATE ==>|"🔧 GND線"| GND2["GND"]
     
@@ -393,7 +393,7 @@ graph TB
 ```
 AO3401 (SOT-23) 接線:
 ┌─────────────┐
-│ 1: G (Gate) │ ← TP4054 VCC (透過 W5，約 4.4V) + 100kΩ 下拉到 GND
+│ 1: G (Gate) │ ← VSYS (USB 時 4.4V) + 100kΩ 下拉到 GND
 │ 2: S (Source)│ ← 電池正極 (+)
 │ 3: D (Drain)│ ← SuperMini VSYS
 └─────────────┘
@@ -401,7 +401,7 @@ AO3401 (SOT-23) 接線:
 連接:
 1. Source (S) ──> 電池 (+)
 2. Drain (D) ──> SuperMini VSYS (系統主幹線)
-3. Gate (G) ──> TP4054 VCC (透過 W5)
+3. Gate (G) ──> VSYS (USB 時 4.4V)
 4. Gate (G) ──> 100kΩ 電阻 ──> GND
 
 工作原理:
@@ -521,14 +521,14 @@ graph LR
 | 編號 | 起點 | 終點 | 說明 |
 |------|------|------|------|
 | **充電管理** | | | |
-| 1 | SuperMini VCC | TP4054 Pin 4 (VCC) | USB 5V 輸入 |
+| 1 | SuperMini VSYS | TP4054 Pin 4 (VCC) | USB 時 4.4V 輸入（透過 W5）|
 | 2 | TP4054 Pin 3 (BAT) | 電池 (+) | 充電輸出 |
-| 3 | TP4054 Pin 2 (PROG) | 3kΩ 電阻 → GND | 設定充電電流 |
+| 3 | TP4054 Pin 2 (PROG) | 10kΩ 電阻 → GND | 設定充電電流 130mA |
 | 4 | TP4054 Pin 1 (GND) | GND | 接地 |
 | **電源切換** | | | |
 | 5 | 電池 (+) | AO3401 Source (S) | 電池電源輸入 |
-| 6 | AO3401 Drain (D) | SuperMini VCC | 電池電源輸出 |
-| 7 | SuperMini VCC | AO3401 Gate (G) | 控制信號 |
+| 6 | AO3401 Drain (D) | SuperMini VSYS | 電池電源輸出 |
+| 7 | SuperMini VSYS | AO3401 Gate (G) | 控制信號（USB 時 4.4V）|
 | 8 | AO3401 Gate (G) | 100kΩ 電阻 → GND | 下拉確保導通 |
 | **電量監測** | | | |
 | 9 | 電池 (+) | 100kΩ 電阻 (R1) | 分壓上端 |
