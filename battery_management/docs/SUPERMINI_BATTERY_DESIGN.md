@@ -10,49 +10,41 @@
 
 ---
 
-## ⚠️ 重要：SuperMini 硬體改造需求
+## ⚠️ 重要：SuperMini 硬體設計說明
 
-### W5 保護二極體（PD1）改造說明
+### W5 保護二極體（PD1）保持原始狀態
 
 ESP32-C3 SuperMini 背面有一個標記為 **W5 (PD1)** 的保護二極體，連接 USB VBUS 到 VSYS：
 
 ```
-USB Type-C VBUS (5V) ──[W5/PD1]──> VSYS (板子 5V 系統)
+USB Type-C VBUS (5V) ──[W5/PD1]──> VSYS (板子約 4.4V 系統)
   綠點 B 焊盤              二極體           藍點 A 焊盤
 ```
 
 **W5/PD1 功能**：
 - 防止反向電流從系統回流到 USB
-- 壓降約 0.3-0.6V（降低效率）
+- 壓降約 0.3-0.6V（USB 5V 降至 4.4V）
 - 限制最大電流約 1A
+- **本設計保持 W5 完整不做任何修改**
 
-**為什麼要改造 W5？**
-1. ✅ **電池供電路徑優化**：繞過 W5，使用 P-MOSFET（壓降僅 0.02V，效率 >99%）
-2. ✅ **保留 TP4054 保護**：W5 繼續保護充電電路
-3. ✅ **施工簡單**：只需斷開一端，不需完全移除元件
-4. ✅ **可恢復性**：需要恢復原設計時，只需焊回一端
+**為什麼保留 W5？**
+1. ✅ **保持原始設計**：不需要任何硬體改造，安全可靠
+2. ✅ **保留保護功能**：W5 繼續提供反向電流保護
+3. ✅ **簡化施工**：無需焊接或修改 W5，降低風險
+4. ✅ **保持保固**：不修改原始硬體，保持開發板保固
 
-**改造步驟**（推薦方案）：
-1. **只斷開 W5 靠近 VSYS (藍點 A) 的一端**
-   - 使用烙鐵抬起或切斷該端焊點
-   - 保留 W5 靠近 USB (綠點 B) 的連接
-2. 確認斷開端與藍點 A 焊盤無連接（萬用表測試開路）
-3. 外部電路連接：
-   - TP4054 VCC → 綠點 B（透過 W5 保護）
-   - AO3401 Drain → 藍點 A（電池供電路徑）
-
-**改造後電路**：
+**電路設計**：
 ```
-充電路徑（保留保護）：
-USB 5V (B) ──[W5]──> TP4054 VCC (壓降 0.6V，可接受)
-
-電池供電路徑（高效）：
-電池 (+) ──[AO3401]──> VSYS (A) (壓降 0.02V，效率 99%+)
-                        ↑
-                    W5 已斷開此端
+充電與供電路徑（保留 W5）：
+USB 5V ──[W5]──> VSYS (4.4V) ──┬──> TP4054 VCC (充電)
+                                │
+                                └──> ESP32-C3 供電
+                                
+電池供電路徑（USB 拔除時）：
+電池 (+) ──[AO3401]──> VSYS (3.7V) ──> ESP32-C3 供電
 ```
 
-> ✅ **優勢**：保留 W5 對充電電路的保護，電池供電完全繞過 W5，兼顧安全與效率！
+> ✅ **優勢**：保持原始硬體設計，簡化施工，降低風險，適合不想修改開發板的用戶！
 
 ---
 
@@ -87,13 +79,14 @@ USB 5V (B) ──[W5]──> TP4054 VCC (壓降 0.6V，可接受)
 
 ### 系統架構
 
-這套電路將 **SuperMini 的 VCC 作為系統主幹線**，並分為「充電入」與「系統出」兩條路徑。
+這套電路將 **SuperMini 的 VSYS 作為系統主幹線**，並分為「充電入」與「系統出」兩條路徑。
 
 ```
                     ESP32-C3 SuperMini
                     ┌─────────────────────────────┐
                     │                             │
-USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
+USB 5V (Type-C) ────┼─> [W5] ─> VSYS (系統主幹線) │
+                    │   降壓      4.4V/3.7V       │
                     │      │                      │
                     │      ├─────────────┐        │
                     │      │             │        │
@@ -137,15 +130,18 @@ USB 5V (Type-C) ────┼─> VCC (系統主幹線)          │
 graph LR
     subgraph SUPERMINI["ESP32-C3 SuperMini 板子"]
         USB["USB Type-C<br/>5V 輸入"]
-        W5_OUT["綠點 B<br/>(透過 W5)"] 
-        VSYS_IN["藍點 A<br/>VSYS 輸入"]
+        W5["W5/PD1<br/>保持完整"] 
+        VSYS_IN["VSYS<br/>系統供電"]
         PCB_GND1["板子 GND"]
+        
+        USB --> W5
+        W5 ==>|4.4V| VSYS_IN
     end
     
     subgraph BATTERY_MODULE["🔋 電池管理模組 (TP4054 + AO3401 + 電池)"]
         direction LR
         
-        INPUT["⚡ 輸入<br/>USB 5V<br/>(透過 W5)"]
+        INPUT["⚡ 輸入<br/>VSYS<br/>(USB 時 4.4V)"]
         
         subgraph INTERNAL["內部電路詳細接線"]
             direction LR
@@ -210,7 +206,7 @@ graph LR
             AO_GATE ==>|"🔧 焦接"| R_GATE
         end
         
-        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-5V"]
+        OUTPUT["⚡ 輸出<br/>VSYS<br/>3.7V-4.4V"]
         GND_MODULE["⏚ GND<br/>共地"]
         
         INPUT ==>|"🔧 VCC線"| TP_VCC
@@ -225,9 +221,10 @@ graph LR
         LEGEND["📊 圖例：<br/>🔧 ===> 需要焦接的實體線<br/>-.-> IC/電池內部連接"]:::legendStyle
     end
     
-    USB --> W5_OUT
-    W5_OUT ==>|"🔧 USB 5V<br/>(4.4V)"| INPUT
-    OUTPUT ==>|"🔧 VSYS<br/>3.7V-5V"| VSYS_IN
+    USB --> W5
+    W5 ==>|VSYS 4.4V| VSYS_IN
+    VSYS_IN ==>|"🔧 VSYS"| INPUT
+    OUTPUT ==>|"🔧 VSYS<br/>3.7V-4.4V"| VSYS_IN
     GND_MODULE ==>|"🔧 共地"| PCB_GND1
     
     classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
@@ -248,20 +245,20 @@ graph LR
 
 | 接口 | 類型 | 連接目標 | 說明 |
 |------|------|----------|------|
-| **USB 5V** | 輸入 | SuperMini 綠點 B (透過 W5) | USB 供電輸入，約 4.4V |
-| **VSYS** | 輸出 | SuperMini 藍點 A | 系統供電輸出，3.7V-5V |
+| **VSYS** | 輸入 | SuperMini VSYS | USB 時 4.4V（透過 W5），供電給 TP4054 |
+| **VSYS** | 輸出 | SuperMini VSYS | 電池供電時 3.7V，回饋給系統 |
 | **GND** | 接地 | SuperMini GND | 共地 |
 
 **模組內部接線細節**：
 
 1. **TP4054 充電管理**
-   - Pin 4 (VCC) ← USB 5V 輸入
+   - Pin 4 (VCC) ← VSYS (USB 時 4.4V 透過 W5)
    - Pin 3 (BAT) → 電池正極
    - Pin 2 (PROG) → 10kΩ 電阻 → GND（設定充電電流 130mA）
    - Pin 1 (GND) → GND
 
 2. **AO3401 電源切換**
-   - Pin 1 (Gate) ← USB 5V 輸入（與 TP4054 VCC 共點）+ 100kΩ 下拉到 GND
+   - Pin 1 (Gate) ← VSYS（USB 時 4.4V）+ 100kΩ 下拉到 GND
    - Pin 2 (Source) ← 電池正極
    - Pin 3 (Drain) → VSYS 輸出
 
@@ -281,19 +278,17 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph ORIGINAL["ESP32-C3 SuperMini 板子（改造區域）"]
+    subgraph ORIGINAL["ESP32-C3 SuperMini 板子（保持原始狀態）"]
         direction TB
         USB_PORT["USB Type-C<br/>5V 輸入"]
-        PAD_B["綠點 B 焊盤<br/>USB VBUS"]
-        W5["W5 保護二極體<br/>保留 USB 端"]
-        PAD_A["藍點 A 焊盤<br/>VSYS 系統"]
+        W5["W5 保護二極體<br/>保持完整"]
+        VSYS["VSYS 系統<br/>USB 時 4.4V"]
         PCB_GND["板子 GND"]
         
-        USB_PORT --> PAD_B
-        PAD_B --> W5
-        W5 -.->|已斷開| PAD_A
+        USB_PORT --> W5
+        W5 ==>|4.4V| VSYS
         
-        NOTE1["⚙️ 改造：W5 只斷開 VSYS 端<br/>保留 USB 端保護 TP4054"]:::noteStyle
+        NOTE1["⚙️ W5/PD1 保持原始狀態，不做任何修改<br/>USB 5V 透過 W5 降至約 4.4V"]:::noteStyle
     end
     
     subgraph NEW_CIRCUIT["新增電路（TP4054 + AO3401）"]
@@ -339,13 +334,13 @@ graph TB
     end
     
     %% 連接兩個區域
-    W5 ==>|保留連接| TP_VCC
+    VSYS ==>|USB 時供電給 TP4054| TP_VCC
     TP_VCC ==>|控制信號| AO_GATE
-    AO_DRAIN ==>|電池供電路徑| PAD_A
+    AO_DRAIN ==>|電池供電路徑| VSYS
     
     %% 工作狀態標註
-    STATE_USB["🔌 USB 插入：<br/>Gate=4.4V, P-MOS 關閉<br/>TP4054 充電"]:::stateOn
-    STATE_BAT["🔋 USB 拔除：<br/>Gate=0V, P-MOS 導通<br/>電池供電"]:::stateOff
+    STATE_USB["🔌 USB 插入：<br/>VSYS=4.4V, Gate=4.4V<br/>P-MOS 關閉, TP4054 充電"]:::stateOn
+    STATE_BAT["🔋 USB 拔除：<br/>VSYS 由電池供電<br/>Gate=0V, P-MOS 導通"]:::stateOff
     
     %% 樣式定義
     classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
@@ -383,39 +378,41 @@ $$I_{CHG} = \frac{1000mV}{R_{PROG}} = \frac{1000mV}{10k\Omega} = 130mA$$
 ```
 AO3401 (SOT-23)
 ┌─────────────┐
-│ 1: G (Gate) │ ← TP4054 VCC (透過 W5) + 100kΩ 下拉到 GND
+│ 1: G (Gate) │ ← VSYS (USB 時 4.4V) + 100kΩ 下拉到 GND
 │ 2: S (Source)│ ← 電池正極 (+)
-│ 3: D (Drain)│ ← SuperMini VSYS (藍點 A)
+│ 3: D (Drain)│ ← SuperMini VSYS
 └─────────────┘
 
 連接:
-USB 5V (綠點 B) ──[W5]──┬──> TP4054 Pin 4 (VCC)
-                        │
-                        └──> AO3401 Gate (G) ──[100kΩ]──> GND
+USB 5V ──[W5]──┬──> VSYS (4.4V)
+               │
+               ├──> TP4054 Pin 4 (VCC)
+               │
+               └──> AO3401 Gate (G) ──[100kΩ]──> GND
                 
 電池 (+) ──┬──> TP4054 Pin 3 (BAT)
            │
            └──> AO3401 Source (S)
            
-AO3401 Drain (D) ──> VSYS (藍點 A)
+AO3401 Drain (D) ──> VSYS
 ```
 
 **工作原理**:
 
-| 狀態 | USB | TP4054 VCC | Gate 電壓 | Vgs | P-MOS 狀態 | 電源來源 |
-|------|-----|------------|-----------|-----|------------|----------|
-| **插 USB** | ✅ | 4.4V | 4.4V (透過 W5) | +0.7V | **關閉** | USB 5V |
+| 狀態 | USB | VSYS | Gate 電壓 | Vgs | P-MOS 狀態 | 電源來源 |
+|------|-----|------|-----------|-----|------------|----------|
+| **插 USB** | ✅ | 4.4V | 4.4V | +0.7V | **關閉** | USB (透過 W5) |
 | **拔 USB** | ❌ | 0V | 0V (下拉) | -3.7V | **導通** | 電池 |
 
 **原理說明**:
 1. **USB 插上時**: 
-   - USB 5V 透過 W5 變成約 4.4V 供給 TP4054
-   - Gate 被 TP4054 VCC 拉高到 4.4V
+   - USB 5V 透過 W5 變成約 4.4V 供給 VSYS
+   - VSYS 4.4V 供電給 TP4054 和 AO3401 Gate
    - Vgs = 4.4V - 3.7V = 0.7V > 0（P-MOS 關閉）
    - 電池透過 TP4054 充電，系統由 USB 供電
 
 2. **USB 拔掉時**:
-   - TP4054 VCC 沒有電源輸入
+   - VSYS 沒有 USB 電源輸入
    - Gate 被 100kΩ 拉到 GND (0V)
    - Vgs = 0V - 3.7V = -3.7V < -2V（P-MOS 導通）
    - 電池透過 P-MOS 供電給 VSYS
@@ -516,20 +513,15 @@ printf("Battery: %.2fV\n", voltage);
 
 | 編號 | 起點 | 終點 | 說明 |
 |------|------|------|------|
-| **SuperMini 改造** | | | |
-| 0a | USB Type-C VBUS | 綠點 B 焊盤 | USB 5V 來源 |
-| 0b | 綠點 B 焊盤 | W5/PD1 輸入端 | **保留連接**（保護 TP4054）|
-| 0c | W5/PD1 輸出端 | ~~藍點 A 焊盤~~ | **已斷開**（斷開 VSYS 連接）|
-| 0d | 藍點 A 焊盤 | VSYS 系統 | 板子 5V 主幹線 |
 | **充電管理** | | | |
-| 1 | 綠點 B 焊盤（USB 5V）| TP4054 Pin 4 (VCC) | USB 5V 充電輸入（透過 W5 保護）⭐ |
+| 1 | SuperMini VSYS | TP4054 Pin 4 (VCC) | USB 時 4.4V 充電輸入（透過 W5）⭐ |
 | 2 | TP4054 Pin 3 (BAT) | 電池 (+) | 充電輸出 |
-| 3 | TP4054 Pin 2 (PROG) | 3kΩ 電阻 → GND | 設定充電電流 333mA |
+| 3 | TP4054 Pin 2 (PROG) | 10kΩ 電阻 → GND | 設定充電電流 130mA |
 | 4 | TP4054 Pin 1 (GND) | GND | 接地 |
 | **電源切換** | | | |
 | 5 | 電池 (+) | AO3401 Source (S) | 電池電源輸入 |
-| 6 | AO3401 Drain (D) | 藍點 A 焊盤（VSYS）| 電池電源輸出到系統 ⭐ |
-| 7 | TP4054 Pin 4 (VCC) | AO3401 Gate (G) | P-MOS 控制信號（透過 W5）⭐ |
+| 6 | AO3401 Drain (D) | SuperMini VSYS | 電池電源輸出到系統 ⭐ |
+| 7 | SuperMini VSYS | AO3401 Gate (G) | P-MOS 控制信號 ⭐ |
 | 8 | AO3401 Gate (G) | 100kΩ 電阻 → GND | 下拉確保 USB 拔除時導通 |
 | **電量監測** | | | |
 | 9 | 電池 (+) | 100kΩ 電阻 (R1) | 分壓上端 |
@@ -544,74 +536,20 @@ printf("Battery: %.2fV\n", voltage);
 | 17 | 10μF 電容 | GND | 接地 |
 
 > ⭐ **關鍵連接點**：
-> - 綠點 B（USB 5V）→ 透過 W5 保護 → TP4054 充電
-> - 藍點 A（VSYS）← 透過 AO3401 ← 電池供電（繞過 W5）
+> - SuperMini VSYS 作為系統主幹線（USB 時 4.4V 透過 W5，電池時 3.7V 透過 AO3401）
+> - W5/PD1 保持原始狀態，不做任何修改
 
 ---
 
 ## 🛠️ 焊接步驟建議
 
 ### 工具準備
-- 電烙鐵（溫度 300-350°C）或熱風槍
+- 電烙鐵（溫度 300-350°C）
 - 細焊錫（0.5mm 或 0.6mm）
 - 鑷子、放大鏡
 - 萬用電表
-- 吸錫線或吸錫器（用於移除 W5）
 
 ### 焊接順序
-
-#### Step 0: 改造 SuperMini 上的 W5/PD1 保護二極體（必須）⭐
-
-**位置識別**（參考背面圖片 esp32c3_pd1.jpg）：
-- W5/PD1 位於 Type-C 座背面，兩個焊盤間
-- **綠點 B**：連接 USB VBUS (5V) - **保留此端連接**
-- **藍點 A**：連接 VSYS (板子 5V) - **斷開此端連接**
-
-**改造方法 1：烙鐵抬起（推薦，可恢復）** ✅
-```
-1. 只加熱 W5 靠近「藍點 A」的一端
-2. 用鑷子輕輕抬起該端，使其與焊盤分離
-3. W5 仍保持靠近「綠點 B」的連接
-4. 用萬用電表確認：
-   - W5 與藍點 A 開路（阻抗 > 1MΩ）✅
-   - W5 與綠點 B 導通（阻抗 < 1Ω）✅
-```
-
-**改造方法 2：切斷導線（永久，但更簡單）**
-```
-1. 用尖銳刀片在 W5 與藍點 A 之間劃斷導線
-2. 確保切口完全斷開，無短路
-3. 用萬用電表確認開路
-```
-
-**改造方法 3：完全移除（不推薦，會失去 TP4054 保護）**
-```
-僅當有特殊需求時使用
-1. 加熱 W5 兩端
-2. 完全移除元件
-3. 需要額外保護電路
-```
-
-**檢查清單**：
-- [ ] W5 靠近藍點 A 的一端已斷開
-- [ ] W5 靠近綠點 B 的一端保持連接 ⭐
-- [ ] 用萬用電表確認 W5 與藍點 A 開路（阻抗 > 1MΩ）
-- [ ] 用萬用電表確認 W5 與綠點 B 導通（阻抗 < 1Ω）
-
-**改造後狀態**：
-```
-✅ TP4054 充電路徑：
-   USB (B) ──[W5 保留]──> TP4054 VCC
-   
-✅ 電池供電路徑（繞過 W5）：
-   電池 ──[AO3401]──> VSYS (A)
-                       ↑
-                   W5 已斷開
-```
-
-> ✅ **優勢**：保留 W5 對充電的保護功能，電池供電路徑高效（99%+），且改造可恢復！
-
----
 
 #### Step 1: SMD 元件焊接（最難，先做）
 
@@ -643,9 +581,9 @@ printf("Battery: %.2fV\n", voltage);
    - 確保所有 GND 點連接可靠
 
 2. **電源與控制線**
-   - 連接綠點 B (USB 5V) → W5 → TP4054 Pin 4 (VCC)
-   - 連接 TP4054 Pin 4 (VCC) → AO3401 Gate
-   - 連接 AO3401 Drain → 藍點 A (VSYS)
+   - 連接 VSYS → TP4054 Pin 4 (VCC)
+   - 連接 VSYS → AO3401 Gate
+   - 連接 AO3401 Drain → VSYS
 
 3. **電池連接**
    - 電池 (+) → TP4054 Pin 3 (BAT)
@@ -797,15 +735,18 @@ printf("ADC Raw: %d (應為 1800-2600)\n", adc_raw);
 
 | 特點 | 傳統方案（TP4056 模組）| 本方案（TP4054 + AO3401 + 2N7002）|
 |------|----------------------|--------------------------|
+| **硬體改造** | 不需要 | **不需要改造 W5/PD1** ✅ |
 | **體積** | 26×17mm (模組) | ~10×15mm (SMD) ✅ |
 | **電源切換** | 二極體（壓降 ~0.6V）| P-MOS（壓降 ~0.02V）✅ |
 | **ADC 功耗** | 持續 17μA | 0μA（平時關閉）✅ |
-| **充電電流** | 固定 1A | 可調（333mA 推薦）✅ |
+| **充電電流** | 固定 1A | 可調（130mA 推薦）✅ |
 | **成本** | NT$20 (模組) | NT$12 (元件) ✅ |
-| **適合電池** | 2000-3000mAh | 600-1500mAh ✅ |
+| **適合電池** | 2000-3000mAh | 500-1000mAh ✅ |
+| **保固** | 可能失效 | **保持開發板保固** ✅ |
 
 **最適合場景**: 
 - ✅ ESP32-C3 SuperMini 等小型開發板
-- ✅ 使用小容量電池（600-1500mAh）
+- ✅ 使用小容量電池（500-1000mAh）
 - ✅ 對體積要求高的專案
-- ✅ 需要長續航（3-6 個月）的應用
+- ✅ 需要長續航（2-3 個月）的應用
+- ✅ 不想修改開發板硬體的用戶
