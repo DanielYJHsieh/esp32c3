@@ -155,14 +155,14 @@ graph LR
                 
                 subgraph TP4054_TOP["TP4054 上排"]
                     direction LR
-                    TP_NC["Pin 5<br/>NC"]
+                    TP_PROG["Pin 5<br/>PROG"]
                     TP_VCC["Pin 4<br/>VCC"]
                 end
                 
                 subgraph TP4054_BOTTOM["TP4054 下排"]
                     direction LR
-                    TP_GND["Pin 1<br/>GND"]
-                    TP_PROG["Pin 2<br/>PROG"]
+                    TP_CHRG["Pin 1<br/>CHRG"]
+                    TP_GND["Pin 2<br/>GND"]
                     TP_BAT["Pin 3<br/>BAT"]
                 end
                 
@@ -257,8 +257,9 @@ graph LR
 1. **TP4054 充電管理**
    - Pin 4 (VCC) ← USB 5V 輸入
    - Pin 3 (BAT) → 電池正極
-   - Pin 2 (PROG) → 10kΩ 電阻 → GND（設定充電電流 130mA）
-   - Pin 1 (GND) → GND
+   - Pin 5 (PROG) → 10kΩ 電阻 → GND（設定充電電流 130mA）
+   - Pin 2 (GND) → GND
+   - Pin 1 (CHRG) → 充電指示 LED（可選）
 
 2. **AO3401 電源切換**
    - Pin 1 (Gate) ← USB 5V 輸入（與 TP4054 VCC 共點）+ 100kΩ 下拉到 GND
