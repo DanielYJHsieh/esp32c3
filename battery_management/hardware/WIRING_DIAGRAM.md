@@ -37,6 +37,122 @@
 
 ## 📐 完整接線圖（TP4054 + MOSFET）
 
+### 🎨 優化佈局說明
+
+為了讓電路走線更精簡、焊接更容易，採用以下元件配置：
+
+**TP4054 放置方式**：
+- **上排（Pin 5, 4）**：PROG 和 VCC 朝上，靠近 USB 輸入
+- **下排（Pin 1, 2, 3）**：CHRG、GND、BAT 朝下，靠近電池
+
+**AO3401 放置方式**：
+- **右轉90°順時針**：放置在電路板右側
+- **左側引腳（Pin 1, 2）**：Gate 和 Source 朝左，靠近 TP4054 和電池
+- **右側引腳（Pin 3）**：Drain 朝右，靠近 VSYS 輸出
+
+**佈局優勢**：
+✓ USB 5V → VCC 走線短（從上方進入 TP4054）  
+✓ 電池 (+) → BAT/Source 走線短（從下方連接）  
+✓ Gate 控制線短（TP4054 VCC → AO3401 Gate 橫向直連）  
+✓ VSYS 輸出線短（AO3401 Drain 直接往右到 VSYS）  
+✓ GND 匯流更集中（TP4054、AO3401、電池的 GND 都在下方）
+
+```mermaid
+graph TB
+    subgraph LAYOUT["📐 物理佈局優化視圖"]
+        direction TB
+        
+        USB_INPUT["⚡ USB 5V 輸入<br/>從上方進入"]
+        
+        subgraph TOP_AREA["上方區域：電源輸入"]
+            direction LR
+            
+            TP_TOP["TP4054<br/>━━━━━━<br/>Pin5 Pin4<br/>PROG VCC<br/>━━━━━━<br/>IC本體<br/>━━━━━━<br/>Pin1 Pin2 Pin3<br/>CHRG GND BAT"]
+            
+            R_PROG_POS["10kΩ<br/>PROG電阻"]
+            
+            AO_RIGHT["AO3401<br/>(右轉90°)<br/>┃<br/>G ┃ D →<br/>┃<br/>S ┃"]
+            
+            TP_TOP -.->|"上排:VCC"| R_PROG_POS
+            TP_TOP ==>|"橫向走線短"| AO_RIGHT
+        end
+        
+        subgraph MIDDLE_AREA["中間區域：主要連接"]
+            direction LR
+            
+            BAT_CONNECT["電池連接點<br/>(+)正極"]
+            
+            WIRE_BAT_TO_TP["走線❶<br/>BAT → TP4054 Pin3"]
+            WIRE_BAT_TO_AO["走線❷<br/>BAT(+) → AO3401 Source"]
+            WIRE_VCC_TO_GATE["走線❸<br/>VCC → Gate<br/>(橫向短線)"]
+            
+            BAT_CONNECT --> WIRE_BAT_TO_TP
+            BAT_CONNECT --> WIRE_BAT_TO_AO
+        end
+        
+        subgraph BOTTOM_AREA["下方區域：電池與接地"]
+            direction LR
+            
+            BATTERY["🔋 鋰電池<br/>500mAh<br/>3.7V"]
+            
+            GND_BUS["⏚ GND 匯流排<br/>━━━━━━━━━━━━━━━<br/>TP4054_GND | 電池(-) | AO3401_Gate下拉 | ADC電路"]
+            
+            BATTERY -.->|"(-)負極"| GND_BUS
+        end
+        
+        VSYS_OUTPUT["⚡ VSYS 輸出<br/>往右輸出到<br/>ESP32-C3"]
+        
+        USB_INPUT ==>|"❶ 短走線"| TOP_AREA
+        TOP_AREA ==>|"❷ 充電/供電"| MIDDLE_AREA
+        MIDDLE_AREA ==>|"❸ 接地匯流"| BOTTOM_AREA
+        AO_RIGHT ==>|"❹ 短走線"| VSYS_OUTPUT
+        
+        ADVANTAGE["💡 佈局優勢總結：<br/>✓ 垂直分層清晰<br/>✓ 橫向走線最短<br/>✓ GND集中在底部<br/>✓ 信號流向順暢"]:::advantageStyle
+    end
+    
+    LEGEND["📊 圖例說明：<br/>===> 主要電源路徑<br/>---> 信號控制線<br/>-.-> 內部連接"]:::legendStyle
+    
+    classDef advantageStyle fill:#c8e6c9,stroke:#4caf50,stroke-width:3px
+    classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+    
+    style LAYOUT fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style TOP_AREA fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    style MIDDLE_AREA fill:#f3e5f5,stroke:#8e24aa,stroke-width:2px
+    style BOTTOM_AREA fill:#e8f5e9,stroke:#43a047,stroke-width:2px
+    style USB_INPUT fill:#ffccbc,stroke:#ff5722,stroke-width:2px
+    style VSYS_OUTPUT fill:#c5e1a5,stroke:#689f38,stroke-width:2px
+```
+
+**ASCII 佈局視圖（補充）**：
+```
+優化佈局視圖：
+                                                      
+    USB 5V ──────────┐                               
+                     ↓                               
+    ┌────────────────────────────────┐              
+    │      TP4054 (左側)             │              
+    │  ┌──────────────────┐          │              
+    │  │  Pin5   Pin4     │          │     到 VSYS →
+    │  │  PROG   VCC      │ ←──────┐ │              
+    │  │      IC本體       │        │ │     AO3401   
+    │  │  Pin1 Pin2 Pin3  │        │ │   ┌────┐     
+    │  │  CHRG GND  BAT   │ ───┐   └─┼───┤G  D├──→  
+    │  └──────┬───┬───┬───┘    │     │   │    │     
+    │         │   │   │        │     │   │S   │     
+    │        LED  GND  └────────┼─────┼───┤    │     
+    │         │        電池(+)  │     │   └────┘     
+    │         │          │      │     │    右轉90°   
+    │         │       ┌──▼──┐   │     │              
+    │         │       │ 🔋  │   │     │              
+    │         │       │500mA│   │     │              
+    │         │       └──┬──┘   │     │              
+    │         │          │(-)   │     │              
+    └─────────┴──────────┴──────┴─────┘              
+              GND匯流區                              
+```
+
+---
+
 ### 系統架構圖
 
 ```
@@ -236,46 +352,62 @@ graph TB
         NOTE1["⚙️ 改造：W5 只斷開 VSYS 端<br/>保留 USB 端保護 TP4054"]:::noteStyle
     end
     
-    subgraph NEW_CIRCUIT["新增電路（TP4054 + AO3401）"]
-        direction TB
+subgraph NEW_CIRCUIT["新增電路（TP4054 + AO3401）優化佈局"]
+        direction LR
         
-        subgraph TP4054_BLOCK["TP4054 充電管理"]
-            TP4054["TP4054<br/>(SOT-23-5)"]
-            TP_VCC["Pin 4: VCC"]
-            TP_BAT["Pin 3: BAT"]
-            TP_PROG["Pin 2: PROG"]
-            TP_GND["Pin 1: GND"]
-            R_PROG["10kΩ<br/>充電電流 130mA"]
+        subgraph TP4054_BLOCK["TP4054 充電管理（左側）"]
+            direction TB
             
-            TP4054 --- TP_VCC
-            TP4054 --- TP_BAT
-            TP4054 --- TP_PROG
-            TP4054 --- TP_GND
+            subgraph TP4054_TOP["上排"]
+                direction LR
+                TP_PROG["Pin 5: PROG"]
+                TP_VCC["Pin 4: VCC"]
+            end
+            
+            TP4054_IC["TP4054<br/>(SOT-23-5)<br/>📌 上: PROG/VCC<br/>下: CHRG/GND/BAT"]
+            
+            subgraph TP4054_BOTTOM["下排"]
+                direction LR
+                TP_CHRG["Pin 1: CHRG"]
+                TP_GND["Pin 2: GND"]
+                TP_BAT["Pin 3: BAT"]
+            end
+            
+            TP4054_TOP --- TP4054_IC
+            TP4054_IC --- TP4054_BOTTOM
+            
+            R_PROG["10kΩ<br/>充電電流 130mA"]
             TP_PROG --> R_PROG
             R_PROG --> GND1["GND"]
             TP_GND --> GND1
-        end
-        
-        subgraph AO3401_BLOCK["AO3401 電源切換"]
-            AO3401["AO3401<br/>P-MOSFET<br/>(SOT-23)"]
-            AO_GATE["Pin 1: Gate (G)"]
-            AO_SOURCE["Pin 2: Source (S)"]
-            AO_DRAIN["Pin 3: Drain (D)"]
-            R_GATE["100kΩ<br/>下拉電阻"]
-            
-            AO3401 --- AO_GATE
-            AO3401 --- AO_SOURCE
-            AO3401 --- AO_DRAIN
-            AO_GATE --> R_GATE
-            R_GATE --> GND2["GND"]
         end
         
         BATTERY["🔋 鋰電池<br/>3.7V 500mAh<br/>(+) 正極 / (-) 負極"]
         BAT_NEG["電池 (-) 負極"]
         
         TP_BAT -->|充電| BATTERY
-        BATTERY -->|供電| AO_SOURCE
         BAT_NEG --> PCB_GND
+        
+        subgraph AO3401_BLOCK["AO3401 電源切換（右側，右轉90°）"]
+            direction TB
+            
+            AO3401_IC["AO3401<br/>P-MOSFET<br/>(SOT-23)<br/>📌 順時針轉90°"]
+            
+            subgraph AO3401_PINS["引腳配置"]
+                direction TB
+                AO_DRAIN["Pin 3: Drain (D)<br/>→ VSYS 輸出"]
+                AO_GATE["Pin 1: Gate (G)<br/>← VCC 控制"]
+                AO_SOURCE["Pin 2: Source (S)<br/>← 電池 (+)"]
+            end
+            
+            AO3401_IC --- AO3401_PINS
+            
+            R_GATE["100kΩ<br/>下拉電阻"]
+            AO_GATE --> R_GATE
+            R_GATE --> GND2["GND"]
+        end
+        
+        BATTERY -->|供電| AO_SOURCE
     end
     
     %% 連接兩個區域
@@ -305,27 +437,45 @@ graph TB
 #### Step 1: TP4054 充電 IC
 
 ```mermaid
-graph LR
+graph TB
     subgraph TP4054["TP4054 充電 IC (SOT-23-5)"]
-        PIN1["Pin 1: GND"]
-        PIN2["Pin 2: PROG"]
-        PIN3["Pin 3: BAT"]
-        PIN4["Pin 4: VCC"]
-        PIN5["Pin 5: NC"]
+        direction TB
+        
+        subgraph TOP_PINS["上排（朝上）"]
+            direction LR
+            PIN5["Pin 5: PROG"]
+            PIN4["Pin 4: VCC"]
+        end
+        
+        IC_BODY["TP4054 IC 本體"]
+        
+        subgraph BOTTOM_PINS["下排（朝下）"]
+            direction LR
+            PIN1["Pin 1: CHRG"]
+            PIN2["Pin 2: GND"]
+            PIN3["Pin 3: BAT"]
+        end
+        
+        TOP_PINS -.->|IC內部| IC_BODY
+        IC_BODY -.->|IC內部| BOTTOM_PINS
     end
     
-    USB["USB 5V<br/>(透過 W5)"] ==>|"🔧 焦接"| PIN4
+    USB["USB 5V<br/>(透過 W5)"] ==>|"🔧 焦接<br/>走線往上"| PIN4
     PIN4 -.->|IC內部| PIN3
-    PIN3 ==>|"🔧 焦接"| BAT["🔋 電池<br/>3.7V 500mAh<br/>(+) 正極"]
+    PIN3 ==>|"🔧 焦接<br/>走線往下"| BAT["🔋 電池<br/>3.7V 500mAh<br/>(+) 正極"]
     BAT -.->|電池內部| BAT_NEG["電池 (-) 負極"]
     BAT_NEG ==>|"🔧 GND線"| GND1["GND"]
-    PIN2 ==>|"🔧 焦接"| R_PROG["10kΩ 電阻"]
+    PIN5 ==>|"🔧 焦接<br/>走線往上"| R_PROG["10kΩ 電阻"]
     R_PROG ==>|"🔧 焦接"| GND1
-    PIN1 ==>|"🔧 GND線"| GND1
+    PIN2 ==>|"🔧 GND線<br/>走線往下"| GND1
+    PIN1 -.->|可選| LED["LED<br/>充電指示"]
+    LED -.->|可選| GND1
     
+    LAYOUT_NOTE["📌 佈局優勢：<br/>✓ VCC/PROG 在上方，靠近 USB 輸入<br/>✓ BAT/GND 在下方，靠近電池<br/>✓ 走線更短、更清晰"]:::noteStyle
     LEGEND["📊 圖例：<br/>🔧 ===> 需焦接<br/>-.-> IC/電池內部"]:::legendStyle
     
     classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+    classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
     style TP4054 fill:#e1f5ff
     style BAT fill:#fff9c4
     style USB fill:#ffebee
@@ -333,14 +483,21 @@ graph LR
 
 **文字說明**:
 ```
-TP4054 (SOT-23-5) 接線:
+TP4054 (SOT-23-5) 接線（優化佈局）:
+
+上排（Pin 5, 4）：靠近 USB 輸入
 ┌─────────────┐
+│ 5: PROG     │ ← 10kΩ 接地（設定充電電流 130mA）
+│ 4: VCC      │ ← SuperMini VCC（USB 5V 入口，透過 W5）
+├─────────────┤
+│   TP4054    │
+│   IC 本體   │
+├─────────────┤
 │ 1: CHRG     │ ← 充電指示 LED（可選）
 │ 2: GND      │ ← GND
 │ 3: BAT      │ ← 電池正極 (+)
-│ 4: VCC      │ ← SuperMini VCC（USB 5V 入口，透過 W5）
-│ 5: PROG     │ ← 10kΩ 接地（設定充電電流 130mA）
 └─────────────┘
+下排（Pin 1, 2, 3）：靠近電池
 
 連接:
 1. Pin 4 (VCC) ──> USB 5V (透過 W5 保護)
@@ -363,28 +520,49 @@ graph TB
         VSYS["SuperMini VSYS<br/>(系統 5V)"]
     end
     
-    subgraph AO3401["AO3401 P-MOSFET (SOT-23)"]
-        GATE["Pin 1: Gate (G)"]
-        SOURCE["Pin 2: Source (S)"]
-        DRAIN["Pin 3: Drain (D)"]
+    subgraph AO3401["AO3401 P-MOSFET (SOT-23)（右轉90°）"]
+        direction LR
+        
+        subgraph LEFT_SIDE["左側"]
+            direction TB
+            GATE["Pin 1: Gate (G)"]
+            SOURCE["Pin 2: Source (S)"]
+        end
+        
+        IC_BODY_MOS["AO3401<br/>P-MOSFET"]
+        
+        subgraph RIGHT_SIDE["右側"]
+            direction TB
+            SPACE[" "]
+            DRAIN["Pin 3: Drain (D)"]
+            SPACE2[" "]
+        end
+        
+        LEFT_SIDE -.->|MOS內部| IC_BODY_MOS
+        IC_BODY_MOS -.->|MOS內部| RIGHT_SIDE
+        
+        style SPACE fill:none,stroke:none
+        style SPACE2 fill:none,stroke:none
     end
     
-    BAT_P["🔋 電池<br/>(+) 正極 3.7V"] ==>|"🔧 焦接"| SOURCE
+    BAT_P["🔋 電池<br/>(+) 正極 3.7V"] ==>|"🔧 焦接<br/>走線往左"| SOURCE
     BAT_N["電池<br/>(-) 負極"] ==>|"🔧 GND線"| GND2
     SOURCE -.->|MOS內部| DRAIN
-    DRAIN ==>|"🔧 VSYS線"| VSYS
+    DRAIN ==>|"🔧 VSYS線<br/>走線往右"| VSYS
     
     USB5V --> TP4054_VCC
-    TP4054_VCC ==>|"🔧 控制線"| GATE
+    TP4054_VCC ==>|"🔧 控制線<br/>走線往左"| GATE
     GATE ==>|"🔧 焦接"| R_GATE["100kΩ 下拉"]
     R_GATE ==>|"🔧 GND線"| GND2["GND"]
     
     USB_ON["USB 插入:"] -.-> STATE1["Gate = 4.4V<br/>Vgs = +0.7V<br/>P-MOS 關閉"]
     USB_OFF["USB 拔除:"] -.-> STATE2["Gate = 0V<br/>Vgs = -3.7V<br/>P-MOS 導通"]
     
+    LAYOUT_NOTE["📌 佈局優勢：<br/>✓ AO3401 右轉90°後<br/>✓ Gate 在左側，靠近 TP4054<br/>✓ Drain 在右側，靠近 VSYS<br/>✓ 走線更短、更直"]:::noteStyle
     LEGEND["📊 圖例：<br/>🔧 ===> 需焦接<br/>-.-> MOS內部通道"]:::legendStyle
     
     classDef legendStyle fill:#e8eaf6,stroke:#3f51b5,stroke-width:2px
+    classDef noteStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
     style AO3401 fill:#e8f5e9
     style POWER_PATH fill:#fff3e0
     style STATE1 fill:#ffcdd2
@@ -393,11 +571,25 @@ graph TB
 
 **文字說明**:
 ```
-AO3401 (SOT-23) 接線:
-┌─────────────┐
-│ 1: G (Gate) │ ← TP4054 VCC (透過 W5，約 4.4V) + 100kΩ 下拉到 GND
-│ 2: S (Source)│ ← 電池正極 (+)
-│ 3: D (Drain)│ ← SuperMini VSYS
+AO3401 (SOT-23) 接線（右轉90°佈局）:
+
+       左側              右側
+    ┌────────┐      ┌────────┐
+    │ 1: G   │      │        │
+    │ (Gate) │<---- │        │
+    │        │      │ 3: D   │----> VSYS
+    │ 2: S   │<---- │(Drain) │
+    │(Source)│ 電池 │        │
+    └────────┘      └────────┘
+       AO3401 (旋轉後視圖)
+
+連接方式：
+左側（輸入）：靠近 TP4054 和電池
+- Pin 1 (Gate) ← TP4054 VCC（透過 W5，約 4.4V）+ 100kΩ 下拉到 GND
+- Pin 2 (Source) ← 電池正極 (+)
+
+右側（輸出）：靠近 VSYS
+- Pin 3 (Drain) → SuperMini VSYS
 └─────────────┘
 
 連接:
