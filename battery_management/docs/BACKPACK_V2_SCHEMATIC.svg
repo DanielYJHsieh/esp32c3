@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="780" viewBox="0 0 1180 780" font-family="Microsoft JhengHei, PingFang TC, Noto Sans CJK TC, sans-serif">
+<rect width="1180" height="780" fill="#ffffff"/>
+<text x="590.0" y="30" font-size="20" text-anchor="middle" fill="#222" font-weight="bold">ESP32-C3 SuperMini 電池背板 v2 — 手焊版電路圖（TP4054 + AO3401）</text>
+<rect x="30" y="55" width="160" height="660" rx="8" fill="#f3f3f3" stroke="#555" stroke-width="2"/>
+<text x="110" y="80" font-size="15" text-anchor="middle" fill="#222" font-weight="bold">ESP32-C3</text>
+<text x="110" y="98" font-size="15" text-anchor="middle" fill="#222" font-weight="bold">SuperMini</text>
+<circle cx="190" cy="145" r="6" fill="#fff" stroke="#e65100" stroke-width="3"/>
+<text x="178" y="141" font-size="15" text-anchor="end" fill="#e65100" font-weight="bold">VSYS</text>
+<text x="178" y="158" font-size="11" text-anchor="end" fill="#555">W5 藍點A端(飛線)</text>
+<circle cx="190" cy="215" r="6" fill="#fff" stroke="#c62828" stroke-width="3"/>
+<text x="178" y="211" font-size="15" text-anchor="end" fill="#c62828" font-weight="bold">5V</text>
+<text x="178" y="228" font-size="11" text-anchor="end" fill="#555">排針 5V = VBUS</text>
+<circle cx="190" cy="455" r="6" fill="#fff" stroke="#2e7d32" stroke-width="3"/>
+<text x="178" y="451" font-size="15" text-anchor="end" fill="#2e7d32" font-weight="bold">3.3</text>
+<text x="178" y="468" font-size="11" text-anchor="end" fill="#555">排針 3.3</text>
+<circle cx="190" cy="545" r="6" fill="#fff" stroke="#6a1b9a" stroke-width="3"/>
+<text x="178" y="541" font-size="15" text-anchor="end" fill="#6a1b9a" font-weight="bold">GPIO1</text>
+<text x="178" y="558" font-size="11" text-anchor="end" fill="#555">CHRG 輸入</text>
+<circle cx="190" cy="615" r="6" fill="#fff" stroke="#1565c0" stroke-width="3"/>
+<text x="178" y="611" font-size="15" text-anchor="end" fill="#1565c0" font-weight="bold">GPIO0</text>
+<text x="178" y="628" font-size="11" text-anchor="end" fill="#555">VBAT/2 (ADC)</text>
+<circle cx="190" cy="685" r="6" fill="#fff" stroke="#222" stroke-width="3"/>
+<text x="178" y="681" font-size="15" text-anchor="end" fill="#222" font-weight="bold">G</text>
+<text x="178" y="698" font-size="11" text-anchor="end" fill="#555">排針 GND</text>
+<text x="110" y="300" font-size="12" text-anchor="middle" fill="#555">板上原有：</text>
+<text x="110" y="318" font-size="12" text-anchor="middle" fill="#555">VBUS ─▶|─ VSYS</text>
+<text x="110" y="334" font-size="11" text-anchor="middle" fill="#555">(W5/PD1 BAT60J)</text>
+<text x="110" y="354" font-size="12" text-anchor="middle" fill="#555">VSYS ─ ME6211 ─ 3V3</text>
+<text x="110" y="390" font-size="12" text-anchor="middle" fill="#c62828" font-weight="bold">⚠ 拆掉 PW 電源LED</text>
+<text x="110" y="406" font-size="12" text-anchor="middle" fill="#c62828" font-weight="bold">⚠ W5 保持完整</text>
+<line x1="196" y1="145" x2="700" y2="145" stroke="#e65100" stroke-width="3"/>
+<text x="260" y="137" font-size="14" text-anchor="start" fill="#e65100" font-weight="bold">VSYS</text>
+<circle cx="600" cy="145" r="4.5" fill="#e65100"/>
+<line x1="600" y1="145" x2="600" y2="156.0" stroke="#222" stroke-width="2"/>
+<line x1="600" y1="164.0" x2="600" y2="175" stroke="#222" stroke-width="2"/>
+<line x1="587" y1="156.0" x2="613" y2="156.0" stroke="#222" stroke-width="3"/>
+<line x1="587" y1="164.0" x2="613" y2="164.0" stroke="#222" stroke-width="3"/>
+<text x="618" y="157.0" font-size="13" text-anchor="start" fill="#222" font-weight="bold">C3</text>
+<text x="618" y="174.0" font-size="13" text-anchor="start" fill="#222">22µF</text>
+<line x1="600" y1="175" x2="600" y2="185" stroke="#222" stroke-width="2"/>
+<line x1="588" y1="185" x2="612" y2="185" stroke="#222" stroke-width="2"/>
+<line x1="593" y1="190" x2="607" y2="190" stroke="#222" stroke-width="2"/>
+<line x1="597" y1="195" x2="603" y2="195" stroke="#222" stroke-width="2"/>
+<rect x="720" y="83" width="120" height="88" rx="6" fill="#fff8e1" stroke="#222" stroke-width="2"/>
+<line x1="700" y1="145" x2="720" y2="145" stroke="#e65100" stroke-width="3"/>
+<line x1="840" y1="145" x2="860" y2="145" stroke="#1565c0" stroke-width="3"/>
+<text x="726" y="150" font-size="14" text-anchor="start" fill="#222" font-weight="bold">S</text>
+<text x="834" y="150" font-size="14" text-anchor="end" fill="#222" font-weight="bold">D</text>
+<text x="780" y="101" font-size="13" text-anchor="middle" fill="#222" font-weight="bold">Q1 AO3401</text>
+<text x="780" y="117" font-size="11" text-anchor="middle" fill="#555">(印字 A19T)</text>
+<polygon points="790,130 790,144 774,137" fill="#222"/>
+<line x1="774" y1="129" x2="774" y2="145" stroke="#222" stroke-width="2"/>
+<line x1="734" y1="137" x2="774" y2="137" stroke="#222" stroke-width="1"/>
+<line x1="790" y1="137" x2="826" y2="137" stroke="#222" stroke-width="1"/>
+<text x="780" y="161" font-size="10" text-anchor="middle" fill="#555">寄生二極體 D→S</text>
+<line x1="780" y1="171" x2="780" y2="185" stroke="#222" stroke-width="2"/>
+<text x="788" y="183" font-size="14" text-anchor="start" fill="#222" font-weight="bold">G</text>
+<text x="696" y="137" font-size="11" text-anchor="end" fill="#888">pin2</text>
+<text x="864" y="137" font-size="11" text-anchor="start" fill="#888">pin3</text>
+<text x="772" y="183" font-size="11" text-anchor="end" fill="#888">pin1</text>
+<line x1="196" y1="215" x2="780" y2="215" stroke="#c62828" stroke-width="3"/>
+<text x="215" y="207" font-size="14" text-anchor="start" fill="#c62828" font-weight="bold">VBUS</text>
+<line x1="780" y1="185" x2="780" y2="215" stroke="#c62828" stroke-width="3"/>
+<circle cx="780" cy="215" r="4.5" fill="#c62828"/>
+<circle cx="720" cy="215" r="4.5" fill="#c62828"/>
+<line x1="720" y1="215" x2="720" y2="240.5" stroke="#222" stroke-width="2"/>
+<line x1="720" y1="284.5" x2="720" y2="310" stroke="#222" stroke-width="2"/>
+<rect x="712" y="240.5" width="16" height="44" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="706" y="259.5" font-size="13" text-anchor="end" fill="#222" font-weight="bold">R1</text>
+<text x="706" y="276.5" font-size="13" text-anchor="end" fill="#222">100k</text>
+<line x1="720" y1="310" x2="720" y2="320" stroke="#222" stroke-width="2"/>
+<line x1="708" y1="320" x2="732" y2="320" stroke="#222" stroke-width="2"/>
+<line x1="713" y1="325" x2="727" y2="325" stroke="#222" stroke-width="2"/>
+<line x1="717" y1="330" x2="723" y2="330" stroke="#222" stroke-width="2"/>
+<circle cx="250" cy="215" r="4.5" fill="#c62828"/>
+<line x1="250" y1="215" x2="250" y2="238.5" stroke="#222" stroke-width="2"/>
+<line x1="250" y1="246.5" x2="250" y2="270" stroke="#222" stroke-width="2"/>
+<line x1="237" y1="238.5" x2="263" y2="238.5" stroke="#222" stroke-width="3"/>
+<line x1="237" y1="246.5" x2="263" y2="246.5" stroke="#222" stroke-width="3"/>
+<text x="268" y="239.5" font-size="13" text-anchor="start" fill="#222" font-weight="bold">C1</text>
+<text x="268" y="256.5" font-size="13" text-anchor="start" fill="#222">1µF</text>
+<line x1="250" y1="270" x2="250" y2="280" stroke="#222" stroke-width="2"/>
+<line x1="238" y1="280" x2="262" y2="280" stroke="#222" stroke-width="2"/>
+<line x1="243" y1="285" x2="257" y2="285" stroke="#222" stroke-width="2"/>
+<line x1="247" y1="290" x2="253" y2="290" stroke="#222" stroke-width="2"/>
+<rect x="400" y="290" width="160" height="130" rx="6" fill="#e3f2fd" stroke="#222" stroke-width="2"/>
+<text x="480" y="348" font-size="15" text-anchor="middle" fill="#222" font-weight="bold">U1 TP4054</text>
+<text x="480" y="366" font-size="12" text-anchor="middle" fill="#555">SOT-23-5</text>
+<circle cx="500" cy="215" r="4.5" fill="#c62828"/>
+<line x1="500" y1="215" x2="500" y2="290" stroke="#c62828" stroke-width="3"/>
+<text x="507" y="308" font-size="12" text-anchor="start" fill="#222">4 VCC</text>
+<line x1="400" y1="390" x2="330" y2="390" stroke="#6a1b9a" stroke-width="2"/>
+<text x="406" y="394" font-size="12" text-anchor="start" fill="#222">1 CHRG</text>
+<line x1="430" y1="420" x2="430" y2="440" stroke="#222" stroke-width="2"/>
+<text x="436" y="414" font-size="12" text-anchor="start" fill="#222">5 PROG</text>
+<line x1="430" y1="440" x2="430" y2="463.0" stroke="#222" stroke-width="2"/>
+<line x1="430" y1="507.0" x2="430" y2="530" stroke="#222" stroke-width="2"/>
+<rect x="422" y="463.0" width="16" height="44" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="416" y="482.0" font-size="13" text-anchor="end" fill="#222" font-weight="bold">R2</text>
+<text x="416" y="499.0" font-size="13" text-anchor="end" fill="#222">10k*</text>
+<line x1="430" y1="530" x2="430" y2="540" stroke="#222" stroke-width="2"/>
+<line x1="418" y1="540" x2="442" y2="540" stroke="#222" stroke-width="2"/>
+<line x1="423" y1="545" x2="437" y2="545" stroke="#222" stroke-width="2"/>
+<line x1="427" y1="550" x2="433" y2="550" stroke="#222" stroke-width="2"/>
+<line x1="500" y1="420" x2="500" y2="450" stroke="#222" stroke-width="2"/>
+<text x="506" y="414" font-size="12" text-anchor="start" fill="#222">2 GND</text>
+<line x1="500" y1="450" x2="500" y2="460" stroke="#222" stroke-width="2"/>
+<line x1="488" y1="460" x2="512" y2="460" stroke="#222" stroke-width="2"/>
+<line x1="493" y1="465" x2="507" y2="465" stroke="#222" stroke-width="2"/>
+<line x1="497" y1="470" x2="503" y2="470" stroke="#222" stroke-width="2"/>
+<line x1="560" y1="330" x2="600" y2="330" stroke="#1565c0" stroke-width="3"/>
+<text x="554" y="326" font-size="12" text-anchor="end" fill="#222">3 BAT</text>
+<line x1="600" y1="330" x2="600" y2="470" stroke="#1565c0" stroke-width="3"/>
+<line x1="600" y1="470" x2="1040" y2="470" stroke="#1565c0" stroke-width="3"/>
+<text x="620" y="462" font-size="14" text-anchor="start" fill="#1565c0" font-weight="bold">VBAT</text>
+<line x1="860" y1="145" x2="900" y2="145" stroke="#1565c0" stroke-width="3"/>
+<line x1="900" y1="145" x2="900" y2="470" stroke="#1565c0" stroke-width="3"/>
+<circle cx="900" cy="470" r="4.5" fill="#1565c0"/>
+<circle cx="680" cy="470" r="4.5" fill="#1565c0"/>
+<line x1="680" y1="470" x2="680" y2="493.5" stroke="#222" stroke-width="2"/>
+<line x1="680" y1="501.5" x2="680" y2="525" stroke="#222" stroke-width="2"/>
+<line x1="667" y1="493.5" x2="693" y2="493.5" stroke="#222" stroke-width="3"/>
+<line x1="667" y1="501.5" x2="693" y2="501.5" stroke="#222" stroke-width="3"/>
+<text x="698" y="494.5" font-size="13" text-anchor="start" fill="#222" font-weight="bold">C2</text>
+<text x="698" y="511.5" font-size="13" text-anchor="start" fill="#222">10µF</text>
+<line x1="680" y1="525" x2="680" y2="535" stroke="#222" stroke-width="2"/>
+<line x1="668" y1="535" x2="692" y2="535" stroke="#222" stroke-width="2"/>
+<line x1="673" y1="540" x2="687" y2="540" stroke="#222" stroke-width="2"/>
+<line x1="677" y1="545" x2="683" y2="545" stroke="#222" stroke-width="2"/>
+<circle cx="980" cy="470" r="4.5" fill="#1565c0"/>
+<line x1="980" y1="470" x2="980" y2="520.5" stroke="#222" stroke-width="2"/>
+<line x1="980" y1="564.5" x2="980" y2="615" stroke="#222" stroke-width="2"/>
+<rect x="972" y="520.5" width="16" height="44" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="994" y="539.5" font-size="13" text-anchor="start" fill="#222" font-weight="bold">R3</text>
+<text x="994" y="556.5" font-size="13" text-anchor="start" fill="#222">1M 1%</text>
+<circle cx="980" cy="615" r="4.5" fill="#1565c0"/>
+<line x1="980" y1="615" x2="980" y2="635.5" stroke="#222" stroke-width="2"/>
+<line x1="980" y1="679.5" x2="980" y2="700" stroke="#222" stroke-width="2"/>
+<rect x="972" y="635.5" width="16" height="44" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="994" y="654.5" font-size="13" text-anchor="start" fill="#222" font-weight="bold">R4</text>
+<text x="994" y="671.5" font-size="13" text-anchor="start" fill="#222">1M 1%</text>
+<line x1="980" y1="700" x2="980" y2="710" stroke="#222" stroke-width="2"/>
+<line x1="968" y1="710" x2="992" y2="710" stroke="#222" stroke-width="2"/>
+<line x1="973" y1="715" x2="987" y2="715" stroke="#222" stroke-width="2"/>
+<line x1="977" y1="720" x2="983" y2="720" stroke="#222" stroke-width="2"/>
+<line x1="196" y1="615" x2="980" y2="615" stroke="#1565c0" stroke-width="2"/>
+<circle cx="900" cy="615" r="4.5" fill="#1565c0"/>
+<line x1="900" y1="615" x2="900" y2="643.5" stroke="#222" stroke-width="2"/>
+<line x1="900" y1="651.5" x2="900" y2="680" stroke="#222" stroke-width="2"/>
+<line x1="887" y1="643.5" x2="913" y2="643.5" stroke="#222" stroke-width="3"/>
+<line x1="887" y1="651.5" x2="913" y2="651.5" stroke="#222" stroke-width="3"/>
+<text x="918" y="644.5" font-size="13" text-anchor="start" fill="#222" font-weight="bold">C4</text>
+<text x="918" y="661.5" font-size="13" text-anchor="start" fill="#222">100nF</text>
+<line x1="900" y1="680" x2="900" y2="690" stroke="#222" stroke-width="2"/>
+<line x1="888" y1="690" x2="912" y2="690" stroke="#222" stroke-width="2"/>
+<line x1="893" y1="695" x2="907" y2="695" stroke="#222" stroke-width="2"/>
+<line x1="897" y1="700" x2="903" y2="700" stroke="#222" stroke-width="2"/>
+<rect x="1060" y="440" width="90" height="100" rx="6" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="1105" y="462" font-size="14" text-anchor="middle" fill="#222" font-weight="bold">J1</text>
+<text x="1105" y="478" font-size="11" text-anchor="middle" fill="#555">1.25mm 2P</text>
+<line x1="1040" y1="470" x2="1060" y2="470" stroke="#1565c0" stroke-width="3"/>
+<text x="1066" y="498" font-size="12" text-anchor="start" fill="#222">1 BAT+</text>
+<line x1="1060" y1="520" x2="1045" y2="520" stroke="#222" stroke-width="2"/>
+<text x="1066" y="524" font-size="12" text-anchor="start" fill="#222">2 BAT−</text>
+<line x1="1045" y1="520" x2="1045" y2="530" stroke="#222" stroke-width="2"/>
+<line x1="1033" y1="530" x2="1057" y2="530" stroke="#222" stroke-width="2"/>
+<line x1="1038" y1="535" x2="1052" y2="535" stroke="#222" stroke-width="2"/>
+<line x1="1042" y1="540" x2="1048" y2="540" stroke="#222" stroke-width="2"/>
+<text x="1105" y="565" font-size="12" text-anchor="middle" fill="#222">LiPo 1S 帶保護板</text>
+<text x="1105" y="582" font-size="12" text-anchor="middle" fill="#c62828" font-weight="bold">插上前先量極性!</text>
+<line x1="196" y1="455" x2="215" y2="455" stroke="#2e7d32" stroke-width="2"/>
+<circle cx="215" cy="455" r="4.5" fill="#2e7d32"/>
+<line x1="215" y1="455" x2="250.5" y2="455" stroke="#222" stroke-width="2"/>
+<line x1="294.5" y1="455" x2="330" y2="455" stroke="#222" stroke-width="2"/>
+<rect x="250.5" y="447" width="44" height="16" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="272.5" y="441" font-size="13" text-anchor="middle" fill="#222">R5 100k</text>
+<line x1="215" y1="455" x2="215" y2="495" stroke="#2e7d32" stroke-width="2"/>
+<line x1="215" y1="495" x2="235" y2="495" stroke="#2e7d32" stroke-width="2"/>
+<polygon points="235,486 235,504 251,495" fill="#fff" stroke="#222" stroke-width="2"/>
+<line x1="251" y1="486" x2="251" y2="504" stroke="#222" stroke-width="2"/>
+<text x="243" y="481" font-size="11" text-anchor="middle" fill="#222">LED1</text>
+<line x1="251" y1="495" x2="262" y2="495" stroke="#222" stroke-width="2"/>
+<rect x="262" y="488" width="40" height="14" fill="#fff" stroke="#222" stroke-width="2"/>
+<text x="282" y="518" font-size="11" text-anchor="middle" fill="#222">R6 1k</text>
+<line x1="302" y1="495" x2="330" y2="495" stroke="#222" stroke-width="2"/>
+<line x1="330" y1="390" x2="330" y2="545" stroke="#6a1b9a" stroke-width="2"/>
+<circle cx="330" cy="455" r="4.5" fill="#6a1b9a"/>
+<circle cx="330" cy="495" r="4.5" fill="#6a1b9a"/>
+<line x1="196" y1="545" x2="330" y2="545" stroke="#6a1b9a" stroke-width="2"/>
+<circle cx="330" cy="545" r="4.5" fill="#6a1b9a"/>
+<text x="205" y="539" font-size="11" text-anchor="start" fill="#6a1b9a" font-weight="bold">CHRG (Low=充電中)</text>
+<line x1="196" y1="685" x2="215" y2="685" stroke="#222" stroke-width="2"/>
+<line x1="215" y1="685" x2="215" y2="695" stroke="#222" stroke-width="2"/>
+<line x1="203" y1="695" x2="227" y2="695" stroke="#222" stroke-width="2"/>
+<line x1="208" y1="700" x2="222" y2="700" stroke="#222" stroke-width="2"/>
+<line x1="212" y1="705" x2="218" y2="705" stroke="#222" stroke-width="2"/>
+<rect x="550" y="630" width="300" height="130" rx="6" fill="#fafafa" stroke="#bbb"/>
+<text x="560" y="652" font-size="12" text-anchor="start" fill="#222">* R2：100–200mAh→10k (100mA)</text>
+<text x="560" y="670" font-size="12" text-anchor="start" fill="#222">     200–400mAh→5.1k (196mA)</text>
+<text x="560" y="688" font-size="12" text-anchor="start" fill="#222">Q1：D=電池、S=VSYS、G=VBUS</text>
+<text x="560" y="706" font-size="12" text-anchor="start" fill="#222">U1 VCC、Q1 Gate 都接 VBUS (5V 排針)</text>
+<text x="560" y="724" font-size="12" text-anchor="start" fill="#222">LED1/R6 選配；2N7002 不需要</text>
+<text x="560" y="742" font-size="12" text-anchor="start" fill="#222">所有 ⏚ 都接 SuperMini GND</text>
+</svg>
