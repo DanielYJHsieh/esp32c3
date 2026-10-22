@@ -5,7 +5,7 @@
 | GPIO | 功能 |
 |------|------|
 | GPIO0 | VBAT/2（ADC1_CH0，1M/1M 分壓 + 100nF） |
-| GPIO1 | TP4054 CHRG（Low = 充電中，外部 100k 上拉） |
+| GPIO1 | TP4054 CHRG（Low = 充電中，內部上拉；R5 選配） |
 
 行為：
 1. 喚醒後先量 VBAT（WiFi 開啟前的靜置電壓）。

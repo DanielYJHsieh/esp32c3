@@ -199,6 +199,6 @@
 <text x="560" y="670" font-size="12" text-anchor="start" fill="#222">     200–400mAh→5.1k (196mA)</text>
 <text x="560" y="688" font-size="12" text-anchor="start" fill="#222">Q1：D=電池、S=VSYS、G=VBUS</text>
 <text x="560" y="706" font-size="12" text-anchor="start" fill="#222">U1 VCC、Q1 Gate 都接 VBUS (5V 排針)</text>
-<text x="560" y="724" font-size="12" text-anchor="start" fill="#222">LED1/R6 選配；2N7002 不需要</text>
+<text x="560" y="724" font-size="12" text-anchor="start" fill="#222">R5、LED1/R6 選配（背板版不裝，用內部上拉）</text>
 <text x="560" y="742" font-size="12" text-anchor="start" fill="#222">所有 ⏚ 都接 SuperMini GND</text>
 </svg>

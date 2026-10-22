@@ -3,7 +3,7 @@
  *
  * Hardware: battery_management/docs/BACKPACK_V2_DESIGN.md
  *   GPIO0 : VBAT_SENSE = VBAT * R4 / (R3 + R4)  (1M / 1M + 100nF)
- *   GPIO1 : TP4054 CHRG, open-drain, external 100k pull-up to 3V3 (LOW = charging)
+ *   GPIO1 : TP4054 CHRG, open-drain, internal pull-up (optional external 100k R5) (LOW = charging)
  */
 #include <stdbool.h>
 #include <stdio.h>
@@ -132,6 +132,9 @@ static void enter_deep_sleep(bool timer_wakeup)
     /* Wake when charging starts (CHRG goes LOW). Only arm it while not charging,
      * otherwise the level-triggered wakeup would fire immediately. */
     if (!is_charging()) {
+        /* keep the internal pull-up on CHRG during deep sleep */
+        gpio_pullup_en(CHRG_GPIO);
+        gpio_pulldown_dis(CHRG_GPIO);
         ESP_ERROR_CHECK(esp_deep_sleep_enable_gpio_wakeup(BIT64(CHRG_GPIO),
                                                           ESP_GPIO_WAKEUP_GPIO_LOW));
     }
@@ -146,7 +149,7 @@ void app_main(void)
     gpio_config_t io = {
         .pin_bit_mask = BIT64(CHRG_GPIO),
         .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_DISABLE,      /* external 100k pull-up */
+        .pull_up_en = GPIO_PULLUP_ENABLE,       /* R5 not fitted on the backpack build */
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
         .intr_type = GPIO_INTR_DISABLE,
     };
