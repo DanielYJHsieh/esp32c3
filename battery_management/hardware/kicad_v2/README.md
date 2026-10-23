@@ -19,6 +19,10 @@
 
 ![3D 預覽](render_top.png)
 
+## BOM
+
+零件清單：[`BOM.md`](BOM.md)
+
 ## 電路圖
 
 - PDF：[`C3_Battery_Backpack_schematic.pdf`](C3_Battery_Backpack_schematic.pdf)
