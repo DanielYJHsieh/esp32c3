@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1320" height="860" viewBox="0 0 1320 860" font-family="Microsoft JhengHei, PingFang TC, Noto Sans CJK TC, sans-serif">
 <rect width="1320" height="860" fill="#fff"/>
-<text x="660.0" y="34.0" font-size="20" text-anchor="middle" fill="#222" font-weight="bold">電池背板 PCB 外形規格（0.4 mm FR4 雙層）— 背面視圖，USB 朝上</text>
+<text x="660.0" y="34.0" font-size="20" text-anchor="middle" fill="#222" font-weight="bold">電池背板 PCB 外形規格（0.6 mm FR4 雙層）— 背面視圖，USB 朝上</text>
 <text x="660.0" y="58.0" font-size="13" text-anchor="middle" fill="#555">座標原點 = SuperMini 背面左上角（mm）；藍色為背板尺寸；灰色為 SuperMini 參考外形</text>
 <rect x="150.0" y="150.0" width="468.0" height="585.0" rx="6" fill="#eceff1" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="6,4"/>
 <circle cx="176.0" cy="215.0" r="20.8" fill="#e6d38a" stroke="#b39b3a"/>
@@ -112,13 +112,13 @@
 <rect x="854" y="112" width="440" height="420" rx="8" fill="#fafafa" stroke="#ccc"/>
 <text x="870.0" y="140.0" font-size="16" text-anchor="start" fill="#222" font-weight="bold">PCB 製作規格</text>
 <text x="870.0" y="170.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold">板材 / 板厚</text>
-<text x="1010.0" y="170.0" font-size="13" text-anchor="start" fill="#222">FR4，0.4 mm</text>
+<text x="1010.0" y="170.0" font-size="13" text-anchor="start" fill="#222">FR4，0.6 mm</text>
 <text x="870.0" y="198.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold">層數 / 銅厚</text>
 <text x="1010.0" y="198.0" font-size="13" text-anchor="start" fill="#222">2 層，1 oz</text>
 <text x="870.0" y="226.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold">外形</text>
 <text x="1010.0" y="226.0" font-size="13" text-anchor="start" fill="#222">13.6 × 18.8 mm（含缺口）</text>
 <text x="870.0" y="254.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold">表面處理</text>
-<text x="1010.0" y="254.0" font-size="13" text-anchor="start" fill="#222">ENIG 化金（建議，焊墊平整）</text>
+<text x="1010.0" y="254.0" font-size="13" text-anchor="start" fill="#222">LeadFree HASL 無鉛噴錫</text>
 <text x="870.0" y="282.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold">防焊 / 文字</text>
 <text x="1010.0" y="282.0" font-size="13" text-anchor="start" fill="#222">雙面防焊；Top 面絲印</text>
 <text x="870.0" y="310.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold">最小線寬/距</text>
@@ -147,17 +147,17 @@
 <rect x="870" y="677.0" width="180" height="4" fill="#ffca28" stroke="#555"/>
 <line x1="1050.0" y1="679.0" x2="1066.0" y2="686.5" stroke="#888" stroke-width="0.8"/>
 <text x="1070.0" y="690.5" font-size="12" text-anchor="start" fill="#222">Kapton + 雙面膠  0.15</text>
-<rect x="870" y="681.0" width="180" height="6.0" fill="#43a047" stroke="#555"/>
-<line x1="1050.0" y1="684.0" x2="1066.0" y2="702.5" stroke="#888" stroke-width="0.8"/>
-<text x="1070.0" y="706.5" font-size="12" text-anchor="start" fill="#222">背板 PCB 0.4  0.4</text>
-<rect x="870" y="687.0" width="180" height="16.5" fill="#1e88e5" stroke="#555"/>
-<line x1="1050.0" y1="695.2" x2="1066.0" y2="718.5" stroke="#888" stroke-width="0.8"/>
+<rect x="870" y="681.0" width="180" height="9.0" fill="#43a047" stroke="#555"/>
+<line x1="1050.0" y1="685.5" x2="1066.0" y2="702.5" stroke="#888" stroke-width="0.8"/>
+<text x="1070.0" y="706.5" font-size="12" text-anchor="start" fill="#222">背板 PCB  0.6</text>
+<rect x="870" y="690.0" width="180" height="16.5" fill="#1e88e5" stroke="#555"/>
+<line x1="1050.0" y1="698.2" x2="1066.0" y2="718.5" stroke="#888" stroke-width="0.8"/>
 <text x="1070.0" y="722.5" font-size="12" text-anchor="start" fill="#222">零件 (SOT-23)  1.1</text>
-<rect x="870" y="703.5" width="180" height="12.0" fill="#bdbdbd" stroke="#555"/>
-<line x1="1050.0" y1="709.5" x2="1066.0" y2="734.5" stroke="#888" stroke-width="0.8"/>
+<rect x="870" y="706.5" width="180" height="12.0" fill="#bdbdbd" stroke="#555"/>
+<line x1="1050.0" y1="712.5" x2="1066.0" y2="734.5" stroke="#888" stroke-width="0.8"/>
 <text x="1070.0" y="738.5" font-size="12" text-anchor="start" fill="#222">泡棉膠  0.8</text>
-<rect x="870" y="715.5" width="180" height="75.0" fill="#66bb6a" stroke="#555"/>
-<line x1="1050.0" y1="753.0" x2="1066.0" y2="754.0" stroke="#888" stroke-width="0.8"/>
-<text x="1070.0" y="758.0" font-size="12" text-anchor="start" fill="#222">電池 502020  5.0</text>
-<text x="870.0" y="812.5" font-size="13" text-anchor="start" fill="#c62828" font-weight="bold">總厚約 11.7 mm（402020 電池約 10.7 mm）</text>
+<rect x="870" y="718.5" width="180" height="75.0" fill="#66bb6a" stroke="#555"/>
+<line x1="1050.0" y1="756.0" x2="1066.0" y2="757.0" stroke="#888" stroke-width="0.8"/>
+<text x="1070.0" y="761.0" font-size="12" text-anchor="start" fill="#222">電池 502020  5.0</text>
+<text x="870.0" y="815.5" font-size="13" text-anchor="start" fill="#c62828" font-weight="bold">總厚約 11.9 mm（402020 電池約 10.9 mm）</text>
 </svg>

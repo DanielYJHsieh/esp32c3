@@ -1,9 +1,10 @@
-# ESP32-C3 SuperMini 電池背板 v2 — 規格總覽（0.4 mm FR4 硬板版）
+# ESP32-C3 SuperMini 電池背板 v2 — 規格總覽（0.6 mm FR4 硬板版）
 
-一片 **13.6 × 18.8 mm、0.4 mm 厚** 的小板，貼在 ESP32-C3 SuperMini 背面，讓 SuperMini 可以用單節鋰電池供電、USB 充電、自動切換電源，並由韌體讀取電量與充電狀態。
+一片 **13.6 × 18.8 mm、0.6 mm 厚** 的小板，貼在 ESP32-C3 SuperMini 背面，讓 SuperMini 可以用單節鋰電池供電、USB 充電、自動切換電源，並由韌體讀取電量與充電狀態。
 
 - 電路圖：[BACKPACK_V2_SCHEMATIC.png](BACKPACK_V2_SCHEMATIC.png)
 - PCB 外形規格：[BACKPACK_V2_PCB_OUTLINE.png](BACKPACK_V2_PCB_OUTLINE.png)
+- **KiCad 專案與 Gerber（可直接下單）**：[../hardware/kicad_v2](../hardware/kicad_v2)
 - 設計細節與 v1 檢討：[BACKPACK_V2_DESIGN.md](BACKPACK_V2_DESIGN.md)
 
 ![PCB 外形規格](BACKPACK_V2_PCB_OUTLINE.png)
@@ -102,10 +103,10 @@
 
 | 項目 | 規格 |
 |------|------|
-| 板材 / 板厚 | FR4，**0.4 mm** |
+| 板材 / 板厚 | FR4，**0.6 mm**（0.4 mm 只能選 ENIG/OSP，報價 US$33–50；0.6 mm 約 US$5.5 / 5 片） |
 | 層數 / 銅厚 | 2 層，1 oz |
 | 外形 | 13.6 × 18.8 mm；上緣 2 個 U 形缺口、中間 2 個 Ø2.6 mm NPTH 孔（避開 USB-C 固定腳） |
-| 表面處理 | ENIG（化金），焊墊平整，好手焊 |
+| 表面處理 | LeadFree HASL（無鉛噴錫） |
 | 防焊 / 絲印 | 雙面防焊；Top 面絲印（零件編號、P1–P7、電池 +/−） |
 | 最小線寬 / 線距 | 0.2 / 0.2 mm |
 | 電源走線 | VBAT、VSYS、GND ≥ 0.5 mm |
@@ -125,11 +126,11 @@
 | 正面零件 / USB-C | 3.2 |
 | SuperMini PCB | 1.0 |
 | Kapton + 雙面膠 | 0.15 |
-| 背板 PCB | 0.4 |
+| 背板 PCB | 0.6 |
 | 背板零件（SOT-23 最高） | 1.1 |
 | 泡棉雙面膠 | 0.8 |
 | 電池 502020（402020） | 5.0（4.0） |
-| **總厚** | **約 11.7（10.7）** |
+| **總厚** | **約 11.9（10.9）** |
 
 | 方向 | 尺寸 |
 |------|------|

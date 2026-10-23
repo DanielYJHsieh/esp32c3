@@ -1,0 +1,1014 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-23T14:49:19",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.7",
+    "schematic_parity": [
+        {
+            "description": "C_0603_1608Metric 與符號指定的封裝（Capacitor_SMD:C_0603_1608Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 C1",
+                    "pos": {
+                        "x": 103.6,
+                        "y": 107.9
+                    },
+                    "uuid": "2618dbd9-5867-47fe-887a-405d3017ef82"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBUS）與原理圖指定的網路（/VBUS）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBUS] 的焊盤 C1 F.Cu",
+                    "pos": {
+                        "x": 102.825,
+                        "y": 107.9
+                    },
+                    "uuid": "2a193a26-91dc-45c9-b75d-d9a12c6ff1b3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 C1 F.Cu",
+                    "pos": {
+                        "x": 104.375,
+                        "y": 107.9
+                    },
+                    "uuid": "7babfbaa-a3a2-4d71-99dd-3e0bbbd4a03b"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "C_0805_2012Metric 與符號指定的封裝（Capacitor_SMD:C_0805_2012Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 C2",
+                    "pos": {
+                        "x": 106.6,
+                        "y": 108.4
+                    },
+                    "uuid": "4355d039-fd5a-40e7-9268-2ff5597eb090"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBAT）與原理圖指定的網路（/VBAT）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBAT] 的焊盤 C2 F.Cu",
+                    "pos": {
+                        "x": 106.6,
+                        "y": 109.35
+                    },
+                    "uuid": "bd66cd2f-14ba-4313-9ea0-6adcedfb1f5c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 C2 F.Cu",
+                    "pos": {
+                        "x": 106.6,
+                        "y": 107.45
+                    },
+                    "uuid": "27878fe1-6ff4-4b61-99bb-c4cb9209564d"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "C_0805_2012Metric 與符號指定的封裝（Capacitor_SMD:C_0805_2012Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 C3",
+                    "pos": {
+                        "x": 108.2,
+                        "y": 101.3
+                    },
+                    "uuid": "316eae1f-433a-46d6-9024-f9079e46ca19"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VSYS）與原理圖指定的網路（/VSYS）不符",
+            "items": [
+                {
+                    "description": "1 上 [VSYS] 的焊盤 C3 F.Cu",
+                    "pos": {
+                        "x": 107.25,
+                        "y": 101.3
+                    },
+                    "uuid": "a41952d0-8c2d-4418-a6dc-70368f33d5a0"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 C3 F.Cu",
+                    "pos": {
+                        "x": 109.15,
+                        "y": 101.3
+                    },
+                    "uuid": "c0009886-3842-4346-9432-0c529c4621df"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "C_0603_1608Metric 與符號指定的封裝（Capacitor_SMD:C_0603_1608Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 C4",
+                    "pos": {
+                        "x": 106.8,
+                        "y": 115.2
+                    },
+                    "uuid": "53b13ea1-7494-4e71-8fe3-8a42334ac807"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBAT_SENSE）與原理圖指定的網路（/VBAT_SENSE）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBAT_SENSE] 的焊盤 C4 F.Cu",
+                    "pos": {
+                        "x": 106.8,
+                        "y": 114.425
+                    },
+                    "uuid": "e0b4d1a8-cc80-4a32-a7d9-42cd4c108332"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 C4 F.Cu",
+                    "pos": {
+                        "x": 106.8,
+                        "y": 115.975
+                    },
+                    "uuid": "fdd09ebb-864c-41c9-b298-a44d3c13a507"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P1）與符號值（P1）不符",
+            "items": [
+                {
+                    "description": "封裝 P1",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 103.6
+                    },
+                    "uuid": "1b9f6baa-dc56-4a00-9890-e14c546a7675"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P1",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 103.6
+                    },
+                    "uuid": "1b9f6baa-dc56-4a00-9890-e14c546a7675"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBUS）與原理圖指定的網路（/VBUS）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBUS] 的焊盤 P1 F.Cu",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 103.6
+                    },
+                    "uuid": "c9ef38eb-1b25-491a-8d74-ab50cb7817fc"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P2）與符號值（P2）不符",
+            "items": [
+                {
+                    "description": "封裝 P2",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 107.6
+                    },
+                    "uuid": "7a660470-7a01-4f1b-af46-c9e04bc3c732"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P2",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 107.6
+                    },
+                    "uuid": "7a660470-7a01-4f1b-af46-c9e04bc3c732"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "1 上 [GND] 的焊盤 P2 F.Cu",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 107.6
+                    },
+                    "uuid": "fd01d8b7-293f-4362-b447-59c871502d9e"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P3）與符號值（P3）不符",
+            "items": [
+                {
+                    "description": "封裝 P3",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 115.9
+                    },
+                    "uuid": "e4a3bc8e-f410-4b48-8f5d-00dde45aceff"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P3",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 115.9
+                    },
+                    "uuid": "e4a3bc8e-f410-4b48-8f5d-00dde45aceff"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（CHRG）與原理圖指定的網路（/CHRG）不符",
+            "items": [
+                {
+                    "description": "1 上 [CHRG] 的焊盤 P3 F.Cu",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 115.9
+                    },
+                    "uuid": "6d51c37c-c634-4b51-b745-27553f49d28c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P4）與符號值（P4）不符",
+            "items": [
+                {
+                    "description": "封裝 P4",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 117.5
+                    },
+                    "uuid": "f018525c-07e9-4770-a95c-fdfac6dfb967"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P4",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 117.5
+                    },
+                    "uuid": "f018525c-07e9-4770-a95c-fdfac6dfb967"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBAT_SENSE）與原理圖指定的網路（/VBAT_SENSE）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBAT_SENSE] 的焊盤 P4 F.Cu",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 117.5
+                    },
+                    "uuid": "bae65e04-faf3-4cdc-9ef8-127d39a44d8f"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P5）與符號值（P5）不符",
+            "items": [
+                {
+                    "description": "封裝 P5",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 103.6
+                    },
+                    "uuid": "9be254cf-c48b-4f71-b915-eb2b1de40ae6"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P5",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 103.6
+                    },
+                    "uuid": "9be254cf-c48b-4f71-b915-eb2b1de40ae6"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VSYS）與原理圖指定的網路（/VSYS）不符",
+            "items": [
+                {
+                    "description": "1 上 [VSYS] 的焊盤 P5 F.Cu",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 103.6
+                    },
+                    "uuid": "39a42c31-caa2-4418-91e7-9a4486411194"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P6）與符號值（P6）不符",
+            "items": [
+                {
+                    "description": "封裝 P6",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 115.9
+                    },
+                    "uuid": "cbdf0729-1704-482d-bded-f98186029d7e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P6",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 115.9
+                    },
+                    "uuid": "cbdf0729-1704-482d-bded-f98186029d7e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBAT）與原理圖指定的網路（/VBAT）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBAT] 的焊盤 P6 F.Cu",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 115.9
+                    },
+                    "uuid": "c2f34f2a-0847-454b-9a29-515d347eaac5"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（P7）與符號值（P7）不符",
+            "items": [
+                {
+                    "description": "封裝 P7",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 117.5
+                    },
+                    "uuid": "82ba7b4a-8050-4233-8d14-3cfaf70e492a"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "封裝特性與符號不匹配: 「從物料清單中移除」設定不同",
+            "items": [
+                {
+                    "description": "封裝 P7",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 117.5
+                    },
+                    "uuid": "82ba7b4a-8050-4233-8d14-3cfaf70e492a"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "1 上 [GND] 的焊盤 P7 F.Cu",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 117.5
+                    },
+                    "uuid": "a5327977-2ae6-4fcf-9b11-eecf71dbbfd1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（Q1）與符號值（AO3401）不符",
+            "items": [
+                {
+                    "description": "封裝 Q1",
+                    "pos": {
+                        "x": 107.4,
+                        "y": 104.2
+                    },
+                    "uuid": "90fd5194-19c6-4d41-8b0f-adc765935d09"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "SOT-23 與符號指定的封裝（Package_TO_SOT_SMD:SOT-23）不符",
+            "items": [
+                {
+                    "description": "封裝 Q1",
+                    "pos": {
+                        "x": 107.4,
+                        "y": 104.2
+                    },
+                    "uuid": "90fd5194-19c6-4d41-8b0f-adc765935d09"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBUS）與原理圖指定的網路（/VBUS）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBUS] 的焊盤 Q1 F.Cu",
+                    "pos": {
+                        "x": 108.3375,
+                        "y": 105.15
+                    },
+                    "uuid": "1bb402ca-e7fa-49db-af67-26783f4543bb"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（VSYS）與原理圖指定的網路（/VSYS）不符",
+            "items": [
+                {
+                    "description": "2 上 [VSYS] 的焊盤 Q1 F.Cu",
+                    "pos": {
+                        "x": 108.3375,
+                        "y": 103.25
+                    },
+                    "uuid": "be49ee52-53f8-4dfb-a4ec-4838b49a0a5b"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（VBAT）與原理圖指定的網路（/VBAT）不符",
+            "items": [
+                {
+                    "description": "3 上 [VBAT] 的焊盤 Q1 F.Cu",
+                    "pos": {
+                        "x": 106.4625,
+                        "y": 104.2
+                    },
+                    "uuid": "d8e144be-ea2d-45c2-8815-6dba4ac652f1"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric 與符號指定的封裝（Resistor_SMD:R_0603_1608Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 R1",
+                    "pos": {
+                        "x": 104.6,
+                        "y": 104.0
+                    },
+                    "uuid": "9c8da744-8c61-4c3b-8761-0ba2ef2405cd"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBUS）與原理圖指定的網路（/VBUS）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBUS] 的焊盤 R1 F.Cu",
+                    "pos": {
+                        "x": 104.6,
+                        "y": 104.825
+                    },
+                    "uuid": "4b1f49e8-bfd7-4d16-a8b4-8534dadb39aa"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 R1 F.Cu",
+                    "pos": {
+                        "x": 104.6,
+                        "y": 103.175
+                    },
+                    "uuid": "6988f4a2-8afc-4721-9cb8-dcaae997fe7b"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "R_0603_1608Metric 與符號指定的封裝（Resistor_SMD:R_0603_1608Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 R2",
+                    "pos": {
+                        "x": 102.3,
+                        "y": 113.8
+                    },
+                    "uuid": "479b6577-50ce-4391-91fe-74e39aa498b6"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（PROG）與原理圖指定的網路（/PROG）不符",
+            "items": [
+                {
+                    "description": "1 上 [PROG] 的焊盤 R2 F.Cu",
+                    "pos": {
+                        "x": 102.3,
+                        "y": 112.975
+                    },
+                    "uuid": "81651730-3f37-40cb-b092-7c250f6ee60a"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 R2 F.Cu",
+                    "pos": {
+                        "x": 102.3,
+                        "y": 114.625
+                    },
+                    "uuid": "f51d9f57-de12-40b7-8f30-be6e21b30823"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（R3）與符號值（1M）不符",
+            "items": [
+                {
+                    "description": "封裝 R3",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 112.0
+                    },
+                    "uuid": "9bdca865-d5f6-4fa9-bd75-26b03953960e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "R_0603_1608Metric 與符號指定的封裝（Resistor_SMD:R_0603_1608Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 R3",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 112.0
+                    },
+                    "uuid": "9bdca865-d5f6-4fa9-bd75-26b03953960e"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBAT）與原理圖指定的網路（/VBAT）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBAT] 的焊盤 R3 F.Cu",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 111.175
+                    },
+                    "uuid": "2748d517-b592-456a-957b-4443a83c3924"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（VBAT_SENSE）與原理圖指定的網路（/VBAT_SENSE）不符",
+            "items": [
+                {
+                    "description": "2 上 [VBAT_SENSE] 的焊盤 R3 F.Cu",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 112.825
+                    },
+                    "uuid": "d466a244-16c6-45f4-9771-2d042f4a4a6c"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "值（R4）與符號值（1M）不符",
+            "items": [
+                {
+                    "description": "封裝 R4",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 115.2
+                    },
+                    "uuid": "75cd98fe-46ea-43aa-ad22-510a546a77ec"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "R_0603_1608Metric 與符號指定的封裝（Resistor_SMD:R_0603_1608Metric）不符",
+            "items": [
+                {
+                    "description": "封裝 R4",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 115.2
+                    },
+                    "uuid": "75cd98fe-46ea-43aa-ad22-510a546a77ec"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（VBAT_SENSE）與原理圖指定的網路（/VBAT_SENSE）不符",
+            "items": [
+                {
+                    "description": "1 上 [VBAT_SENSE] 的焊盤 R4 F.Cu",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 114.375
+                    },
+                    "uuid": "adda86b4-69a9-4b57-8a5a-8d0477cb5d64"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 R4 F.Cu",
+                    "pos": {
+                        "x": 108.6,
+                        "y": 116.025
+                    },
+                    "uuid": "bca05b80-5145-4945-91aa-63fcba427b65"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "SOT-23-5 與符號指定的封裝（Package_TO_SOT_SMD:SOT-23-5）不符",
+            "items": [
+                {
+                    "description": "封裝 U1",
+                    "pos": {
+                        "x": 103.4,
+                        "y": 110.5
+                    },
+                    "uuid": "e0944861-e6ad-4c34-b234-bb1d1cc21da8"
+                }
+            ],
+            "severity": "warning",
+            "type": "footprint_symbol_mismatch"
+        },
+        {
+            "description": "焊盤網路（CHRG）與原理圖指定的網路（/CHRG）不符",
+            "items": [
+                {
+                    "description": "1 上 [CHRG] 的焊盤 U1 F.Cu",
+                    "pos": {
+                        "x": 104.5375,
+                        "y": 111.45
+                    },
+                    "uuid": "c53b6d2d-2bf8-450c-b81b-0f0bc0da2776"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（GND）與原理圖指定的網路（/GND）不符",
+            "items": [
+                {
+                    "description": "2 上 [GND] 的焊盤 U1 F.Cu",
+                    "pos": {
+                        "x": 104.5375,
+                        "y": 110.5
+                    },
+                    "uuid": "61244e16-183b-48d4-a824-952d0a60b8c8"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（VBAT）與原理圖指定的網路（/VBAT）不符",
+            "items": [
+                {
+                    "description": "3 上 [VBAT] 的焊盤 U1 F.Cu",
+                    "pos": {
+                        "x": 104.5375,
+                        "y": 109.55
+                    },
+                    "uuid": "0ea77671-c4a2-4816-bd63-a56de4a81e65"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（VBUS）與原理圖指定的網路（/VBUS）不符",
+            "items": [
+                {
+                    "description": "4 上 [VBUS] 的焊盤 U1 F.Cu",
+                    "pos": {
+                        "x": 102.2625,
+                        "y": 109.55
+                    },
+                    "uuid": "2347108b-abac-4ae8-8f11-a8988cbb88c3"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        },
+        {
+            "description": "焊盤網路（PROG）與原理圖指定的網路（/PROG）不符",
+            "items": [
+                {
+                    "description": "5 上 [PROG] 的焊盤 U1 F.Cu",
+                    "pos": {
+                        "x": 102.2625,
+                        "y": 111.45
+                    },
+                    "uuid": "35ce73ac-aad9-4b01-b5aa-fdb93da898ab"
+                }
+            ],
+            "severity": "warning",
+            "type": "net_conflict"
+        }
+    ],
+    "source": "C3_Battery_Backpack.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P1",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 103.6
+                    },
+                    "uuid": "1b9f6baa-dc56-4a00-9890-e14c546a7675"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P2",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 107.6
+                    },
+                    "uuid": "7a660470-7a01-4f1b-af46-c9e04bc3c732"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P7",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 117.5
+                    },
+                    "uuid": "82ba7b4a-8050-4233-8d14-3cfaf70e492a"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P5",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 103.6
+                    },
+                    "uuid": "9be254cf-c48b-4f71-b915-eb2b1de40ae6"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P6",
+                    "pos": {
+                        "x": 112.74,
+                        "y": 115.9
+                    },
+                    "uuid": "cbdf0729-1704-482d-bded-f98186029d7e"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P3",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 115.9
+                    },
+                    "uuid": "e4a3bc8e-f410-4b48-8f5d-00dde45aceff"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「C3_Backpack」",
+            "items": [
+                {
+                    "description": "封裝 P4",
+                    "pos": {
+                        "x": 100.86,
+                        "y": 117.5
+                    },
+                    "uuid": "f018525c-07e9-4770-a95c-fdfac6dfb967"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        }
+    ]
+}

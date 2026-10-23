@@ -3,10 +3,11 @@
 本專案為 ESP32-C3 SuperMini 開發板提供完整的電池供電解決方案，使用 **TP4054 充電 IC + MOSFET 自動切換** 架構。
 
 > 🆕 **v2 背板設計（新製作請用這份）**：[docs/BACKPACK_V2_DESIGN.md](docs/BACKPACK_V2_DESIGN.md)
-> - 📋 **規格總覽（0.4mm FR4 背板：功能、接點、BOM、PCB 製作規格）**：[docs/BACKPACK_V2_PCB_SPEC.md](docs/BACKPACK_V2_PCB_SPEC.md)
+> - 📋 **規格總覽（0.6mm FR4 背板：功能、接點、BOM、PCB 製作規格）**：[docs/BACKPACK_V2_PCB_SPEC.md](docs/BACKPACK_V2_PCB_SPEC.md)
 > - 18×22.5mm 背板疊在 SuperMini 背面，電池以 1.25mm 2P 連接器插拔
 > - 修正 v1 的電源路徑問題（P-MOS 方向、插 USB 時 VSYS 無供電），W5/PD1 不需改造
 > - 拆除電源 LED（v1 漏算，約 0.37mA 常駐）、ADC 改為 1M/1M 高阻分壓，只用 GPIO0/GPIO1
+> - 🛠️ **KiCad 專案與 Gerber（可直接下單 JLCPCB）**：[hardware/kicad_v2](hardware/kicad_v2)
 > - 韌體範例：[firmware/battery_monitor_v2](firmware/battery_monitor_v2)
 >
 > 以下為 v1 內容，保留作為紀錄。

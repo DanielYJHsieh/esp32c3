@@ -1,0 +1,1462 @@
+(kicad_sch
+	(version 20250114)
+	(generator "gen_sch.py")
+	(generator_version "9.0")
+	(uuid "3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21")
+	(paper "A4")
+	(title_block
+		(title "ESP32-C3 SuperMini Battery Backpack v2")
+		(date "2026-10-23")
+		(rev "2.0")
+		(comment 1 "TP4054 charger + AO3401 load-sharing + VBAT/2 sense")
+		(comment 2 "Connect: P1 5V, P2 G, P3 GPIO1, P4 GPIO0, P5 W5 A end (VSYS), P6/P7 battery")
+	)
+	(lib_symbols
+		(symbol "Battery_Management:LTC4054ES5-4.2"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "U"
+				(at -5.842 6.604 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "LTC4054ES5-4.2"
+				(at 1.524 6.604 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-5"
+				(at 0 -12.7 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.analog.com/media/en/technical-documentation/data-sheets/405442xf.pdf"
+				(at 0 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Constant-current/constant-voltage linear charger for single cell lithium-ion batteries with 2.9V Trickle Charge, 4.5V to 6.5V VDD, -40 to +85 degree Celsius, TSOT-23-5"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "Constant-current constant-voltage linear charger single cell lithium-ion battery"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TSOT?23*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "LTC4054ES5-4.2_0_1"
+				(rectangle
+					(start -7.62 5.08)
+					(end 7.62 -7.62)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "LTC4054ES5-4.2_1_1"
+				(pin open_collector line
+					(at -10.16 0 0)
+					(length 2.54)
+					(name "~{CHRG}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 -10.16 90)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_out line
+					(at 10.16 0 180)
+					(length 2.54)
+					(name "BAT"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at 0 7.62 270)
+					(length 2.54)
+					(name "V_{CC}"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "PROG"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Device:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Transistor_FET:TP0610T"
+			(pin_names
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "Q"
+				(at 5.08 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "TP0610T"
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_SMD:SOT-23"
+				(at 5.08 -1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(justify left)
+				)
+			)
+			(property "Datasheet" "http://www.vishay.com/docs/70209/70209.pdf"
+				(at 5.08 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Description" "-0.18A Id, -60V Vds, P-Channel MOSFET, SOT-23"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "P-Channel MOSFET"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "SOT?23*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TP0610T_0_1"
+				(polyline
+					(pts
+						(xy 0.254 1.905) (xy 0.254 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.254 0) (xy -2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 2.286) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 1.778) (xy 3.302 1.778) (xy 3.302 -1.778) (xy 0.762 -1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 0.508) (xy 0.762 -0.508)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 -1.27) (xy 0.762 -2.286)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 1.651 0)
+					(radius 2.794)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.286 0) (xy 1.27 0.381) (xy 1.27 -0.381) (xy 2.286 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 2.54) (xy 2.54 1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center 2.54 1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 2.54 -1.778)
+					(radius 0.254)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -2.54) (xy 2.54 0) (xy 0.762 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.794 -0.508) (xy 2.921 -0.381) (xy 3.683 -0.381) (xy 3.81 -0.254)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.302 -0.381) (xy 2.921 0.254) (xy 3.683 0.254) (xy 3.302 -0.381)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TP0610T_1_1"
+				(pin input line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "G"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "S"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "D"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Connector:TestPoint"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.762)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint"
+				(at 0 5.08 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 5.08 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "test point"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "TestPoint_0_1"
+				(circle
+					(center 0 3.302)
+					(radius 0.762)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:PWR_FLAG"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(text "充電：TP4054（符號借用 LTC4054ES5-4.2，腳位相同 1 CHRG / 2 GND / 3 BAT / 4 VCC / 5 PROG）" (exclude_from_sim no) (at 50.80 35.56 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "1475b555-1dfa-41ec-88c6-47b05d51ef41"))
+	(symbol
+		(lib_id "Battery_Management:LTC4054ES5-4.2")
+		(at 86.36 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "61fc9968-b194-4cc1-b90b-0743276aa93d")
+		(property "Reference" "U1" (at 86.36 54.61 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "TP4054" (at 86.36 80.01 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23-5" (at 86.36 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 86.36 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "dafa1bda-812a-422d-8595-bccd8d19032c"))
+		(pin "2" (uuid "400cc5fe-09f8-44ea-b47e-7e6121dbbe96"))
+		(pin "3" (uuid "b9701271-164f-4a31-b08e-54dafb33ab03"))
+		(pin "4" (uuid "024ceb58-195a-467d-b943-9f4fd0a1f213"))
+		(pin "5" (uuid "0a04fb68-8cac-4c8f-bab1-c8722690adec"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "U1") (unit 1))))
+	)
+	(wire (pts (xy 76.20 66.04) (xy 73.66 66.04)) (stroke (width 0) (type default)) (uuid "ce4616ec-47fe-4962-a9c8-a35de69e2bf0"))
+	(label "CHRG" (at 73.66 66.04 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "43e1a4ee-a330-4e45-bd56-804c8d268119"))
+	(wire (pts (xy 86.36 76.20) (xy 86.36 78.74)) (stroke (width 0) (type default)) (uuid "733d689e-b4e8-4940-8276-7c3520b010d3"))
+	(label "GND" (at 86.36 78.74 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ba79b17f-88ae-4cc5-9135-cfa0cc03e471"))
+	(wire (pts (xy 96.52 66.04) (xy 99.06 66.04)) (stroke (width 0) (type default)) (uuid "b384f791-8dea-4c45-bc6f-66ea3d913916"))
+	(label "VBAT" (at 99.06 66.04 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "ae811be3-9428-4ddc-924f-be807ef66f98"))
+	(wire (pts (xy 86.36 58.42) (xy 86.36 55.88)) (stroke (width 0) (type default)) (uuid "17291624-39fd-4b0d-9448-62a44b1c63db"))
+	(label "VBUS" (at 86.36 55.88 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "82827a3f-cd31-4678-840b-a62da0c364ec"))
+	(wire (pts (xy 76.20 68.58) (xy 73.66 68.58)) (stroke (width 0) (type default)) (uuid "37b39a85-ba1d-4104-aa95-c82e14af6d84"))
+	(label "PROG" (at 73.66 68.58 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "8937ff6e-73cc-49a7-860a-c24dda14b1e2"))
+	(symbol
+		(lib_id "Device:C")
+		(at 55.88 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "87edf3f1-eccc-412e-ac69-f130c83e5023")
+		(property "Reference" "C1" (at 58.42 64.77 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "1uF" (at 58.42 67.31 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 55.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "41baf04a-d1ee-442d-aa17-9c6c804f0d21"))
+		(pin "2" (uuid "c500e198-f2c8-4338-91b3-e4052dc50c8f"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "C1") (unit 1))))
+	)
+	(wire (pts (xy 55.88 62.23) (xy 55.88 59.69)) (stroke (width 0) (type default)) (uuid "2cd02972-af55-4a11-bcf4-29dd44576f5b"))
+	(label "VBUS" (at 55.88 59.69 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "d8dcd202-4f60-4f33-aaab-f20cc23c7abb"))
+	(wire (pts (xy 55.88 69.85) (xy 55.88 72.39)) (stroke (width 0) (type default)) (uuid "17c29dda-6724-45f3-812e-93fbce7cb38a"))
+	(label "GND" (at 55.88 72.39 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "1401add3-22a1-4b43-9eba-675a10435107"))
+	(symbol
+		(lib_id "Device:R")
+		(at 55.88 91.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cfe84d87-b94a-4c46-9ead-e975f40fed7f")
+		(property "Reference" "R2" (at 58.42 90.17 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10k" (at 58.42 92.71 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 55.88 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 55.88 91.44 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "7b499741-2034-4fd3-9c61-5a1b708b873a"))
+		(pin "2" (uuid "f6e3e5a8-238a-4275-914c-6c9316bb1481"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "R2") (unit 1))))
+	)
+	(wire (pts (xy 55.88 87.63) (xy 55.88 85.09)) (stroke (width 0) (type default)) (uuid "56337d54-3cdc-4b5a-bd35-e4812fa5f003"))
+	(label "PROG" (at 55.88 85.09 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "fd5afcbc-b8fc-45c8-a48f-2df3f3a0829e"))
+	(wire (pts (xy 55.88 95.25) (xy 55.88 97.79)) (stroke (width 0) (type default)) (uuid "1d4a625e-aba6-4b6c-816a-a0a8fb3d32d6"))
+	(label "GND" (at 55.88 97.79 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "b6f0c714-b2ea-4e55-be3a-70cb4a52e89b"))
+	(symbol
+		(lib_id "Device:C")
+		(at 116.84 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7ce4d96f-1a11-4506-baeb-f750f846198e")
+		(property "Reference" "C2" (at 119.38 64.77 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "10uF" (at 119.38 67.31 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 116.84 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 116.84 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "8f42deae-e970-4a18-86b9-851e5ba60b83"))
+		(pin "2" (uuid "072d0526-b074-4204-8073-3bacc47e29a1"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "C2") (unit 1))))
+	)
+	(wire (pts (xy 116.84 62.23) (xy 116.84 59.69)) (stroke (width 0) (type default)) (uuid "aefd0dc3-7148-453a-9807-c6079f102c64"))
+	(label "VBAT" (at 116.84 59.69 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "79a616bd-ace9-40ee-8bbe-c1346d1d035d"))
+	(wire (pts (xy 116.84 69.85) (xy 116.84 72.39)) (stroke (width 0) (type default)) (uuid "147d9692-e216-42cc-90d6-64305ab5be67"))
+	(label "GND" (at 116.84 72.39 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "d8ab5d37-fbe6-433a-bf0a-7c6c4866db2f"))
+	(text "R2：10k = 100mA（I = 1000V / R2）；背面版不建議再加大" (exclude_from_sim no) (at 50.80 106.68 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "1366654e-28aa-42eb-9411-244f8ab61afe"))
+	(text "電源路徑（load-sharing）：Q1 D = 電池、S = VSYS、G = VBUS" (exclude_from_sim no) (at 157.48 35.56 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "835d188b-9ba7-4294-a61d-38a20165539e"))
+	(symbol
+		(lib_id "Transistor_FET:TP0610T")
+		(at 182.88 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "606af2f6-3487-4cc6-873a-78d8225e72d7")
+		(property "Reference" "Q1" (at 182.88 57.15 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "AO3401 (A19T)" (at 182.88 74.93 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "Package_TO_SOT_SMD:SOT-23" (at 182.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 182.88 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "1888e2ce-1670-4ad1-acf4-08e1811915f1"))
+		(pin "2" (uuid "4e646dd2-a1fc-462e-b4e6-dd8efdef89e8"))
+		(pin "3" (uuid "68dc11f3-3a35-464c-980b-ff3615749d93"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "Q1") (unit 1))))
+	)
+	(wire (pts (xy 177.80 66.04) (xy 175.26 66.04)) (stroke (width 0) (type default)) (uuid "3402150a-2b07-43e7-a7e1-e984cd21c7ac"))
+	(label "VBUS" (at 175.26 66.04 180) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "22b376f7-920c-40b0-989a-e8d4185a581d"))
+	(wire (pts (xy 185.42 71.12) (xy 185.42 73.66)) (stroke (width 0) (type default)) (uuid "67920a5f-8a92-419c-8377-411ec4ece462"))
+	(label "VSYS" (at 185.42 73.66 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4775d052-ca5a-4f65-991d-c3f26cb96a3c"))
+	(wire (pts (xy 185.42 60.96) (xy 185.42 58.42)) (stroke (width 0) (type default)) (uuid "848a3264-021e-409b-9e6e-e91fe59d48cb"))
+	(label "VBAT" (at 185.42 58.42 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "38fa5680-873e-412b-93e5-426240882060"))
+	(symbol
+		(lib_id "Device:R")
+		(at 157.48 81.28 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b364e036-e3b5-4f1a-9146-960feac7b8c5")
+		(property "Reference" "R1" (at 160.02 80.01 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "100k" (at 160.02 82.55 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 157.48 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 157.48 81.28 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "4a81cb3c-4cd9-4074-9eec-fe133cea0fb1"))
+		(pin "2" (uuid "d463c423-9634-4569-92b7-1c179281a8a9"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "R1") (unit 1))))
+	)
+	(wire (pts (xy 157.48 77.47) (xy 157.48 74.93)) (stroke (width 0) (type default)) (uuid "5cac22df-44b3-47ed-8562-57ce8c8a3dfc"))
+	(label "VBUS" (at 157.48 74.93 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "224a0bf3-0dcb-4163-8157-61f19a45dac3"))
+	(wire (pts (xy 157.48 85.09) (xy 157.48 87.63)) (stroke (width 0) (type default)) (uuid "093dec61-7569-4a8a-9b7b-8e0a8cd906f6"))
+	(label "GND" (at 157.48 87.63 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "14f63031-59ba-4f23-a820-82a400d5da7f"))
+	(symbol
+		(lib_id "Device:C")
+		(at 213.36 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "add0263b-0848-439a-94f1-7f7c221d7b93")
+		(property "Reference" "C3" (at 215.90 64.77 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "22uF" (at 215.90 67.31 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 213.36 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 213.36 66.04 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "e8999f1f-36e3-4378-9990-25eef2b16659"))
+		(pin "2" (uuid "acfbe401-6ece-4b82-9199-3dd27e96f33c"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "C3") (unit 1))))
+	)
+	(wire (pts (xy 213.36 62.23) (xy 213.36 59.69)) (stroke (width 0) (type default)) (uuid "76850349-c961-424b-8dbf-5f634374bd8c"))
+	(label "VSYS" (at 213.36 59.69 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "be88d11b-bccb-4387-a20c-f254824b8ee4"))
+	(wire (pts (xy 213.36 69.85) (xy 213.36 72.39)) (stroke (width 0) (type default)) (uuid "46b1125c-1456-4b61-b084-b3277c90ab13"))
+	(label "GND" (at 213.36 72.39 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "76e44c8b-ebae-4d28-b1fc-59787f222c80"))
+	(text "插 USB：VSYS 由 USB 經 SuperMini 的 W5 供電，Q1 關閉；拔 USB：Q1 導通，電池供 VSYS" (exclude_from_sim no) (at 157.48 106.68 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "f412439d-8860-4012-a906-d1e3db091a8a"))
+	(text "電量偵測：VBAT / 2 → GPIO0（常駐約 2uA）" (exclude_from_sim no) (at 50.80 132.08 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "a35c1a6d-2df9-4d80-b88c-b375f0ae292b"))
+	(symbol
+		(lib_id "Device:R")
+		(at 66.04 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "fe87c4eb-4a38-4c1e-a9fb-1bb7f54bdf7d")
+		(property "Reference" "R3" (at 68.58 156.21 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "1M 1%" (at 68.58 158.75 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 66.04 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 66.04 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "509f2eaf-0013-49f5-942b-f214b28e99b7"))
+		(pin "2" (uuid "6d8f4e34-f75a-476a-9227-c91f73e62b11"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "R3") (unit 1))))
+	)
+	(wire (pts (xy 66.04 153.67) (xy 66.04 151.13)) (stroke (width 0) (type default)) (uuid "635f4177-c51d-477c-b680-d9c551917107"))
+	(label "VBAT" (at 66.04 151.13 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "21771025-5c30-4181-88c6-e00230d234ef"))
+	(wire (pts (xy 66.04 161.29) (xy 66.04 163.83)) (stroke (width 0) (type default)) (uuid "abfb602d-43e5-4de2-ac2f-d26776d815ac"))
+	(label "VBAT_SENSE" (at 66.04 163.83 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "adfc28a9-f586-48ec-b8aa-1362d7d07bdb"))
+	(symbol
+		(lib_id "Device:R")
+		(at 66.04 182.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "08282a1f-ca75-44b4-9846-a51f31326c0c")
+		(property "Reference" "R4" (at 68.58 181.61 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "1M 1%" (at 68.58 184.15 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric" (at 66.04 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 66.04 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "2b51633e-ed94-49ea-930c-1a764557d322"))
+		(pin "2" (uuid "b86dd3e0-5162-4ccb-966d-d94ecdda1ee3"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "R4") (unit 1))))
+	)
+	(wire (pts (xy 66.04 179.07) (xy 66.04 176.53)) (stroke (width 0) (type default)) (uuid "4559363f-756e-4a12-9add-8d4562d03910"))
+	(label "VBAT_SENSE" (at 66.04 176.53 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "7168e564-db13-4d4f-8e36-c694372c55d1"))
+	(wire (pts (xy 66.04 186.69) (xy 66.04 189.23)) (stroke (width 0) (type default)) (uuid "f023968a-790d-447b-9d82-053e1b013dfc"))
+	(label "GND" (at 66.04 189.23 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "6f98f072-0a14-4ab5-a8fc-bea0af578ff0"))
+	(symbol
+		(lib_id "Device:C")
+		(at 91.44 182.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2d7624f1-145b-492c-8463-b7b08930a48a")
+		(property "Reference" "C4" (at 93.98 181.61 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Value" "100nF" (at 93.98 184.15 0) (effects (font (size 1.27 1.27)) (justify left)))
+		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 91.44 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 91.44 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "8e0583dc-d026-4c73-8a09-dcdd9e102624"))
+		(pin "2" (uuid "dab7a052-4372-408c-8a11-7c011029596d"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "C4") (unit 1))))
+	)
+	(wire (pts (xy 91.44 179.07) (xy 91.44 176.53)) (stroke (width 0) (type default)) (uuid "120485b9-8f4a-4c20-be3e-35710affe751"))
+	(label "VBAT_SENSE" (at 91.44 176.53 90) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "19693989-3638-41aa-a1ce-3c85116d16d5"))
+	(wire (pts (xy 91.44 186.69) (xy 91.44 189.23)) (stroke (width 0) (type default)) (uuid "e84348eb-1779-4856-b2ed-ab8e1160f4d0"))
+	(label "GND" (at 91.44 189.23 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "413a829e-621d-4631-9e0c-f56f0b436c0f"))
+	(text "接點（邊緣焊墊）" (exclude_from_sim no) (at 157.48 132.08 0) (effects (font (size 1.8 1.8)) (justify left bottom)) (uuid "04377797-e0e6-435d-b6ed-a1ea3b9e6b1b"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 162.56 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "9ad90a12-3434-4ce0-80a0-79212a7c6d17")
+		(property "Reference" "P1" (at 162.56 153.67 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "VBUS -> SuperMini 5V" (at 162.56 161.29 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 162.56 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 162.56 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "ff6c9e7f-c8e5-41ef-8ec4-5fa667b5e869"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P1") (unit 1))))
+	)
+	(wire (pts (xy 162.56 157.48) (xy 162.56 160.02)) (stroke (width 0) (type default)) (uuid "f12c1ab7-69d0-41d3-9ddb-603fa98ea7a3"))
+	(label "VBUS" (at 162.56 160.02 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "5655ed86-a078-4a9b-b6f8-cd2f1be1601b"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 193.04 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "682c02ed-4dc0-4289-865b-8d11749763d3")
+		(property "Reference" "P2" (at 193.04 153.67 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "GND -> SuperMini G" (at 193.04 161.29 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 193.04 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 193.04 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "32f87ea2-9311-42ce-b974-a605d6885988"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P2") (unit 1))))
+	)
+	(wire (pts (xy 193.04 157.48) (xy 193.04 160.02)) (stroke (width 0) (type default)) (uuid "e5a2690a-3fd1-4911-a817-80102d738ab7"))
+	(label "GND" (at 193.04 160.02 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "a7a445b8-1dce-4238-9cde-01db6dbc0525"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 223.52 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "bfe77574-7530-4bb4-8aeb-37272895ff74")
+		(property "Reference" "P3" (at 223.52 153.67 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "CHRG -> GPIO1" (at 223.52 161.29 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 223.52 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 223.52 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "a0d604ed-34b8-40ee-8956-df523b240412"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P3") (unit 1))))
+	)
+	(wire (pts (xy 223.52 157.48) (xy 223.52 160.02)) (stroke (width 0) (type default)) (uuid "0b83a479-739f-4d3d-922e-03d33d507e0f"))
+	(label "CHRG" (at 223.52 160.02 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "4709c20c-be49-45cd-b7c9-f78f0e72288d"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 254.00 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "7688a82f-ffdf-485d-afca-2a226a24b198")
+		(property "Reference" "P4" (at 254.00 153.67 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "VBAT/2 -> GPIO0" (at 254.00 161.29 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 254.00 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 254.00 157.48 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "27fb5255-923c-4d44-a818-4861fea9208f"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P4") (unit 1))))
+	)
+	(wire (pts (xy 254.00 157.48) (xy 254.00 160.02)) (stroke (width 0) (type default)) (uuid "3ef75c46-775f-48d7-85a6-c79e8ad483a9"))
+	(label "VBAT_SENSE" (at 254.00 160.02 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "c487c63b-49b4-459d-bdfd-d9eff1989e09"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 162.56 182.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "534eb669-f164-4717-b06e-4237f625b41f")
+		(property "Reference" "P5" (at 162.56 179.07 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "VSYS -> W5 A end" (at 162.56 186.69 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 162.56 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 162.56 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "288dbcfb-e2ee-4908-9d35-f3d6a613c99e"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P5") (unit 1))))
+	)
+	(wire (pts (xy 162.56 182.88) (xy 162.56 185.42)) (stroke (width 0) (type default)) (uuid "adfe70f6-8b8a-4ea1-9037-c3014a68530a"))
+	(label "VSYS" (at 162.56 185.42 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "113e16c1-e2c5-4146-99b6-dd1756d5f094"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 193.04 182.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "106397ad-9c67-49e0-a41f-88f09a22a825")
+		(property "Reference" "P6" (at 193.04 179.07 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "BAT+" (at 193.04 186.69 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 193.04 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 193.04 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "dd15d804-51ce-4efe-ac9f-239531a7aa37"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P6") (unit 1))))
+	)
+	(wire (pts (xy 193.04 182.88) (xy 193.04 185.42)) (stroke (width 0) (type default)) (uuid "d144d3d6-5711-4bdd-9105-faa340843eee"))
+	(label "VBAT" (at 193.04 185.42 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "3e4a3529-fe5c-443c-816a-e1a795a9694e"))
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 223.52 182.88 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "9af8c4e5-7598-49c3-8771-a485c726ca3d")
+		(property "Reference" "P7" (at 223.52 179.07 0) (effects (font (size 1.27 1.27))))
+		(property "Value" "BAT-" (at 223.52 186.69 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "C3_Backpack:EdgePad_0.7x1.0" (at 223.52 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 223.52 182.88 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "23d8692e-e76a-4d2e-818f-d6e70a9d2b13"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "P7") (unit 1))))
+	)
+	(wire (pts (xy 223.52 182.88) (xy 223.52 185.42)) (stroke (width 0) (type default)) (uuid "3877c1ac-58e2-4e98-a85c-0cb874515aa9"))
+	(label "GND" (at 223.52 185.42 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "ef1ccea3-3e16-4231-8e2c-d35c5186ae28"))
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 50.80 213.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "e260bc56-25c3-4f90-8a1e-292179e8e551")
+		(property "Reference" "#FLG01" (at 50.80 209.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Value" "PWR_FLAG" (at 50.80 217.17 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 50.80 213.36 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 50.80 213.36 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "61d128fe-93e5-43c0-9af4-eb1fd200098e"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "#FLG01") (unit 1))))
+	)
+	(wire (pts (xy 50.80 213.36) (xy 50.80 215.90)) (stroke (width 0) (type default)) (uuid "f4b3e6cf-3b56-4839-a38c-1e5c4522dd18"))
+	(label "VBUS" (at 50.80 215.90 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "525fd7ec-12f5-4875-887f-f156fb4e2969"))
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 76.20 213.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "9c2684a9-6dcc-48db-9d9e-a37e649a438b")
+		(property "Reference" "#FLG02" (at 76.20 209.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Value" "PWR_FLAG" (at 76.20 217.17 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 76.20 213.36 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 76.20 213.36 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "b8e0d22d-663b-441d-a4b6-d4272e47a469"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "#FLG02") (unit 1))))
+	)
+	(wire (pts (xy 76.20 213.36) (xy 76.20 215.90)) (stroke (width 0) (type default)) (uuid "fdb7e54e-9846-4f84-958a-9c98c2b5d86f"))
+	(label "GND" (at 76.20 215.90 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "51735f9d-d43c-4bdb-928f-31c5443b3c71"))
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 101.60 213.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom no)
+		(on_board no)
+		(dnp no)
+		(uuid "ccb2f77b-90b5-4047-a4e5-33dbce851239")
+		(property "Reference" "#FLG03" (at 101.60 209.55 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Value" "PWR_FLAG" (at 101.60 217.17 0) (effects (font (size 1.27 1.27))))
+		(property "Footprint" "" (at 101.60 213.36 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(property "Datasheet" "" (at 101.60 213.36 0) (effects (font (size 1.27 1.27)) (hide yes)))
+		(pin "1" (uuid "871c324d-51da-48e8-a6a3-a21420752fc6"))
+		(instances (project "C3_Battery_Backpack" (path "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21" (reference "#FLG03") (unit 1))))
+	)
+	(wire (pts (xy 101.60 213.36) (xy 101.60 215.90)) (stroke (width 0) (type default)) (uuid "1ee19ea2-37be-4a90-87c9-a3e82b9ba896"))
+	(label "VSYS" (at 101.60 215.90 270) (effects (font (size 1.27 1.27)) (justify right bottom)) (uuid "01dfff04-be9e-48af-90b2-833bc6b6743a"))
+	(text "PWR_FLAG：VBUS 來自 SuperMini USB、VSYS 由 Q1 / W5 供給（VBAT 由 U1 BAT 驅動）" (exclude_from_sim no) (at 50.80 233.68 0) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid "28430cd9-124f-46b3-9aac-f9698f729e6b"))
+	(sheet_instances (path "/" (page "1")))
+)

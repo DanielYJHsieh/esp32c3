@@ -1,0 +1,143 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-23T14:38:06",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/3b1c7e2a-5d4f-4c8e-9a1b-7f2e6d0c4a21",
+            "violations": [
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P1 [TestPoint]",
+                            "pos": {
+                                "x": 162.56,
+                                "y": 157.48
+                            },
+                            "uuid": "9ad90a12-3434-4ce0-80a0-79212a7c6d17"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P5 [TestPoint]",
+                            "pos": {
+                                "x": 162.56,
+                                "y": 182.88
+                            },
+                            "uuid": "534eb669-f164-4717-b06e-4237f625b41f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P2 [TestPoint]",
+                            "pos": {
+                                "x": 193.04,
+                                "y": 157.48
+                            },
+                            "uuid": "682c02ed-4dc0-4289-865b-8d11749763d3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P6 [TestPoint]",
+                            "pos": {
+                                "x": 193.04,
+                                "y": 182.88
+                            },
+                            "uuid": "106397ad-9c67-49e0-a41f-88f09a22a825"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P3 [TestPoint]",
+                            "pos": {
+                                "x": 223.52,
+                                "y": 157.48
+                            },
+                            "uuid": "bfe77574-7530-4bb4-8aeb-37272895ff74"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P7 [TestPoint]",
+                            "pos": {
+                                "x": 223.52,
+                                "y": 182.88
+                            },
+                            "uuid": "9af8c4e5-7598-49c3-8771-a485c726ca3d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P4 [TestPoint]",
+                            "pos": {
+                                "x": 254.0,
+                                "y": 157.48
+                            },
+                            "uuid": "7688a82f-ffdf-485d-afca-2a226a24b198"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                }
+            ]
+        }
+    ],
+    "source": "C3_Battery_Backpack.kicad_sch"
+}
