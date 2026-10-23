@@ -3,7 +3,7 @@
 
 執行：  "D:\\Program Files\\KiCad\\bin\\python.exe" build_pcb.py [--route]
 座標：  背板左上角為 (0, 0)，X 往右、Y 往下，單位 mm（= 從 SuperMini 背面看、USB 朝上）。
-        背板左上角對應 SuperMini 背面座標 (2.2, 0.4)。
+        背板左上角對應 SuperMini 背面座標 (geom.SM_X, geom.SM_Y)。
 """
 import os
 import sys
@@ -77,19 +77,21 @@ R06 = ("Resistor_SMD", "R_0603_1608Metric")
 C06 = ("Capacitor_SMD", "C_0603_1608Metric")
 C08 = ("Capacitor_SMD", "C_0805_2012Metric")
 
-place(fp_lib("Package_TO_SOT_SMD", "SOT-23-5"), "U1", "TP4054", 3.4, 10.5, 180)
-place(fp_lib("Package_TO_SOT_SMD", "SOT-23"), "Q1", "AO3401", 7.4, 4.2, 180)
-place(fp_lib(*C06), "C1", "1uF", 3.6, 7.9, 0)
-place(fp_lib(*R06), "R1", "100k", 4.6, 4.0, 90)
-place(fp_lib(*R06), "R2", "10k", 2.3, 13.8, -90)
-place(fp_lib(*C08), "C2", "10uF", 6.6, 8.4, 90)
-place(fp_lib(*C08), "C3", "22uF", 8.2, 1.3, 0)
-place(fp_lib(*R06), "R3", "1M", 8.6, 12.0, -90)
-place(fp_lib(*R06), "R4", "1M", 8.6, 15.2, -90)
-place(fp_lib(*C06), "C4", "100nF", 6.8, 15.2, -90)
+# 第 1 列：C1、Q1；第 2 列：U1、C2、R1、C3；第 3 列：R2；第 4 列：分壓 C4、R4、R3
+place(fp_lib(*C06), "C1", "1uF", 4.2, 1.2, 0)
+place(fp_lib("Package_TO_SOT_SMD", "SOT-23"), "Q1", "AO3401", 7.95, 1.85, 180)
+place(fp_lib("Package_TO_SOT_SMD", "SOT-23-5"), "U1", "TP4054", 3.45, 5.4, 180)
+place(fp_lib(*C08), "C2", "10uF", 6.65, 5.4, -90)
+place(fp_lib(*R06), "R1", "100k", 8.6, 5.4, -90)
+place(fp_lib(*C08), "C3", "22uF", 10.65, 5.4, -90)
+place(fp_lib(*R06), "R2", "10k", 3.0, 7.95, 0)
+place(fp_lib(*C06), "C4", "100nF", 3.9, BH - 1.9, 90)
+place(fp_lib(*R06), "R4", "1M", 5.5, BH - 1.9, 90)
+place(fp_lib(*R06), "R3", "1M", 7.1, BH - 1.9, -90)
 
-PADS = {"P1": (0.86, 3.6), "P2": (0.86, 7.6), "P3": (0.86, 15.9), "P4": (0.86, 17.5),
-        "P5": (12.74, 3.6), "P6": (12.74, 15.9), "P7": (12.74, 17.5)}
+# 左側接點 5V / G 與 SuperMini 排針同高（SM_Y + y = 1.4 / 3.9）
+PADS = {"P1": (0.7, 0.9), "P2": (0.7, 3.4), "P3": (0.7, BH - 2.3), "P4": (0.7, BH - 0.8),
+        "P5": (BW - 0.7, 0.9), "P6": (BW - 0.7, BH - 2.3), "P7": (BW - 0.7, BH - 0.8)}
 for ref, (x, y) in PADS.items():
     place(fp_edge_pad(), ref, ref, x, y, 0)
 
@@ -168,15 +170,15 @@ def silk(text, x, y, h=0.8, align="c", back=False):
     board.Add(t)
 
 
-silk("5V", 1.45, 3.6, 0.8, "l")
-silk("G", 1.45, 7.6, 0.8, "l")
-silk("IO1", 1.45, 15.9, 0.8, "l")
-silk("IO0", 1.45, 17.5, 0.8, "l")
-silk("B+", 12.15, 15.9, 0.8, "r")
-silk("B-", 12.15, 17.5, 0.8, "r")
-silk("C3 BATT", 10.9, 9.6, 0.8)
-silk("V2.0", 10.9, 10.7, 0.8)
-silk("SUPERMINI SIDE", 6.8, 9.4, 0.8, back=True)
+silk("5V", 1.3, 0.9, 0.8, "l")
+silk("G", 1.3, 3.4, 0.8, "l")
+silk("IO1", 1.3, BH - 2.3, 0.8, "l")
+silk("IO0", 1.3, BH - 0.8, 0.8, "l")
+silk("B+", BW - 1.3, BH - 2.3, 0.8, "r")
+silk("B-", BW - 1.3, BH - 0.8, 0.8, "r")
+silk("C3 BATT", 8.6, 7.7, 0.8)
+silk("V2.1", 8.6, 8.8, 0.8)
+silk("SUPERMINI SIDE", BW / 2, BH / 2, 0.8, back=True)
 
 # ---------------------------------------------------------------- 設計規則（JLCPCB）
 ds = board.GetDesignSettings()

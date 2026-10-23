@@ -3,7 +3,7 @@
 
 改自 switch_relay_Control/D1mini_Fixture_Shield_HW/kicad/route.py：
 0.05mm 格點、A* 搜尋、8 方向走線；每條網路依序佈線，已佈好的銅箔變成後面網路的障礙。
-板框除了外框，還有 USB-C 固定腳的 U 形缺口與圓孔，銅箔與板框保持 EDGE 間距。
+板框依 geom.py（可含 U 形缺口與圓孔，v2.1 沒有），銅箔與板框保持 EDGE 間距。
 """
 import heapq
 import math

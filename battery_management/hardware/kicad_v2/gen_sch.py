@@ -64,8 +64,11 @@ def place(lib, name, ref, value, footprint, x, y, nets, nc=(), in_bom=True):
     ys = [y - py for (px, py, a_, h_) in pins.values()]
     if name in ("R", "C"):
         rpos, vpos, rj = (x + 2.54, y - 1.27), (x + 2.54, y + 1.27), " (justify left)"
-    else:
-        rpos, vpos, rj = (x, min(ys) - 3.81), (x, max(ys) + 3.81), ""
+    elif len(pins) == 1:        # TestPoint / PWR_FLAG：文字放在符號上方左右兩側，避開往下的網路標籤
+        rpos, vpos, rj = (x - 1.27, y - 3.81), (x + 1.27, y - 3.81), None
+    else:                       # IC / MOS：文字放在上下兩支腳的右側，避開網路標籤
+        rpos, vpos, rj = (x + 2.54, min(ys) + 1.27), (x + 2.54, max(ys) - 0.64), " (justify left)"
+    rj_ref, rj_val = (" (justify right)", " (justify left)") if rj is None else (rj, rj)
     hide_ref = " (hide yes)" if ref.startswith("#") else ""
     items.append(f'''	(symbol
 		(lib_id "{key}")
@@ -76,8 +79,8 @@ def place(lib, name, ref, value, footprint, x, y, nets, nc=(), in_bom=True):
 		(on_board {"yes" if footprint else "no"})
 		(dnp no)
 		(uuid "{uid()}")
-		(property "Reference" "{ref}" (at {rpos[0]:.2f} {rpos[1]:.2f} 0) (effects (font (size 1.27 1.27)){rj}{hide_ref}))
-		(property "Value" "{value}" (at {vpos[0]:.2f} {vpos[1]:.2f} 0) (effects (font (size 1.27 1.27)){rj}))
+		(property "Reference" "{ref}" (at {rpos[0]:.2f} {rpos[1]:.2f} 0) (effects (font (size 1.27 1.27)){rj_ref}{hide_ref}))
+		(property "Value" "{value}" (at {vpos[0]:.2f} {vpos[1]:.2f} 0) (effects (font (size 1.27 1.27)){rj_val}))
 		(property "Footprint" "{footprint}" (at {x:.2f} {y:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes)))
 		(property "Datasheet" "" (at {x:.2f} {y:.2f} 0) (effects (font (size 1.27 1.27)) (hide yes))){pin_uuids}
 		(instances (project "{PROJECT}" (path "/{ROOT_UUID}" (reference "{ref}") (unit 1))))
@@ -109,7 +112,8 @@ FP_C8 = "Capacitor_SMD:C_0805_2012Metric"
 FP_P = "C3_Backpack:EdgePad_0.7x1.0"
 
 # ---- 充電
-note("充電：TP4054（符號借用 LTC4054ES5-4.2，腳位相同 1 CHRG / 2 GND / 3 BAT / 4 VCC / 5 PROG）", 20 * G, 14 * G)
+note("充電：TP4054", 20 * G, 13 * G)
+note("符號借用 LTC4054ES5-4.2，腳位相同：1 CHRG / 2 GND / 3 BAT / 4 VCC / 5 PROG", 20 * G, 15 * G, 1.27)
 place("Battery_Management", "LTC4054ES5-4.2", "U1", "TP4054", "Package_TO_SOT_SMD:SOT-23-5",
       34 * G, 26 * G, {"1": "CHRG", "2": "GND", "3": "VBAT", "4": "VBUS", "5": "PROG"})
 place("Device", "C", "C1", "1uF", FP_C6, 22 * G, 26 * G, {"1": "VBUS", "2": "GND"})
@@ -118,7 +122,8 @@ place("Device", "C", "C2", "10uF", FP_C8, 46 * G, 26 * G, {"1": "VBAT", "2": "GN
 note("R2：10k = 100mA（I = 1000V / R2）；背面版不建議再加大", 20 * G, 42 * G, 1.27)
 
 # ---- 電源路徑
-note("電源路徑（load-sharing）：Q1 D = 電池、S = VSYS、G = VBUS", 62 * G, 14 * G)
+note("電源路徑（load-sharing）", 62 * G, 13 * G)
+note("Q1 D = 電池、S = VSYS、G = VBUS", 62 * G, 15 * G, 1.27)
 place("Transistor_FET", "TP0610T", "Q1", "AO3401 (A19T)", "Package_TO_SOT_SMD:SOT-23",
       72 * G, 26 * G, {"1": "VBUS", "2": "VSYS", "3": "VBAT"})
 place("Device", "R", "R1", "100k", FP_R, 62 * G, 32 * G, {"1": "VBUS", "2": "GND"})
@@ -126,23 +131,22 @@ place("Device", "C", "C3", "22uF", FP_C8, 84 * G, 26 * G, {"1": "VSYS", "2": "GN
 note("插 USB：VSYS 由 USB 經 SuperMini 的 W5 供電，Q1 關閉；拔 USB：Q1 導通，電池供 VSYS", 62 * G, 42 * G, 1.27)
 
 # ---- 電量偵測
-note("電量偵測：VBAT / 2 → GPIO0（常駐約 2uA）", 20 * G, 52 * G)
-place("Device", "R", "R3", "1M 1%", FP_R, 26 * G, 62 * G, {"1": "VBAT", "2": "VBAT_SENSE"})
-place("Device", "R", "R4", "1M 1%", FP_R, 26 * G, 72 * G, {"1": "VBAT_SENSE", "2": "GND"})
-place("Device", "C", "C4", "100nF", FP_C6, 36 * G, 72 * G, {"1": "VBAT_SENSE", "2": "GND"})
+note("電量偵測：VBAT / 2 → GPIO0（常駐約 2uA）", 20 * G, 50 * G)
+place("Device", "R", "R3", "1M 1%", FP_R, 22 * G, 60 * G, {"1": "VBAT", "2": "VBAT_SENSE"})
+place("Device", "R", "R4", "1M 1%", FP_R, 32 * G, 60 * G, {"1": "VBAT_SENSE", "2": "GND"})
+place("Device", "C", "C4", "100nF", FP_C6, 42 * G, 60 * G, {"1": "VBAT_SENSE", "2": "GND"})
 
 # ---- 接點
-note("接點（邊緣焊墊）", 62 * G, 52 * G)
-pads = [("P1", "VBUS -> SuperMini 5V", "VBUS"), ("P2", "GND -> SuperMini G", "GND"),
-        ("P3", "CHRG -> GPIO1", "CHRG"), ("P4", "VBAT/2 -> GPIO0", "VBAT_SENSE"),
-        ("P5", "VSYS -> W5 A end", "VSYS"), ("P6", "BAT+", "VBAT"), ("P7", "BAT-", "GND")]
+note("接點（邊緣焊墊）：P1–P4 跳線到 SuperMini 排針，P5 飛線到 W5 A 端，P6/P7 接電池", 62 * G, 50 * G)
+pads = [("P1", "5V", "VBUS"), ("P2", "G", "GND"), ("P3", "GPIO1", "CHRG"), ("P4", "GPIO0", "VBAT_SENSE"),
+        ("P5", "W5 A", "VSYS"), ("P6", "BAT+", "VBAT"), ("P7", "BAT-", "GND")]
 for k, (ref, val, n) in enumerate(pads):
-    place("Connector", "TestPoint", ref, val, FP_P, (64 + (k % 4) * 12) * G, (62 + (k // 4) * 10) * G, {"1": n}, in_bom=False)
+    place("Connector", "TestPoint", ref, val, FP_P, (64 + k * 7) * G, 58 * G, {"1": n}, in_bom=False)
 
 # ---- PWR_FLAG（電源由板外供給）
 for k, n in enumerate(("VBUS", "GND", "VSYS")):
-    place("power", "PWR_FLAG", f"#FLG0{k + 1}", "PWR_FLAG", "", (20 + k * 10) * G, 84 * G, {"1": n}, in_bom=False)
-note("PWR_FLAG：VBUS 來自 SuperMini USB、VSYS 由 Q1 / W5 供給（VBAT 由 U1 BAT 驅動）", 20 * G, 92 * G, 1.27)
+    place("power", "PWR_FLAG", f"#FLG0{k + 1}", "PWR_FLAG", "", (22 + k * 10) * G, 72 * G, {"1": n}, in_bom=False)
+note("PWR_FLAG：VBUS 來自 SuperMini USB、VSYS 由 Q1 / W5 供給（VBAT 由 U1 BAT 驅動）", 20 * G, 78 * G, 1.27)
 
 lib_syms = "\n".join("\t\t" + blk.replace("\n", "\n\t") for blk in embedded.values())
 doc = f'''(kicad_sch
@@ -152,9 +156,9 @@ doc = f'''(kicad_sch
 	(uuid "{ROOT_UUID}")
 	(paper "A4")
 	(title_block
-		(title "ESP32-C3 SuperMini Battery Backpack v2")
+		(title "ESP32-C3 SuperMini Battery Backpack v2.1")
 		(date "2026-10-23")
-		(rev "2.0")
+		(rev "2.1")
 		(comment 1 "TP4054 charger + AO3401 load-sharing + VBAT/2 sense")
 		(comment 2 "Connect: P1 5V, P2 G, P3 GPIO1, P4 GPIO0, P5 W5 A end (VSYS), P6/P7 battery")
 	)

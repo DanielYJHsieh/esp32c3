@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-10-23T14:38:06",
+    "date": "2026-10-23T20:30:14",
     "ignored_checks": [
         {
             "description": "Global label only appears once in the schematic",
@@ -38,24 +38,9 @@
                             "description": "符號 P1 [TestPoint]",
                             "pos": {
                                 "x": 162.56,
-                                "y": 157.48
+                                "y": 147.32
                             },
-                            "uuid": "9ad90a12-3434-4ce0-80a0-79212a7c6d17"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
-                    "items": [
-                        {
-                            "description": "符號 P5 [TestPoint]",
-                            "pos": {
-                                "x": 162.56,
-                                "y": 182.88
-                            },
-                            "uuid": "534eb669-f164-4717-b06e-4237f625b41f"
+                            "uuid": "77be2ccb-f470-4fd0-bcbd-815531c83015"
                         }
                     ],
                     "severity": "warning",
@@ -67,25 +52,10 @@
                         {
                             "description": "符號 P2 [TestPoint]",
                             "pos": {
-                                "x": 193.04,
-                                "y": 157.48
+                                "x": 180.34,
+                                "y": 147.32
                             },
-                            "uuid": "682c02ed-4dc0-4289-865b-8d11749763d3"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
-                    "items": [
-                        {
-                            "description": "符號 P6 [TestPoint]",
-                            "pos": {
-                                "x": 193.04,
-                                "y": 182.88
-                            },
-                            "uuid": "106397ad-9c67-49e0-a41f-88f09a22a825"
+                            "uuid": "e0e036e9-2b5a-4d66-912f-64e5005391e9"
                         }
                     ],
                     "severity": "warning",
@@ -97,25 +67,10 @@
                         {
                             "description": "符號 P3 [TestPoint]",
                             "pos": {
-                                "x": 223.52,
-                                "y": 157.48
+                                "x": 198.12,
+                                "y": 147.32
                             },
-                            "uuid": "bfe77574-7530-4bb4-8aeb-37272895ff74"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
-                    "items": [
-                        {
-                            "description": "符號 P7 [TestPoint]",
-                            "pos": {
-                                "x": 223.52,
-                                "y": 182.88
-                            },
-                            "uuid": "9af8c4e5-7598-49c3-8771-a485c726ca3d"
+                            "uuid": "845b0311-9d59-4dbe-a958-189825e97b9e"
                         }
                     ],
                     "severity": "warning",
@@ -127,10 +82,55 @@
                         {
                             "description": "符號 P4 [TestPoint]",
                             "pos": {
-                                "x": 254.0,
-                                "y": 157.48
+                                "x": 215.9,
+                                "y": 147.32
                             },
-                            "uuid": "7688a82f-ffdf-485d-afca-2a226a24b198"
+                            "uuid": "d7508b64-9f0a-4598-9402-45dd98485138"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P5 [TestPoint]",
+                            "pos": {
+                                "x": 233.68,
+                                "y": 147.32
+                            },
+                            "uuid": "47aab410-9fea-4523-bfaa-c28905eeeed2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P6 [TestPoint]",
+                            "pos": {
+                                "x": 251.46,
+                                "y": 147.32
+                            },
+                            "uuid": "14681341-e6f2-4050-8de8-7c6993836c5b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「C3_Backpack」",
+                    "items": [
+                        {
+                            "description": "符號 P7 [TestPoint]",
+                            "pos": {
+                                "x": 269.24,
+                                "y": 147.32
+                            },
+                            "uuid": "4c6c87e8-3b92-4751-af3e-d30fa8b31209"
                         }
                     ],
                     "severity": "warning",
