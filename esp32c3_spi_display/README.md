@@ -12,12 +12,12 @@
 
 ## 腳位連接
 
-> **待改（2026-10-31）**：MOSI 要從 GPIO 3 改到 GPIO 7，GPIO 1 / 3 改成 deep sleep 喚醒按鈕。完整說明見 [`PIN_MIGRATION.md`](PIN_MIGRATION.md)，下表是改之前的腳位。
+> 2026-11-01：MOSI 已從 GPIO 3 改到 GPIO 7，GPIO 1 / 3 留給 deep sleep 喚醒按鈕（韌體尚未實作）。說明見 [`PIN_MIGRATION.md`](PIN_MIGRATION.md)。
 
 | E-Paper | ESP32-C3 | 說明 |
 |---------|----------|------|
 | SCLK    | GPIO 2   | SPI 時鐘 |
-| MOSI    | GPIO 3   | SPI 資料輸出 |
+| MOSI    | GPIO 7   | SPI 資料輸出 (DESPI-C02 SDI) |
 | CS      | GPIO 10  | SPI 片選 |
 | DC      | GPIO 4   | 資料/命令選擇 |
 | RST     | GPIO 5   | 硬體重置 |

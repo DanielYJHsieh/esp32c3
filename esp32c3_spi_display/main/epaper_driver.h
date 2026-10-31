@@ -4,7 +4,7 @@
  * 
  * Hardware Connection:
  * - SCLK: GPIO 2
- * - MOSI: GPIO 3
+ * - MOSI: GPIO 7
  * - CS:   GPIO 10
  * - DC:   GPIO 4
  * - RST:  GPIO 5
@@ -26,8 +26,8 @@
 
 // GPIO Pin definitions
 #define PIN_SCLK            2
-#define PIN_MOSI            3
-#define PIN_MISO            5   // Not used but required for SPI configuration
+#define PIN_MOSI            7   // FSPID; GPIO 3 freed for a wake button
+#define PIN_MISO            -1  // Write-only display, MISO not connected
 #define PIN_CS              10
 #define PIN_DC              4
 #define PIN_RST             5
