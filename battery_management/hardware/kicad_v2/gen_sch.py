@@ -117,9 +117,9 @@ note("符號借用 LTC4054ES5-4.2，腳位相同：1 CHRG / 2 GND / 3 BAT / 4 VC
 place("Battery_Management", "LTC4054ES5-4.2", "U1", "TP4054", "Package_TO_SOT_SMD:SOT-23-5",
       34 * G, 26 * G, {"1": "CHRG", "2": "GND", "3": "VBAT", "4": "VBUS", "5": "PROG"})
 place("Device", "C", "C1", "1uF", FP_C6, 22 * G, 26 * G, {"1": "VBUS", "2": "GND"})
-place("Device", "R", "R2", "10k", FP_R, 22 * G, 36 * G, {"1": "PROG", "2": "GND"})
+place("Device", "R", "R2", "5.1k", FP_R, 22 * G, 36 * G, {"1": "PROG", "2": "GND"})
 place("Device", "C", "C2", "10uF", FP_C8, 46 * G, 26 * G, {"1": "VBAT", "2": "GND"})
-note("R2：10k = 100mA（I = 1000V / R2）；背面版不建議再加大", 20 * G, 42 * G, 1.27)
+note("R2：5.1k = 196mA（I = 1000V / R2），給 ≥ 400mAh 電池；100–400mAh 改 10k = 100mA；不要小於 5.1k", 20 * G, 42 * G, 1.27)
 
 # ---- 電源路徑
 note("電源路徑（load-sharing）", 62 * G, 13 * G)
