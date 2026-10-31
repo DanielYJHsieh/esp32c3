@@ -54,8 +54,8 @@
 <text x="297.0" y="211.0" font-size="11" text-anchor="start" fill="#7a4410">P2 G</text>
 <line x1="281.0" y1="207.0" x2="211.4" y2="208.2" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="5 3"/>
 <rect x="270.5" y="405.0" width="21.0" height="30.0" rx="2" fill="#c87533" stroke="#7a4410"/>
-<text x="297.0" y="424.0" font-size="11" text-anchor="start" fill="#7a4410">P3 IO1</text>
-<line x1="281.0" y1="420.0" x2="211.4" y2="589.2" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="5 3"/>
+<text x="297.0" y="424.0" font-size="11" text-anchor="start" fill="#7a4410">P3 CHRG</text>
+<line x1="281.0" y1="420.0" x2="668.6" y2="589.2" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="5 3"/>
 <rect x="270.5" y="450.0" width="21.0" height="30.0" rx="2" fill="#c87533" stroke="#7a4410"/>
 <text x="297.0" y="469.0" font-size="11" text-anchor="start" fill="#7a4410">P4 IO0</text>
 <line x1="281.0" y1="465.0" x2="211.4" y2="665.4" stroke="#c0392b" stroke-width="1.6" stroke-dasharray="5 3"/>
@@ -89,4 +89,6 @@
 <text x="824.0" y="240.0" font-size="12" text-anchor="start" fill="#222">USB-C 固定腳（平的）</text>
 <text x="800.0" y="290.0" font-size="12" text-anchor="start" fill="#7a4410">P5 VSYS：飛線繞到正面 W5 的 A 端</text>
 <text x="800.0" y="312.0" font-size="12" text-anchor="start" fill="#7a4410">P6 / P7：電池 pigtail → J1</text>
+<text x="800.0" y="334.0" font-size="12" text-anchor="start" fill="#7a4410">P3 CHRG：絕緣線橫越背板到 GPIO20</text>
+<text x="800.0" y="356.0" font-size="12" text-anchor="start" fill="#7a4410">（板上絲印 IO1；GPIO1 留給喚醒按鈕）</text>
 </svg>

@@ -26,7 +26,8 @@ PCB：`C3_Battery_Backpack_v2.1_Gerber.zip`（12.0 × 12.8 mm，0.6 mm FR4）。
 |---|---|---|---|
 | J1 電池連接線 | 1.25 mm 2P 公母對插線（MX1.25 / Molex PicoBlade 相容） | 1 組 | 板端焊 P6（B+）/ P7（B−）。**每顆電池插上前先量極性** |
 | 電池 | 單節 LiPo，帶保護板，**≥ 400 mAh**（例如 500 mAh）。用 402020（約 110 mAh）、502020（約 150 mAh）這類小電池時 R2 要改 10 kΩ | 1 | 保護板出線朝右（GPIO5–21 那側） |
-| 跳線 | 0.3 mm 鍍錫線 / 30 AWG | 約 25 mm | P1–P4 到 SuperMini 排針 |
+| 跳線 | 0.3 mm 鍍錫線 / 30 AWG | 約 15 mm | P1、P2、P4 到 SuperMini 左排排針 |
+| CHRG 線 | 30 AWG 絕緣線 | 約 15 mm | P3 橫越背板到右排 **GPIO20**（板上絲印 IO1） |
 | VSYS 飛線 | 28–30 AWG 絕緣線 | 約 20 mm | P5 到正面 W5 的 A 端 |
 | 絕緣 / 固定 | Kapton 膠帶、0.5–1 mm 泡棉雙面膠 | 少量 | |
 

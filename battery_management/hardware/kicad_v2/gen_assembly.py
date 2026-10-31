@@ -16,7 +16,7 @@ OUT = os.path.join(HERE, "ASSEMBLY.svg")
 S = 60                          # px / mm
 MX, MY = 150, 110
 EDGE_NAME = {"P1": "5V", "P2": "G", "P3": "IO1", "P4": "IO0", "P5": "VSYS", "P6": "B+", "P7": "B-"}
-EDGE_TO = {"P1": "→ 5V 排針", "P2": "→ G 排針", "P3": "→ GPIO1", "P4": "→ GPIO0",
+EDGE_TO = {"P1": "→ 5V 排針", "P2": "→ G 排針", "P3": "→ GPIO20（右排）", "P4": "→ GPIO0",
            "P5": "→ W5 A 端", "P6": "→ 電池 +", "P7": "→ 電池 −"}
 PIN_NAME = {"Q1": {"1": "G", "2": "S", "3": "D"}}
 BODY = {"U1": "#e3e3e3", "Q1": "#e3e3e3"}
@@ -48,7 +48,7 @@ def mm_xy(v):
     return pcbnew.ToMM(v.x) - B.OX, pcbnew.ToMM(v.y) - B.OY
 
 
-W, H = int(X(B.BW) + 190), int(Y(B.BH) + 130)
+W, H = int(X(B.BW) + 190), int(Y(B.BH) + 155)
 add(f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
     'font-family="Microsoft JhengHei, PingFang TC, Noto Sans CJK TC, sans-serif">')
 add(f'<rect width="{W}" height="{H}" fill="#fff"/>')
@@ -119,6 +119,7 @@ ly = Y(B.BH) + 40
 text(X(0), ly, "U1 TP4054：3 支腳那排朝右，Pin 1（CHRG）在右下", 14, "#222", "start")
 text(X(0), ly + 24, "Q1 AO3401：單腳 D 朝左，Pin 1（G）在右下，S 在右上", 14, "#222", "start")
 text(X(0), ly + 48, "背面印「SUPERMINI SIDE」，貼 SuperMini 背面", 14, "#222", "start")
+text(X(0), ly + 72, "P3 絲印是 IO1，但 CHRG 現在接 GPIO20（右排第 7 根），GPIO1 留給喚醒按鈕", 14, "#c00000", "start")
 add("</svg>")
 
 with open(OUT, "w", encoding="utf-8") as f:

@@ -172,7 +172,7 @@ def silk(text, x, y, h=0.8, align="c", back=False):
 
 silk("5V", 1.3, 0.9, 0.8, "l")
 silk("G", 1.3, 3.4, 0.8, "l")
-silk("IO1", 1.3, BH - 2.3, 0.8, "l")
+silk("IO1", 1.3, BH - 2.3, 0.8, "l")   # v2.1 已下單的絲印；2026-10-31 起 P3 改接 GPIO20，絲印保留不動以免 Gerber 變動
 silk("IO0", 1.3, BH - 0.8, 0.8, "l")
 silk("B+", BW - 1.3, BH - 2.3, 0.8, "r")
 silk("B-", BW - 1.3, BH - 0.8, 0.8, "r")

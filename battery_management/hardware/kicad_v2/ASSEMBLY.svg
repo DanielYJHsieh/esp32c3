@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="1008" viewBox="0 0 1060 1008" font-family="Microsoft JhengHei, PingFang TC, Noto Sans CJK TC, sans-serif">
-<rect width="1060" height="1008" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="1033" viewBox="0 0 1060 1033" font-family="Microsoft JhengHei, PingFang TC, Noto Sans CJK TC, sans-serif">
+<rect width="1060" height="1033" fill="#fff"/>
 <text x="530.0" y="32.0" font-size="22" text-anchor="middle" dominant-baseline="central" fill="#222" font-weight="bold">電池背板 v2.1 手焊組裝圖（零件面朝上，「5V」在左上 = USB 端）</text>
 <text x="530.0" y="64.0" font-size="15" text-anchor="middle" dominant-baseline="central" fill="#555">12 × 12.8 mm；▲ / ● = Pin 1；藍 = 電阻、米色 = 陶瓷電容（無極性）</text>
 <rect x="150" y="110" width="720.0" height="768.0" rx="6" fill="#2f6b3a" stroke="#1d4425" stroke-width="3"/>
@@ -34,7 +34,7 @@
 <rect x="171.0" y="710.0" width="42.0" height="60.0" rx="4" fill="#d9d9d9" stroke="#8a8a8a" stroke-width="1.5"/>
 <text x="192.0" y="740.0" font-size="15" text-anchor="middle" dominant-baseline="central" fill="#333" font-weight="bold">P3</text>
 <text x="136.0" y="730.0" font-size="17" text-anchor="end" dominant-baseline="central" fill="#b35c00" font-weight="bold">IO1</text>
-<text x="136.0" y="752.0" font-size="12" text-anchor="end" dominant-baseline="central" fill="#666">→ GPIO1</text>
+<text x="136.0" y="752.0" font-size="12" text-anchor="end" dominant-baseline="central" fill="#666">→ GPIO20（右排）</text>
 <rect x="171.0" y="800.0" width="42.0" height="60.0" rx="4" fill="#d9d9d9" stroke="#8a8a8a" stroke-width="1.5"/>
 <text x="192.0" y="830.0" font-size="15" text-anchor="middle" dominant-baseline="central" fill="#333" font-weight="bold">P4</text>
 <text x="136.0" y="820.0" font-size="17" text-anchor="end" dominant-baseline="central" fill="#b35c00" font-weight="bold">IO0</text>
@@ -98,4 +98,5 @@
 <text x="150.0" y="918.0" font-size="14" text-anchor="start" dominant-baseline="central" fill="#222">U1 TP4054：3 支腳那排朝右，Pin 1（CHRG）在右下</text>
 <text x="150.0" y="942.0" font-size="14" text-anchor="start" dominant-baseline="central" fill="#222">Q1 AO3401：單腳 D 朝左，Pin 1（G）在右下，S 在右上</text>
 <text x="150.0" y="966.0" font-size="14" text-anchor="start" dominant-baseline="central" fill="#222">背面印「SUPERMINI SIDE」，貼 SuperMini 背面</text>
+<text x="150.0" y="990.0" font-size="14" text-anchor="start" dominant-baseline="central" fill="#c00000">P3 絲印是 IO1，但 CHRG 現在接 GPIO20（右排第 7 根），GPIO1 留給喚醒按鈕</text>
 </svg>

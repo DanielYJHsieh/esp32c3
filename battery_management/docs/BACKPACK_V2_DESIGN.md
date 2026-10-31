@@ -13,9 +13,9 @@
 | 充電 IC | TP4054（SOT-23-5），預設 R_PROG = 5.1 kΩ → **196 mA**（≥ 400 mAh 電池；小電池用 10 kΩ → 100 mA） |
 | 電源路徑 | **Load-sharing**：USB 經板上 PD1 (BAT60J) 供 VSYS；電池經 P-MOS (AO3401A) 供 VSYS，Gate 接 VBUS |
 | 板子改造 | **不再改 W5/PD1**（若 v1 已抬腳，要焊回去）；**拆掉電源 LED 或 UR7** |
-| 與 SuperMini 連接 | `5V(VBUS) / GND / GPIO1 / GPIO0` 焊墊 + **1 條飛線到 PD1 陰極（VSYS，藍點 A）** |
+| 與 SuperMini 連接 | `5V(VBUS) / GND / GPIO20 / GPIO0` 焊墊 + **1 條飛線到 PD1 陰極（VSYS，藍點 A）** |
 | 電量偵測 | 1 MΩ / 1 MΩ 分壓 + 100 nF → GPIO0 (ADC1_CH0)，常駐約 2 µA，不需 MOSFET/GPIO 控制 |
-| 充電狀態 | TP4054 CHRG → GPIO1（內部上拉；R5、LED 選配） |
+| 充電狀態 | TP4054 CHRG → **GPIO20**（內部上拉；R5、LED 選配）。2026-10-31 由 GPIO1 改過來，GPIO1 留給 deep sleep 喚醒按鈕 |
 | 電池連接器 | **Molex PicoBlade 1.25 mm 2P SMD 臥貼**（53261-0271 或相容 MX1.25），替代：JST PH 2.0（S2B-PH-SM4-TB） |
 | 電池 | 帶保護板的單節 LiPo，例如 402025（~150 mAh）/ 502025（~200 mAh） |
 | Deep sleep 整機電流 | 約 **45 µA**（拆 LED 後，主要是板上 ME6211 LDO）；換低 Iq LDO 可降到 ~10 µA（選配） |
@@ -62,7 +62,7 @@
 | 7 | U1 pin5 PROG | R2 → GND | — | 5.1k = 196 mA（預設）；10k = 100 mA（小電池） |
 | 8 | U1 pin2 GND、J1 BAT− | SuperMini **GND 排針** | 黑 | 所有 GND 匯到這裡 |
 | 9 | R3 1M 下端 = R4 1M 上端 = C4 100nF | SuperMini **GPIO0** | — | R4、C4 另一端接 GND |
-| 10 | U1 pin1 CHRG | SuperMini **GPIO1** | 紫 | 充電中 = Low；用 GPIO1 內部上拉 |
+| 10 | U1 pin1 CHRG | SuperMini **GPIO20** | 紫 | 充電中 = Low；用 GPIO20 內部上拉 |
 | 11 | （選配）R5 100k：3.3 排針 → CHRG；LED1 + R6 1k：3.3 → CHRG | — | — | 背面塞電池時 LED 看不到，**背板版不裝** |
 
 電池端：SuperMini 這側焊一段 **1.25 mm 2P 公母對插線**的其中一頭（手焊比 SMD 座容易），電池接另一頭。**每顆新電池插上前，先量極性**。
@@ -108,7 +108,7 @@ SuperMini 是單面板，背面平整（參考 `docs/esp32_c3_supermini_pinout.j
    - Q1 旋轉 180°，單腳 D 朝左往下接 VBAT
    - S（右上）沿右側往上繞過板邊接 W5
    - G（右下）往上接 VBUS
-6. CHRG（紫）沿左側往下接 GPIO1；VBAT/2（綠）接 GPIO0。
+6. CHRG（紫）橫越到右排接 GPIO20；VBAT/2（綠）接 GPIO0。
 7. 電池線從右側 GPIO20/21 兩個焊墊之間出板，接到 J1 板端（見下一節）。
 
 ### 電池連接器 J1 放在哪裡
@@ -119,7 +119,7 @@ J1 放在**右側板邊外（GPIO5–21 那側），平躺貼著板邊**，高�
 | 上方 | 會擋 USB-C 插頭 |
 | 下方 | 會影響天線 |
 | 電路和電池中間 | 對插接頭約 3.2 mm 厚，疊進去會讓總厚度多 3 mm |
-| 左側 | 5V/G/GPIO1/GPIO0 焊墊和走線都在這側 |
+| 左側 | 5V/G/GPIO0 焊墊和走線都在這側 |
 
 右側的 GPIO5–21 這個專案都沒用到，而且電池保護板出線也在右側，線最短。
 
@@ -284,7 +284,7 @@ USB-C VBUS ──┬────────────────────
 
 **(C) 電量偵測與充電狀態**
 ```
- VBAT ── R3 1M ──┬── R4 1M ── GND             3V3 ──┬── R5 100k ──┬──────► GPIO1
+ VBAT ── R3 1M ──┬── R4 1M ── GND             3V3 ──┬── R5 100k ──┬──────► GPIO20
                  │                                  │             │
                  ├── C4 100nF ── GND                └── LED1 ─►|─ R6 1k ─┘   (LED 選配)
                  │                                                │
@@ -303,13 +303,13 @@ USB-C VBUS ──┬────────────────────
 | **VBUS** | 排針 5V、U1.4 (VCC)、C1+、Q1.G、R1 上端 |
 | **VSYS** | 飛線到 PD1 陰極（藍點 A）、Q1.S、C3+ |
 | **VBAT** | J1.1、U1.3 (BAT)、Q1.D、C2+、R3 上端 |
-| **CHRG** | U1.1、R5 下端、R6、GPIO1 |
+| **CHRG** | U1.1、R5 下端、R6、GPIO20 |
 | **VBAT_SENSE** | R3 下端、R4 上端、C4+、GPIO0 |
 | **PROG** | U1.5、R2 |
 | **3V3** | 排針 3.3、R5 上端、LED1 陽極 |
 | **GND** | 排針 G、U1.2、J1.2、C1−、C2−、C3−、C4−、R1、R2、R4 下端 |
 
-> LED1 + R6 串聯：3V3 → LED1 陽極 → LED1 陰極 → R6 1 kΩ → CHRG。只在充電中（有 USB）時亮，不會耗電池的電。R5 與 LED 陽極接同一個 3V3，所以不充電時 LED 兩端 0 V，GPIO1 能讀到乾淨的 High。
+> LED1 + R6 串聯：3V3 → LED1 陽極 → LED1 陰極 → R6 1 kΩ → CHRG。只在充電中（有 USB）時亮，不會耗電池的電。R5 與 LED 陽極接同一個 3V3，所以不充電時 LED 兩端 0 V，GPIO20 能讀到乾淨的 High。
 
 ### 3.3 運作原理
 
@@ -416,7 +416,7 @@ TP4054 規格上限 500 mA（R_PROG = 2 kΩ），晶片約 120 °C 會自動降�
    │ ○ GPIO8             GPIO4 ○ │   ○ = 直通孔，不接
    │ ○ GPIO9             GPIO3 ○ │   ● = 背板有接
    │ ○ GPIO10            GPIO2 ○ │
-   │ ○ GPIO20            GPIO1 ● │ ← CHRG
+   │ ● GPIO20            GPIO1 ○ │ ← GPIO20 = CHRG（GPIO1 留給喚醒按鈕）
    │ ○ GPIO21            GPIO0 ● │ ← VBAT_SENSE
    └───────────────────────────────┘
             天線端（下）
@@ -488,10 +488,10 @@ TP4054 規格上限 500 mA（R_PROG = 2 kΩ），晶片約 120 °C 會自動降�
 | # | 動作 | 期望 |
 |---|------|------|
 | 1 | 只插 USB（無電池） | 板子正常開機；VSYS ≈ 4.7 V；VBAT ≈ 4.2 V（TP4054 空載輸出） |
-| 2 | **確認電池極性**後插上電池，再插 USB | LED1 亮（充電中）；GPIO1 = Low；VSYS ≈ 4.7 V；VBAT 緩慢上升 |
+| 2 | **確認電池極性**後插上電池，再插 USB | LED1 亮（充電中）；GPIO20 = Low；VSYS ≈ 4.7 V；VBAT 緩慢上升 |
 | 3 | 拔 USB | 系統**不重開機**；VSYS ≈ VBAT − 0.03 V；Q1 Gate = 0 V |
 | 4 | 再插 USB | 系統不重開機；VSYS 回到 ~4.7 V |
-| 5 | 充到滿 | LED1 熄滅；GPIO1 = High；VBAT ≈ 4.2 V |
+| 5 | 充到滿 | LED1 熄滅；GPIO20 = High；VBAT ≈ 4.2 V |
 | 6 | 電池供電 deep sleep，串電表量電池電流 | 約 40–50 µA（拆了電源 LED 後） |
 | 7 | 插拔 USB 時跑 WiFi 傳輸（測試 3/4 的壓力版） | 不 brownout |
 
@@ -528,9 +528,11 @@ TP4054 規格上限 500 mA（R_PROG = 2 kΩ），晶片約 120 °C 會自動降�
 
 功能：
 - ADC1_CH0 (GPIO0) + `adc_cali` 曲線校正，取 16 次平均，換算 VBAT（× 2）。
-- GPIO1 讀取充電狀態。
-- 低電量保護：VBAT < 3.30 V 時不開 WiFi，直接 deep sleep，**只靠「開始充電（CHRG 拉低）」喚醒**。
-- 正常時定時喚醒。若目前沒有在充電，也會開啟「插上 USB 開始充電就喚醒」。
+- GPIO20 讀取充電狀態。
+- 低電量保護：VBAT < 3.30 V 時不開 WiFi，直接 deep sleep，1 小時後再檢查。
+- 正常時定時喚醒（12 小時）。
+- **只用計時器喚醒**：C3 只有 GPIO0–5 能從 deep sleep 喚醒，CHRG 在 GPIO20，所以不能「插 USB 開始充電就喚醒」。GPIO1 留給喚醒按鈕。
+- 實板測試程式（Arduino，不需要 ESP-IDF）：[`../firmware/battery_test_v2`](../firmware/battery_test_v2)。
 
 注意事項：
 - **充電中量到的 VBAT 會偏高**（充電電流 × 電池內阻），電量百分比請以未充電時為準。
@@ -550,7 +552,7 @@ TP4054 規格上限 500 mA（R_PROG = 2 kΩ），晶片約 120 °C 會自動降�
   - BAT 端 10 µF。
   - I = 1000 / R_PROG。
   - 有電池反接保護。
-  - **未接電池時 CHRG 會閃爍**，韌體讀 GPIO1 時會看到忽高忽低，屬正常。
+  - **未接電池時 CHRG 會閃爍**，韌體讀 GPIO20 時會看到忽高忽低，屬正常。
 - `AO3401.JPG`：Top View 腳位為 G 左上、S 左下、D 右。
 
 - SuperMini 原廠電路圖：[`docs/esp32-c3-supermini-schematic.png`](../../docs/esp32-c3-supermini-schematic.png)

@@ -138,7 +138,8 @@ place("Device", "C", "C4", "100nF", FP_C6, 42 * G, 60 * G, {"1": "VBAT_SENSE", "
 
 # ---- 接點
 note("接點（邊緣焊墊）：P1–P4 跳線到 SuperMini 排針，P5 飛線到 W5 A 端，P6/P7 接電池", 62 * G, 50 * G)
-pads = [("P1", "5V", "VBUS"), ("P2", "G", "GND"), ("P3", "GPIO1", "CHRG"), ("P4", "GPIO0", "VBAT_SENSE"),
+note("P3 CHRG 接 GPIO20（2026-10-31 起；板上絲印仍是 IO1），GPIO1 留給喚醒按鈕", 62 * G, 52 * G, 1.27)
+pads = [("P1", "5V", "VBUS"), ("P2", "G", "GND"), ("P3", "GPIO20", "CHRG"), ("P4", "GPIO0", "VBAT_SENSE"),
         ("P5", "W5 A", "VSYS"), ("P6", "BAT+", "VBAT"), ("P7", "BAT-", "GND")]
 for k, (ref, val, n) in enumerate(pads):
     place("Connector", "TestPoint", ref, val, FP_P, (64 + k * 7) * G, 58 * G, {"1": n}, in_bom=False)
@@ -160,7 +161,7 @@ doc = f'''(kicad_sch
 		(date "2026-10-23")
 		(rev "2.1")
 		(comment 1 "TP4054 charger + AO3401 load-sharing + VBAT/2 sense")
-		(comment 2 "Connect: P1 5V, P2 G, P3 GPIO1, P4 GPIO0, P5 W5 A end (VSYS), P6/P7 battery")
+		(comment 2 "Connect: P1 5V, P2 G, P3 GPIO20, P4 GPIO0, P5 W5 A end (VSYS), P6/P7 battery")
 	)
 	(lib_symbols
 {lib_syms}

@@ -24,7 +24,7 @@ USB_LEGS = [(4.7, 1.0), (13.3, 1.0), (4.7, 5.2), (13.3, 5.2)]
 PADS = {
     "P1": (0.7, 0.9, "5V", "5V"),
     "P2": (0.7, 3.4, "G", "G"),
-    "P3": (0.7, B.BH - 2.3, "IO1", "1"),
+    "P3": (0.7, B.BH - 2.3, "CHRG", "20"),   # 絲印 IO1；2026-10-31 起接 GPIO20
     "P4": (0.7, B.BH - 0.8, "IO0", "0"),
     "P5": (B.BW - 0.7, 0.9, "VSYS", None),
     "P6": (B.BW - 0.7, B.BH - 2.3, "B+", None),
@@ -104,8 +104,10 @@ for ref, (px, py, name, pin) in PADS.items():
     right = px > B.BW / 2
     text(X(x) + (-16 if right else 16), Y(y) + 4, f"{ref} {name}", 11, "end" if right else "start", "#7a4410")
     if pin is not None:
-        hy = PIN_Y0 + LEFT.index(pin) * PITCH
-        add(f'<line x1="{X(x):.1f}" y1="{Y(y):.1f}" x2="{X(ROW_X[0]):.1f}" y2="{Y(hy):.1f}" stroke="#c0392b" '
+        row = LEFT if pin in LEFT else RIGHT
+        hx = ROW_X[0] if row is LEFT else ROW_X[1]
+        hy = PIN_Y0 + row.index(pin) * PITCH
+        add(f'<line x1="{X(x):.1f}" y1="{Y(y):.1f}" x2="{X(hx):.1f}" y2="{Y(hy):.1f}" stroke="#c0392b" '
             'stroke-width="1.6" stroke-dasharray="5 3"/>')
 
 # 尺寸
@@ -128,6 +130,8 @@ for i, (sw, label) in enumerate([
     text(lx - 16, ly + i * 30, label, 12, "start")
 text(lx - 40, ly + 170, "P5 VSYS：飛線繞到正面 W5 的 A 端", 12, "start", "#7a4410")
 text(lx - 40, ly + 192, "P6 / P7：電池 pigtail → J1", 12, "start", "#7a4410")
+text(lx - 40, ly + 214, "P3 CHRG：絕緣線橫越背板到 GPIO20", 12, "start", "#7a4410")
+text(lx - 40, ly + 236, "（板上絲印 IO1；GPIO1 留給喚醒按鈕）", 12, "start", "#7a4410")
 add("</svg>")
 
 with open(OUT, "w", encoding="utf-8") as f:

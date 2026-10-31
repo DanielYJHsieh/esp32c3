@@ -3,7 +3,11 @@
  *
  * Hardware: battery_management/docs/BACKPACK_V2_DESIGN.md
  *   GPIO0 : VBAT_SENSE = VBAT * R4 / (R3 + R4)  (1M / 1M + 100nF)
- *   GPIO1 : TP4054 CHRG, open-drain, internal pull-up (optional external 100k R5) (LOW = charging)
+ *   GPIO20: TP4054 CHRG, open-drain, internal pull-up (optional external 100k R5) (LOW = charging)
+ *
+ * CHRG moved from GPIO1 to GPIO20 (2026-10-31) to free GPIO1 for a deep-sleep wake button.
+ * Only GPIO0-5 can wake the C3 from deep sleep, so "wake when charging starts" is gone:
+ * wake-up is timer only.
  */
 #include <stdbool.h>
 #include <stdio.h>
@@ -24,12 +28,13 @@ static const char *TAG = "battery";
 #define VBAT_DIVIDER_RATIO  2.0f                    /* (R3 + R4) / R4 = (1M + 1M) / 1M */
 #define VBAT_SAMPLES        16
 
-#define CHRG_GPIO           GPIO_NUM_1
+#define CHRG_GPIO           GPIO_NUM_20
 
 #define VBAT_LOW_WARN_MV    3400
 #define VBAT_CUTOFF_MV      3300
 
 #define SLEEP_INTERVAL_S    (12ULL * 60 * 60)       /* twice a day */
+#define CUTOFF_RECHECK_S    (60ULL * 60)            /* below cutoff: re-check hourly */
 
 RTC_DATA_ATTR static uint32_t s_boot_count;
 
@@ -124,21 +129,11 @@ static void do_work(int vbat_mv, bool charging)
     vTaskDelay(pdMS_TO_TICKS(1000));
 }
 
-static void enter_deep_sleep(bool timer_wakeup)
+static void enter_deep_sleep(uint64_t seconds)
 {
-    if (timer_wakeup) {
-        ESP_ERROR_CHECK(esp_sleep_enable_timer_wakeup(SLEEP_INTERVAL_S * 1000000ULL));
-    }
-    /* Wake when charging starts (CHRG goes LOW). Only arm it while not charging,
-     * otherwise the level-triggered wakeup would fire immediately. */
-    if (!is_charging()) {
-        /* keep the internal pull-up on CHRG during deep sleep */
-        gpio_pullup_en(CHRG_GPIO);
-        gpio_pulldown_dis(CHRG_GPIO);
-        ESP_ERROR_CHECK(esp_deep_sleep_enable_gpio_wakeup(BIT64(CHRG_GPIO),
-                                                          ESP_GPIO_WAKEUP_GPIO_LOW));
-    }
-    ESP_LOGI(TAG, "Deep sleep (timer=%d)", timer_wakeup);
+    /* CHRG is on GPIO20, which cannot wake the C3 from deep sleep: timer only. */
+    ESP_ERROR_CHECK(esp_sleep_enable_timer_wakeup(seconds * 1000000ULL));
+    ESP_LOGI(TAG, "Deep sleep %llu s", (unsigned long long)seconds);
     esp_deep_sleep_start();
 }
 
@@ -164,13 +159,13 @@ void app_main(void)
              charging ? ", charging (reading is elevated)" : "");
 
     if (vbat_mv >= 0 && vbat_mv < VBAT_CUTOFF_MV && !charging) {
-        ESP_LOGW(TAG, "Battery below cutoff, sleeping until charger is connected");
-        enter_deep_sleep(false);
+        ESP_LOGW(TAG, "Battery below cutoff, re-checking in %llu s", (unsigned long long)CUTOFF_RECHECK_S);
+        enter_deep_sleep(CUTOFF_RECHECK_S);
     }
     if (vbat_mv >= 0 && vbat_mv < VBAT_LOW_WARN_MV && !charging) {
         ESP_LOGW(TAG, "Battery low");
     }
 
     do_work(vbat_mv, charging);
-    enter_deep_sleep(true);
+    enter_deep_sleep(SLEEP_INTERVAL_S);
 }
