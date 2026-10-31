@@ -1,7 +1,9 @@
 # 電池背板 v2.1 — BOM（零件清單）
 
 PCB：`C3_Battery_Backpack_v2.1_Gerber.zip`（12.0 × 12.8 mm，0.6 mm FR4）。零件全部焊在 Top 面，手焊。
-零件位置對照 [`render_top.png`](render_top.png)，電路對照 [`C3_Battery_Backpack_schematic.pdf`](C3_Battery_Backpack_schematic.pdf)。
+零件位置與方向對照 **[`ASSEMBLY.png`](ASSEMBLY.png)**（手焊組裝圖，有零件編號），電路對照 [`C3_Battery_Backpack_schematic.pdf`](C3_Battery_Backpack_schematic.pdf)。
+
+![組裝圖](ASSEMBLY.png)
 
 ## 背板零件
 

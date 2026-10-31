@@ -21,7 +21,7 @@
 
 ## BOM
 
-零件清單：[`BOM.md`](BOM.md)
+零件清單：[`BOM.md`](BOM.md)；手焊組裝圖（零件編號、Pin 1）：[`ASSEMBLY.png`](ASSEMBLY.png)
 
 ## 電路圖
 
@@ -86,7 +86,7 @@
 | P6 | B+ | VBAT | 電池 + |
 | P7 | B- | GND | 電池 − |
 
-零件代號沒有印在板上（板子太小），手焊時對照 `render_top.png` 或 `../../docs/BACKPACK_V2_LAYOUT.png`。
+零件代號沒有印在板上（板子太小），手焊時對照 [`ASSEMBLY.png`](ASSEMBLY.png)。
 
 背面絲印「SUPERMINI SIDE」，表示這面貼 SuperMini。
 
@@ -100,6 +100,7 @@ python gen_sch.py
 "D:\Program Files\KiCad\bin\kicad-cli.exe" pcb export gerbers -o gerber --layers F.Cu,B.Cu,F.Mask,B.Mask,F.Silkscreen,B.Silkscreen,Edge.Cuts C3_Battery_Backpack.kicad_pcb
 "D:\Program Files\KiCad\bin\kicad-cli.exe" pcb export drill -o gerber/ --format excellon --excellon-units mm C3_Battery_Backpack.kicad_pcb
 python gen_outline.py
+"D:\Program Files\KiCad\bin\python.exe" gen_assembly.py   # ASSEMBLY.svg，PNG 用下面的 Edge 指令截圖
 "D:\Program Files\KiCad\bin\kicad-cli.exe" sch export pdf -o C3_Battery_Backpack_schematic.pdf C3_Battery_Backpack.kicad_sch
 "D:\Program Files\KiCad\bin\kicad-cli.exe" sch export svg -o . C3_Battery_Backpack.kicad_sch   # 輸出 C3_Battery_Backpack.svg，改名為 C3_Battery_Backpack_schematic.svg
 ```
@@ -119,5 +120,6 @@ msedge --headless=new --force-device-scale-factor=2 --window-size=1123,794 --scr
 | `route.py` | 自動佈線（A* 格點、雙層）與兩面鋪 GND |
 | `erc.json` / `drc.json` | 最近一次 ERC / DRC 報告 |
 | `gerber/` | Gerber 與鑽孔原始輸出 |
+| `gen_assembly.py` / `ASSEMBLY.svg` / `ASSEMBLY.png` | 手焊組裝圖 |
 | `C3_Battery_Backpack_schematic.pdf` / `.png` / `.svg` | 電路圖輸出 |
 | `render_top.png` / `render_bottom.png` / `top.svg` / `bottom.svg` | PCB 預覽 |
