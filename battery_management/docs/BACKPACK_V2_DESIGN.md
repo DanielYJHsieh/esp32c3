@@ -58,7 +58,7 @@
 | 3 | U1 pin4 VCC | C1 1µF → GND | — | 電容貼近 U1 |
 | 4 | U1 pin3 BAT | Q1 pin3 D、J1 BAT+、C2 10µF → GND、R3 上端 | 藍 | VBAT 網路 |
 | 5 | Q1 pin2 S | **W5 藍點 A 端**（VSYS） | 橘 | 飛線越短越好，用較粗的線（≥ 28AWG） |
-| 6 | Q1 pin2 S | C3 22µF → GND | — | 選配，WiFi 尖峰補強 |
+| 6 | Q1 pin2 S | C3 10µF → GND | — | 選配，WiFi 尖峰補強 |
 | 7 | U1 pin5 PROG | R2 → GND | — | 10k = 100 mA；5.1k = 196 mA |
 | 8 | U1 pin2 GND、J1 BAT− | SuperMini **GND 排針** | 黑 | 所有 GND 匯到這裡 |
 | 9 | R3 1M 下端 = R4 1M 上端 = C4 100nF | SuperMini **GPIO0** | — | R4、C4 另一端接 GND |
@@ -272,7 +272,7 @@ USB-C VBUS ──┬────────────────────
  USB VBUS ──►|── PD1 (板上 W5, BAT60J) ──────────────┬──────► VSYS ──► ME6211 ──► 3V3
                                                      │
                                           S ┌────────┴┐
- VBAT ─────────────────────────────────── D │ Q1      │      C3 22µF (VSYS→GND)
+ VBAT ─────────────────────────────────── D │ Q1      │      C3 10µF (VSYS→GND)
                                             │ AO3401A │
  VBUS ───────────────────┬──────────────── G└─────────┘
                          │
@@ -351,7 +351,7 @@ VBAT ─(Q1 ~25mV)→ VSYS ─(ME6211 壓降 ~100–250 mV @ 100–300 mA)→ 3V
 | LED1 | LED | 紅色 | 0603 | 1 | 選配，充電指示 |
 | C1 | 電容 | 1 µF / 10 V X5R | 0402/0603 | 1 | TP4054 VCC（不要加大） |
 | C2 | 電容 | 10 µF / 10 V X5R | 0603/0805 | 1 | VBAT |
-| C3 | 電容 | 22 µF / 10 V X5R | 0805 | 1 | VSYS 尖峰補強（WiFi TX 瞬間） |
+| C3 | 電容 | 10 µF / 10 V X5R | 0805 | 1 | VSYS 尖峰補強（WiFi TX 瞬間） |
 | C4 | 電容 | 100 nF | 0402/0603 | 1 | ADC 取樣保持 |
 | J1 | 電池座 | Molex PicoBlade 53261-0271（或相容「MX1.25 2P 臥貼」） | 1.25 mm SMD R/A | 1 | 替代：JST PH S2B-PH-SM4-TB |
 | BAT | LiPo | 402025 / 502025 帶保護板，線端壓 1.25 mm 母頭 | — | 1 | 見 4.2 |

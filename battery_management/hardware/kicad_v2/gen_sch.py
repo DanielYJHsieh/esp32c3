@@ -127,7 +127,7 @@ note("Q1 D = 電池、S = VSYS、G = VBUS", 62 * G, 15 * G, 1.27)
 place("Transistor_FET", "TP0610T", "Q1", "AO3401 (A19T)", "Package_TO_SOT_SMD:SOT-23",
       72 * G, 26 * G, {"1": "VBUS", "2": "VSYS", "3": "VBAT"})
 place("Device", "R", "R1", "100k", FP_R, 62 * G, 32 * G, {"1": "VBUS", "2": "GND"})
-place("Device", "C", "C3", "22uF", FP_C8, 84 * G, 26 * G, {"1": "VSYS", "2": "GND"})
+place("Device", "C", "C3", "10uF", FP_C8, 84 * G, 26 * G, {"1": "VSYS", "2": "GND"})
 note("插 USB：VSYS 由 USB 經 SuperMini 的 W5 供電，Q1 關閉；拔 USB：Q1 導通，電池供 VSYS", 62 * G, 42 * G, 1.27)
 
 # ---- 電量偵測

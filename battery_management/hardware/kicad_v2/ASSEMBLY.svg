@@ -17,7 +17,7 @@
 <rect x="745.5" y="461.0" width="87.0" height="60.0" rx="4" fill="#d9d9d9" stroke="#8a8a8a" stroke-width="1.5"/>
 <rect x="759.0" y="390.5" width="60.0" height="86.9" rx="5" fill="#f4e3c4" stroke="#333" stroke-width="2"/>
 <text x="782.0" y="434.0" font-size="17" text-anchor="middle" dominant-baseline="central" fill="#000" font-weight="bold" transform="rotate(-90 782.0 434.0)">C3</text>
-<text x="801.0" y="434.0" font-size="12" text-anchor="middle" dominant-baseline="central" fill="#333" transform="rotate(-90 801.0 434.0)">22uF</text>
+<text x="801.0" y="434.0" font-size="12" text-anchor="middle" dominant-baseline="central" fill="#333" transform="rotate(-90 801.0 434.0)">10uF</text>
 <rect x="355.5" y="783.5" width="57.0" height="54.0" rx="4" fill="#d9d9d9" stroke="#8a8a8a" stroke-width="1.5"/>
 <rect x="355.5" y="690.5" width="57.0" height="54.0" rx="4" fill="#d9d9d9" stroke="#8a8a8a" stroke-width="1.5"/>
 <rect x="354.0" y="726.1" width="60.0" height="75.9" rx="5" fill="#f4e3c4" stroke="#333" stroke-width="2"/>
