@@ -1,0 +1,128 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-31T19:18:23",
+    "ignored_checks": [
+        {
+            "description": "Footprint has no courtyard defined",
+            "key": "missing_courtyard"
+        },
+        {
+            "description": "Track endpoint not centered on via",
+            "key": "track_not_centered_on_via"
+        },
+        {
+            "description": "Tuning profile track geometries",
+            "key": "tuning_profile_track_geometries"
+        },
+        {
+            "description": "Footprint doesn't match symbol's footprint filters",
+            "key": "footprint_filters_mismatch"
+        },
+        {
+            "description": "Footprint component type doesn't match footprint pads",
+            "key": "footprint_type_mismatch"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.7",
+    "schematic_parity": [],
+    "source": "EPD24_SuperMini_Adapter.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+            "items": [
+                {
+                    "description": "封裝 TP3",
+                    "pos": {
+                        "x": 115.0,
+                        "y": 121.6
+                    },
+                    "uuid": "119e5deb-ba46-4960-8042-58505d1d2c32"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+            "items": [
+                {
+                    "description": "封裝 TP1",
+                    "pos": {
+                        "x": 115.0,
+                        "y": 123.2
+                    },
+                    "uuid": "1eecc491-f98c-4e50-8091-7f3f8b37d3df"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+            "items": [
+                {
+                    "description": "封裝 TP2",
+                    "pos": {
+                        "x": 115.0,
+                        "y": 124.8
+                    },
+                    "uuid": "43595347-e4ea-44f4-a5ae-1aad88bdcd88"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+            "items": [
+                {
+                    "description": "封裝 TP6",
+                    "pos": {
+                        "x": 105.7,
+                        "y": 118.3
+                    },
+                    "uuid": "6e6c3ec0-b2e8-4042-b916-50a173b1b0a6"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+            "items": [
+                {
+                    "description": "封裝 TP4",
+                    "pos": {
+                        "x": 103.1,
+                        "y": 118.3
+                    },
+                    "uuid": "728a9b90-dddf-483e-a9f8-6048742bf89d"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        },
+        {
+            "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+            "items": [
+                {
+                    "description": "封裝 TP5",
+                    "pos": {
+                        "x": 104.4,
+                        "y": 118.3
+                    },
+                    "uuid": "8c02be12-ba79-4014-beb6-9ba7c9f3a67c"
+                }
+            ],
+            "severity": "warning",
+            "type": "lib_footprint_issues"
+        }
+    ]
+}

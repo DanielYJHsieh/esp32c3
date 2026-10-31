@@ -1,0 +1,128 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-10-31T19:18:51",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning",
+        "exclusion"
+    ],
+    "kicad_version": "10.0.7",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/3c1e7a90-5b2d-4f6e-8a14-9d2c0b7e5f31",
+            "violations": [
+                {
+                    "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+                    "items": [
+                        {
+                            "description": "符號 TP4 [TestPoint]",
+                            "pos": {
+                                "x": 309.88,
+                                "y": 243.84
+                            },
+                            "uuid": "bf86b158-9fcb-4a03-ba3d-0e9f49cafd2a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+                    "items": [
+                        {
+                            "description": "符號 TP5 [TestPoint]",
+                            "pos": {
+                                "x": 330.2,
+                                "y": 243.84
+                            },
+                            "uuid": "09fd1c18-7704-4e59-adf2-046d2e9a9388"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+                    "items": [
+                        {
+                            "description": "符號 TP6 [TestPoint]",
+                            "pos": {
+                                "x": 350.52,
+                                "y": 243.84
+                            },
+                            "uuid": "c55ff93c-2d49-4183-a09d-4c94ea65380e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+                    "items": [
+                        {
+                            "description": "符號 TP1 [TestPoint]",
+                            "pos": {
+                                "x": 355.6,
+                                "y": 147.32
+                            },
+                            "uuid": "c8bfda47-08da-4286-bf50-374a79ce49d3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+                    "items": [
+                        {
+                            "description": "符號 TP2 [TestPoint]",
+                            "pos": {
+                                "x": 375.92,
+                                "y": 147.32
+                            },
+                            "uuid": "f5895410-5280-4ecb-be4d-e6e43e6ed920"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "目前的配置不包含封裝庫「EPD24_SuperMini」",
+                    "items": [
+                        {
+                            "description": "符號 TP3 [TestPoint]",
+                            "pos": {
+                                "x": 396.24,
+                                "y": 147.32
+                            },
+                            "uuid": "893a6a0d-fb9a-4969-a887-bfc1a6640115"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                }
+            ]
+        }
+    ],
+    "source": "EPD24_SuperMini_Adapter.kicad_sch"
+}
