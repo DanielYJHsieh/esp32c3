@@ -59,15 +59,15 @@ battery_management/
 | 特性 | ESP32-C3 | ESP8266 | 優勢 |
 |------|----------|---------|------|
 | **Deep Sleep 電流** | 5μA | 20μA | 🟢 ESP32-C3 省電 4 倍 |
-| **喚醒方式** | Timer, GPIO, ULP | Timer, GPIO | 🟢 ESP32-C3 更多選項 |
+| **喚醒方式** | Timer, GPIO | Timer, GPIO | 🟡 相近 |
 | **ADC 解析度** | 12-bit (0-4095) | 10-bit (0-1024) | 🟢 ESP32-C3 電量監測更精確 |
 | **ADC 衰減** | 0-3.3V (11dB 衰減) | 0-1.0V | 🟢 ESP32-C3 可直接讀取電池電壓 |
 | **工作電壓** | 3.0V - 3.6V | 3.0V - 3.6V | 🟡 相同 |
 | **WiFi 電流** | 平均 120mA | 平均 80mA | 🔴 ESP32-C3 稍高（但 Deep Sleep 補償） |
 | **RTC 記憶體** | 8KB | 512 bytes | 🟢 ESP32-C3 可存更多狀態 |
-| **ULP 協處理器** | ✅ 支援 | ❌ 無 | 🟢 ESP32-C3 可後台處理 |
+| **ULP 協處理器** | ❌ 無（S3、C6 才有） | ❌ 無 | 🟡 相同 |
 
-**結論**: ESP32-C3 的超低 Deep Sleep 功耗與 ULP 協處理器，讓電池續航比 ESP8266 更優秀。
+**結論**: ESP32-C3 的超低 Deep Sleep 功耗與較大的 RTC 記憶體，讓電池續航比 ESP8266 更優秀。
 
 ---
 
@@ -238,9 +238,9 @@ idf.py build flash monitor
 ## 🔧 技術特色
 
 ### 1. ESP32-C3 專屬優化
-- ✅ 利用 **ULP 協處理器** 進行電池電壓監測（不喚醒主 CPU）
-- ✅ **RTC GPIO** 保持狀態，減少重新初始化時間
-- ✅ **RTC Memory** 存儲顯示內容，避免重新下載
+- ✅ **Timer 定時喚醒**讀電池電壓，量完立刻回 Deep Sleep（C3 沒有 ULP 協處理器）
+- ✅ **GPIO hold**（`gpio_hold_en` + `gpio_deep_sleep_hold_en`）讓 E-Paper 控制腳在 Deep Sleep 期間不浮接
+- ✅ **RTC Memory**（8KB）存狀態變數；整張 48KB 畫面放不下，圖片要保留就存 Flash
 
 ### 2. 高精度電量監測
 - 12-bit ADC（4096 階），解析度 ~1mV
@@ -278,13 +278,13 @@ idf.py build flash monitor
 **A**: 可以。ESP32-C3 工作電壓 3.0V-3.6V，鋰電池 3.2V-4.2V 略高，但實測穩定（大多數開發板有穩壓）。若不確定，建議加 LDO。
 
 ### Q2: 為什麼 ESP32-C3 續航比 ESP8266 長這麼多？
-**A**: Deep Sleep 電流差異（5μA vs 20μA），在長時間休眠場景下放大 4 倍。再加上 ULP 協處理器，可進一步降低喚醒頻率。
+**A**: Deep Sleep 電流差異（5μA vs 20μA），在長時間休眠場景下放大 4 倍。
 
 ### Q3: 需要更換充電模組嗎？
 **A**: 不需要。TP4056 同樣適用於 ESP32-C3，接線方式幾乎相同。
 
-### Q4: ULP 協處理器怎麼用？
-**A**: 參考 [SOFTWARE_ARCHITECTURE.md - ULP 應用](docs/SOFTWARE_ARCHITECTURE.md#ulp-協處理器應用)，可用於定時電壓檢測、GPIO 監聽等，主 CPU 不必喚醒。
+### Q4: ESP32-C3 有 ULP 協處理器嗎？
+**A**: 沒有。ESP32-C3 沒有 ULP，Deep Sleep 時無法在背景跑程式。要定時檢查電池，就用 Timer 喚醒、讀完 ADC 立刻回 Deep Sleep；想更省可以用 deep sleep wake stub（喚醒後在 RTC 記憶體裡先跑一小段程式，不必完整開機）。需要 ULP 的話要換 ESP32-S3（RISC-V + FSM ULP）或 ESP32-C6（LP 核心）。詳見 [ESP32C3_POWER_FEATURES.md](docs/ESP32C3_POWER_FEATURES.md#-esp32-c3-沒有-ulp-協處理器)。
 
 ---
 
@@ -300,7 +300,7 @@ idf.py build flash monitor
   - [ ] Deep Sleep 策略
 - [ ] **Phase 3**: 韌體實作
   - [ ] 基礎測試程式
-  - [ ] ULP 協處理器範例
+  - [ ] Deep sleep wake stub 範例（C3 沒有 ULP）
   - [ ] 整合測試
 - [ ] **Phase 4**: 實測與優化
   - [ ] 功耗測試

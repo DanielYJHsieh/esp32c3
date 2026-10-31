@@ -8,13 +8,15 @@
 
 ESP32-C3 支援多種電源模式，可根據應用場景切換：
 
-| 模式 | CPU | WiFi | 藍牙 | RTC | ULP | 電流消耗 | 喚醒時間 |
-|------|-----|------|------|-----|-----|----------|----------|
-| **Active** | ✅ | ✅ | ✅ | ✅ | ✅ | 80-120mA | - |
-| **Modem Sleep** | ✅ | 間歇 | 間歇 | ✅ | ✅ | 20-40mA | 即時 |
-| **Light Sleep** | ⏸️ | ❌ | ❌ | ✅ | ✅ | 800μA | 3-5ms |
-| **Deep Sleep** | ❌ | ❌ | ❌ | ✅ | ✅ | **5μA** | 100-300ms |
-| **Hibernation** | ❌ | ❌ | ❌ | ⏸️ | ❌ | 1μA | 200-400ms |
+| 模式 | CPU | WiFi | 藍牙 | RTC | 電流消耗 | 喚醒時間 |
+|------|-----|------|------|-----|----------|----------|
+| **Active** | ✅ | ✅ | ✅ | ✅ | 80-120mA | - |
+| **Modem Sleep** | ✅ | 間歇 | 間歇 | ✅ | 20-40mA | 即時 |
+| **Light Sleep** | ⏸️ | ❌ | ❌ | ✅ | 800μA | 3-5ms |
+| **Deep Sleep** | ❌ | ❌ | ❌ | ✅ | **5μA** | 100-300ms |
+| **Hibernation** | ❌ | ❌ | ❌ | ⏸️ | 1μA | 200-400ms |
+
+> ESP32-C3 **沒有 ULP 協處理器**，Deep Sleep 時沒有任何處理器在跑，見下方「ESP32-C3 沒有 ULP 協處理器」。
 
 > 💡 **電子紙應用推薦**: **Deep Sleep**，每日喚醒 1-2 次更新顯示，其餘時間休眠。
 
@@ -25,7 +27,7 @@ ESP32-C3 支援多種電源模式，可根據應用場景切換：
 ### 1. Deep Sleep 特性
 
 在 Deep Sleep 模式下：
-- ✅ **保留**: RTC 控制器、RTC 記憶體（8KB）、RTC GPIO、ULP 協處理器
+- ✅ **保留**: RTC 控制器、RTC 記憶體（8KB）、RTC GPIO（GPIO0~5，可喚醒；GPIO6~21 為高阻抗）
 - ❌ **關閉**: CPU、WiFi、藍牙、大部分 GPIO、外設（SPI/I2C/UART）
 - 💾 **RAM**: 主記憶體不保留，需存儲重要數據到 RTC Memory
 - ⚡ **電流**: 典型 **5μA**（@ 3.3V）
@@ -44,47 +46,45 @@ esp_deep_sleep_start();
 ```
 
 #### b) GPIO 喚醒（外部中斷）
+
+ESP32-C3 只有 **GPIO0 ~ GPIO5**（VDD3P3_RTC 供電的腳）能把晶片從 Deep Sleep 喚醒，其他 GPIO 只能喚醒 Light Sleep。
 ```c
-// GPIO9 高電平喚醒
-esp_deep_sleep_enable_gpio_wakeup(BIT(9), ESP_GPIO_WAKEUP_GPIO_HIGH);
+// GPIO1（電池背板 TP4054 CHRG）變 Low = 開始充電時喚醒
+esp_deep_sleep_enable_gpio_wakeup(BIT(1), ESP_GPIO_WAKEUP_GPIO_LOW);
 esp_deep_sleep_start();
 ```
 
-#### c) ULP 協處理器喚醒
-```c
-// ULP 程式執行後，根據條件喚醒主 CPU
-esp_sleep_enable_ulp_wakeup();
-ulp_run(&ulp_entry); // 啟動 ULP 程式
-esp_deep_sleep_start();
-```
-
-#### d) EXT0/EXT1 喚醒（特定 GPIO）
-```c
-// EXT0: 單一 GPIO，支援低/高電平觸發
-esp_sleep_enable_ext0_wakeup(GPIO_NUM_5, 1); // GPIO5 高電平喚醒
-```
+> ESP32-C3 **不支援 EXT0 / EXT1 喚醒**（`esp_sleep_enable_ext0_wakeup()` / `ext1` 是 ESP32、S2、S3 的 API）。C3 的 Deep Sleep 喚醒源只有 Timer 和上面的 GPIO 喚醒。
 
 ### 3. RTC Memory 應用
 
 RTC Memory 在 Deep Sleep 期間保持數據，用於：
-- 儲存顯示內容（避免重新下載）
 - 儲存 WiFi 連線資訊（加速重連）
-- 儲存狀態變數（如更新計數）
+- 儲存狀態變數（如更新計數、上次電池電壓、上次顯示內容的版本號）
 
 **範例**:
 ```c
-RTC_DATA_ATTR int boot_count = 0;  // 宣告 RTC 變數
-RTC_DATA_ATTR uint8_t display_buffer[48000]; // E-Paper framebuffer
+RTC_DATA_ATTR static uint32_t boot_count = 0;        // 宣告 RTC 變數
+RTC_DATA_ATTR static uint32_t last_content_hash = 0; // 上次顯示內容的版本 / hash
 
-void setup() {
+void app_main(void)
+{
     boot_count++;
-    Serial.printf("開機次數: %d\n", boot_count);
-    
-    // 使用 display_buffer，無需重新下載圖片
+    ESP_LOGI(TAG, "開機次數: %" PRIu32, boot_count);
+
+    // 內容沒變就不用刷新，直接回去睡
+    if (new_content_hash == last_content_hash) {
+        esp_deep_sleep_start();
+    }
 }
 ```
 
 **RTC Memory 容量**: 8KB（ESP32-C3），相比 ESP8266 的 512 bytes 大 16 倍！
+
+> ⚠️ **整張 framebuffer 放不進 RTC Memory**：800×480 黑白一張就要 48,000 bytes，C3 的 RTC Memory 只有 8KB（C3 只有 RTC FAST memory，所有 `RTC_DATA_ATTR` 變數都放這裡）。
+> - 電子紙**斷電也會保留畫面**，不需要為了「維持顯示」保存 framebuffer。
+> - 要保留圖片避免重新下載，就存到 **Flash**（NVS 或自訂資料分區），醒來再讀回 RAM。
+> - RTC Memory 只放小的狀態變數（計數、hash、WiFi channel／BSSID）。
 
 ---
 
@@ -195,55 +195,32 @@ float battery_voltage = voltage_adc * (100 + 33) / 33.0; // 還原電池電壓
 
 ---
 
-## 🚀 ULP 協處理器應用
+## 🚫 ESP32-C3 沒有 ULP 協處理器
 
-### 什麼是 ULP？
+ESP32-C3 **沒有** ULP（Ultra Low Power）協處理器，`esp_sleep_enable_ulp_wakeup()`、`ulp_run()` 在 C3 上不能用。Deep Sleep 時沒有處理器在跑，無法在背景定時讀 ADC、只在電壓過低時才喚醒主 CPU。
 
-ULP (Ultra Low Power) 協處理器是一個簡單的處理器，在 Deep Sleep 時仍可運行：
-- **功耗**: ~150μA（執行時），5μA（休眠時）
-- **時脈**: 8MHz
-- **指令集**: 簡化的組語（RISC-like）
-- **用途**: 定時任務、GPIO 監聽、ADC 讀取
+### 替代做法：定時喚醒電池監測
 
-### 電池監測應用
+**場景**：定期檢查電池電壓，低於門檻才做事
 
-**場景**: 每 10 分鐘檢查電池電壓，低於 3.2V 才喚醒主 CPU
+1. 設定 Timer 喚醒後進入 Deep Sleep
+2. 醒來後先讀 ADC（不開 WiFi，約數 ms）
+3. 電壓正常 → 立刻回 Deep Sleep；過低 → 處理警告
 
-**流程**:
-1. 主 CPU 設定 ULP 程式並進入 Deep Sleep
-2. ULP 每 10 分鐘喚醒，讀取 ADC
-3. 若電壓 < 3.2V，ULP 喚醒主 CPU 發送警告
-4. 否則 ULP 繼續休眠
-
-**優點**: 
-- 主 CPU 不必每 10 分鐘喚醒，節省 95%+ 電量
-- 電池電壓異常時才處理
-
-**ESP-IDF 範例**:
 ```c
-// 主程式設定 ULP
-#include "ulp.h"
-#include "ulp_main.h"
-
-// 啟動 ULP 程式（組語編寫，需單獨編譯）
-ulp_run(&ulp_entry);
-esp_sleep_enable_ulp_wakeup();
+esp_sleep_enable_timer_wakeup(10 * 60 * 1000000ULL);  // 10 分鐘
 esp_deep_sleep_start();
 ```
 
-**ULP 程式** (pseudo-code):
-```asm
-; ULP 組語（簡化）
-entry:
-    ADC_READ GPIO2       ; 讀取 ADC
-    CMP ADC_VALUE, 917   ; 比較是否 < 3.0V (ADC=917)
-    JUMP_IF_LESS wakeup  ; 若低於，喚醒主 CPU
-    HALT 600000          ; 休眠 10 分鐘
-    JUMP entry           ; 重複
+每次醒來不開 WiFi、只讀 ADC，耗電遠小於一次 WiFi 更新。想再省，可用 **deep sleep wake stub**：喚醒後先在 RTC 記憶體裡跑一小段程式，判斷不用處理就直接回去睡，不必完整開機（見參考資料）。
 
-wakeup:
-    WAKE                 ; 喚醒主 CPU
-```
+### 需要 ULP 時
+
+| 晶片 | 低功耗處理器 |
+|------|--------------|
+| ESP32-C3 | ❌ 無 |
+| ESP32-S3 | ✅ ULP（RISC-V + FSM） |
+| ESP32-C6 | ✅ LP 核心（RISC-V） |
 
 ---
 
@@ -271,14 +248,25 @@ void fast_wifi_connect() {
 
 ### 2. 部分硬體保持供電
 
-**場景**: E-Paper 需要保持 BUSY 引腳狀態
+**場景**: Deep Sleep 期間讓 E-Paper 的 RES（GPIO5）保持 High，不要浮接
+
+ESP32-C3 上用 `gpio_hold_en()` 加 `gpio_deep_sleep_hold_en()`（只呼叫 `gpio_hold_en()` 在 Deep Sleep 期間不會保持；`rtc_gpio_*` 是 ESP32、S2、S3 的 API）。
 ```c
-// 設定 RTC GPIO，Deep Sleep 期間保持輸出
-rtc_gpio_init(GPIO_NUM_5);
-rtc_gpio_set_direction(GPIO_NUM_5, RTC_GPIO_MODE_OUTPUT_ONLY);
-rtc_gpio_set_level(GPIO_NUM_5, 1);
-rtc_gpio_hold_en(GPIO_NUM_5); // 鎖定狀態，Deep Sleep 期間保持
+#include "driver/gpio.h"
+
+// 進入 Deep Sleep 前
+gpio_set_direction(GPIO_NUM_5, GPIO_MODE_OUTPUT);
+gpio_set_level(GPIO_NUM_5, 1);
+gpio_hold_en(GPIO_NUM_5);        // 鎖定這支腳
+gpio_deep_sleep_hold_en();       // Deep Sleep 期間保持所有已鎖定的腳
+esp_deep_sleep_start();
+
+// 醒來後：先把腳設回輸出並給好電位，再解除鎖定（解除時會回到預設模式）
+gpio_set_direction(GPIO_NUM_5, GPIO_MODE_OUTPUT);
+gpio_set_level(GPIO_NUM_5, 1);
+gpio_hold_dis(GPIO_NUM_5);
 ```
+> BUSY 是輸入腳，不需要鎖定。
 
 ### 3. 減少 Serial 輸出
 
@@ -316,10 +304,10 @@ esp_log_level_set("*", ESP_LOG_NONE);
 | RTC Memory | 8KB | 512 bytes | ESP32-C3 大 16 倍 |
 | 喚醒時間 | 100-300ms | 300-500ms | ESP32-C3 快 40% |
 | ADC 精度 | 12-bit | 10-bit | ESP32-C3 精度 4 倍 |
-| ULP 協處理器 | ✅ | ❌ | ESP32-C3 獨有 |
+| ULP 協處理器 | ❌ | ❌ | 兩者都沒有（S3、C6 才有） |
 | WiFi 功耗 | 120mA | 80mA | ESP8266 略優 |
 
-**總結**: 對於電池供電的電子紙應用，ESP32-C3 的超低休眠功耗 + ULP 優勢明顯。
+**總結**: 對於電池供電的電子紙應用，ESP32-C3 的超低休眠功耗優勢明顯。
 
 ---
 
@@ -328,4 +316,5 @@ esp_log_level_set("*", ESP_LOG_NONE);
 - [ESP32-C3 Datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf)
 - [ESP32-C3 Low Power Mode Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-guides/low-power-mode.html)
 - [ESP-IDF Sleep Modes API](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-reference/system/sleep_modes.html)
-- [ULP Coprocessor Programming](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-guides/ulp.html)
+- [ESP-IDF GPIO API (ESP32-C3)：gpio_hold_en / gpio_deep_sleep_hold_en](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-reference/peripherals/gpio.html)
+- [Deep-sleep Wake Stubs (ESP32-C3)](https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/api-guides/deep-sleep-stub.html)
