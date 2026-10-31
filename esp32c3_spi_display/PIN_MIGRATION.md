@@ -75,5 +75,5 @@ ESP32-C3 有兩個限制：
 - 測試程式：`../battery_management/firmware/battery_test_v2`（Arduino，`--fqbn esp32:esp32:esp32c3:CDCOnBoot=cdc`）。
 
 ## 不要動的
-- `../EPD24_SuperMini_Adapter_HW/`（整合板）：另一個 session 正在改成同一組腳位。
+- `../EPD24_SuperMini_Adapter_HW/`（整合板）：已改成同一組腳位並 commit（`4217447`），CHRG IO20、SDI IO7、K1/K2 = IO1/IO3（板上已有 100k 上拉），R4 5.1k。韌體照這份改就能直接用在整合板上。
 - 電池背板的 PCB / Gerber：已下單，絲印 P3 仍印「IO1」，實際接 IO20。
