@@ -2,14 +2,14 @@
 	(version "E")
 	(design
 		(source "D:\\0_Arduino\\esp32c3\\EPD24_Mini_Adapter_HW\\kicad\\EPD24_Mini_Adapter.kicad_sch")
-		(date "2026-10-30T13:22:42")
+		(date "2026-11-01T16:47:08")
 		(tool "Eeschema 10.0.7")
 		(sheet
 			(number "1")
 			(name "/")
 			(tstamps "/")
 			(title_block
-				(title "EPD24 Mini Adapter v1.0 (DESPI-C02 mini, JST SH cable)")
+				(title "EPD24 Mini Adapter v1.1 (DESPI-C02 mini, wire pads)")
 				(company)
 				(rev "1.0")
 				(date "2026-10-30")
@@ -57,10 +57,10 @@
 		(comp
 			(ref "C1")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -93,7 +93,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "1324e8fb-f194-48d0-83ad-53db439f3c18")
+			(tstamps "97d09778-8234-4fcc-9e19-04d545331463")
 			(units
 				(unit
 					(name "A")
@@ -111,10 +111,10 @@
 		(comp
 			(ref "C2")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -147,7 +147,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "82b540a8-ffd2-423c-ae2e-a36824ad7158")
+			(tstamps "0b7bbb45-a84a-4106-a820-7cd86a4f7723")
 			(units
 				(unit
 					(name "A")
@@ -165,10 +165,10 @@
 		(comp
 			(ref "C3")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -201,7 +201,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "97ada8e0-2632-4592-8e60-088649fc18a4")
+			(tstamps "fca818fb-334e-4e91-af58-d950ec0fbf20")
 			(units
 				(unit
 					(name "A")
@@ -255,7 +255,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "735d185a-4406-4e08-af6d-f05d0c15fe8b")
+			(tstamps "ed66c751-e190-42ba-a159-48206c4b6889")
 			(units
 				(unit
 					(name "A")
@@ -273,10 +273,10 @@
 		(comp
 			(ref "C5")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -309,7 +309,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "117c7280-8de4-4dbf-a8c5-96de0ce44ef4")
+			(tstamps "55e1fc10-5603-4f98-91e5-3322a0754a4f")
 			(units
 				(unit
 					(name "A")
@@ -363,7 +363,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "02e8a504-d751-4287-9336-016206d12531")
+			(tstamps "1de460a2-0f51-438a-b2de-2946f645308d")
 			(units
 				(unit
 					(name "A")
@@ -417,7 +417,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "45486b61-08fa-45bd-a0ee-5275dae0df5b")
+			(tstamps "12cd5f4b-ec97-446a-921b-e0fd9d872a75")
 			(units
 				(unit
 					(name "A")
@@ -471,7 +471,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "8a6af96d-edff-44ec-9e0e-02fc2d29162c")
+			(tstamps "2d4b67c1-cd61-4a67-9756-6dae2db1e42c")
 			(units
 				(unit
 					(name "A")
@@ -489,10 +489,10 @@
 		(comp
 			(ref "C9")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -525,7 +525,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e65116e2-ba2d-4331-b117-aea15c83e6a5")
+			(tstamps "1f47c8ba-daf0-4527-9c46-9dc54a41a00d")
 			(units
 				(unit
 					(name "A")
@@ -543,10 +543,10 @@
 		(comp
 			(ref "C10")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -579,7 +579,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "51e420f7-b3ff-47aa-92d5-30bf54b83918")
+			(tstamps "01e5f278-ca3d-4297-8d58-63e693b08ba7")
 			(units
 				(unit
 					(name "A")
@@ -597,10 +597,10 @@
 		(comp
 			(ref "C11")
 			(value "4.7uF/25V")
-			(footprint "Capacitor_SMD:C_0603_1608Metric")
+			(footprint "Capacitor_SMD:C_0805_2012Metric")
 			(fields
 				(field
-					(name "Footprint") "Capacitor_SMD:C_0603_1608Metric")
+					(name "Footprint") "Capacitor_SMD:C_0805_2012Metric")
 				(field
 					(name "Datasheet")
 				)
@@ -633,7 +633,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "a1c54a3e-ef43-4dc9-a310-69da16481790")
+			(tstamps "8e89ef2d-c304-492b-b67b-c51f98354d39")
 			(units
 				(unit
 					(name "A")
@@ -687,7 +687,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "120f5e11-c319-48bd-b439-37927ae70c04")
+			(tstamps "4fa7638f-e416-4941-a833-d811c232ae30")
 			(units
 				(unit
 					(name "A")
@@ -741,7 +741,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "5415f807-7fc3-4185-9cb1-89f4a8e95eba")
+			(tstamps "920fa930-4e7d-449c-a5bf-44aa1add9fff")
 			(units
 				(unit
 					(name "A")
@@ -795,7 +795,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "f811e1ad-aafc-4b55-8852-2dd9a91844de")
+			(tstamps "36243af5-8a12-46f3-91f9-d5a138a547ee")
 			(units
 				(unit
 					(name "A")
@@ -849,7 +849,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "4270f1c6-2ee0-4bc0-b16a-8705bdfc1681")
+			(tstamps "0de3d1fe-9b17-45c6-aa20-a5233abf962d")
 			(units
 				(unit
 					(name "A")
@@ -903,7 +903,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "e9f3a1e5-bd41-4157-8411-0c30bfae8d24")
+			(tstamps "32d5e74c-6489-4212-949b-2cea8e75a4ec")
 			(units
 				(unit
 					(name "A")
@@ -989,11 +989,11 @@
 		)
 		(comp
 			(ref "J2")
-			(value "SM08B-SRSS-TB")
-			(footprint "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal")
+			(value "WIRE PADS")
+			(footprint "Connector_PinHeader_2.00mm:PinHeader_1x08_P2.00mm_Vertical")
 			(fields
 				(field
-					(name "Footprint") "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal")
+					(name "Footprint") "Connector_PinHeader_2.00mm:PinHeader_1x08_P2.00mm_Vertical")
 				(field
 					(name "Datasheet")
 				)
@@ -1026,7 +1026,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "0a4c65d7-e38b-41cb-b25f-4fd11743427e")
+			(tstamps "3a0f1148-e341-4c37-81ef-9f634ae94f0e")
 			(units
 				(unit
 					(name "A")
@@ -1098,7 +1098,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "c2a1ced0-e4f7-453f-898b-88e1fc50a785")
+			(tstamps "f76be729-7c1f-4e07-94f7-c6d1b764a21c")
 			(units
 				(unit
 					(name "A")
@@ -1115,11 +1115,11 @@
 		)
 		(comp
 			(ref "Q1")
-			(value "Si1308EDL")
-			(footprint "Package_TO_SOT_SMD:SOT-323_SC-70")
+			(value "AO3400A")
+			(footprint "Package_TO_SOT_SMD:SOT-23")
 			(fields
 				(field
-					(name "Footprint") "Package_TO_SOT_SMD:SOT-323_SC-70")
+					(name "Footprint") "Package_TO_SOT_SMD:SOT-23")
 				(field
 					(name "Datasheet")
 				)
@@ -1148,7 +1148,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "64c2e220-c22a-4503-bffe-a73b63f39daa")
+			(tstamps "96577740-3895-4ad3-8ff2-898d65de1b00")
 			(units
 				(unit
 					(name "A")
@@ -1205,7 +1205,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "201b2a5e-e482-46c4-8cad-2b2eb64d94b0")
+			(tstamps "aea02c99-f323-4a17-8a33-6a3bddedf112")
 			(units
 				(unit
 					(name "A")
@@ -1259,7 +1259,7 @@
 				(names "/")
 				(tstamps "/")
 			)
-			(tstamps "6f3083b2-6b0b-474a-ad95-7d4bb4e6a700")
+			(tstamps "9b601862-315a-43a7-9fdc-6c259b8752c3")
 			(units
 				(unit
 					(name "A")

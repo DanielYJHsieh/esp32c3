@@ -19,15 +19,17 @@ VIA_COST = 12.0
 BOTTOM_COST = 1.6       # 底層每格成本加權：盡量走頂層，底層留給 GND 鋪銅
 TURN_COST = 3.0         # 每轉 45° 的成本：讓走線少轉彎、比較直
 OX, OY = 100.0, 100.0
-BW, BH = 18.0, 21.5
+BW, BH = 18.0, 19.9
 NX, NY = int(round(BW / G)) + 1, int(round(BH / G)) + 1
 
 # 佈線順序與線寬（mm）：升壓迴路先走、走粗；FPC 焊墊只有 0.3mm 寬，訊號線 0.15mm
 WIDTH = {"SW": 0.3, "RESE": 0.3, "3V3": 0.25, "GND": 0.3, "NEG": 0.3, "PREVGH": 0.25, "PREVGL": 0.25}
 DEFAULT_W = 0.15
-ORDER = ["SDI", "VSH", "VDD", "VSL", "PREVGH", "PREVGL", "SW", "RESE", "GDR", "NEG", "3V3", "VGH", "VGL",
-         "VCOM", "VPP", "BUSY", "RES", "DC", "CS", "SCLK"]          # build_pcb.py 自動重試後找到的可行順序          # build_pcb.py 自動重試後找到的可行順序
-# GND 不走線：每個 GND 焊墊旁都有接地過孔（build_pcb.py STITCH），靠兩面鋪銅連接，DRC 確認沒有未連接
+PRE_TRACKS = []   # (網路, (x0, y0), (x1, y1))：build_pcb.py 設定，佈線前先拉的頂層短線
+ORDER = ["VCOM", "PREVGL", "SDI", "VSH", "VDD", "VSL", "PREVGH", "SW", "RESE", "GDR", "NEG", "3V3", "VGH",
+         "VGL", "VPP", "BUSY", "RES", "DC", "CS", "SCLK", "GND"]   # build_pcb.py 自動重試後找到的可行順序
+# GND 最後走：訊號線走完後盡量用線把 GND 焊墊接起來（J2 的 GND 焊點會被兩側訊號線圍住），
+# 走不到的再靠接地過孔（build_pcb.py STITCH）和兩面鋪銅；DRC 確認沒有未連接
 
 
 def to_mm(v):
@@ -175,9 +177,19 @@ def run(board, net, pt, mm, stitches=(), order=None):
         grid.paint_seg(layer, grid.nid(name), a[0], a[1], b[0], b[1], w)
 
     def add_via(name, x, y):
+        for vn, vx, vy in vias:              # 附近已有同網路過孔就共用（避免兩顆鑽孔疊在一起），兩層各補一段線接過去
+            if vn == name and math.hypot(x - vx, y - vy) < VIA_D + 0.05:
+                if (vx, vy) != (x, y):
+                    for L in (0, 1):
+                        add_track(name, L, (x, y), (vx, vy), DEFAULT_W)
+                return
         vias.append((name, x, y))
         for L in (0, 1):
             grid.paint_circle(L, grid.nid(name), x, y, VIA_D / 2)
+
+    # ---- 先拉的短線：同網路相鄰焊墊直接連（例如 FPC pin 15/16 都是 3V3），免得佈線斜接造成銅頸過窄
+    for name, a, b in PRE_TRACKS:
+        add_track(name, 0, a, b, 0.3)
 
     # ---- 先放的接地過孔：被訊號線圍住的小電容 GND 腳直接打到底層鋪銅
     for name, pad_xy, via_xy in stitches:
@@ -215,10 +227,28 @@ def run(board, net, pt, mm, stitches=(), order=None):
                         cells.append((L, ix, iy))
             return cells
 
-        tree = set(pin_cells(pins[0]))
+        def inside(pin, xy):
+            layers, kind, prm = pin
+            if kind == "c":
+                return math.hypot(xy[0] - prm[0], xy[1] - prm[1]) <= prm[2]
+            return prm[0] <= xy[0] <= prm[2] and prm[1] <= xy[1] <= prm[3]
+
+        def with_partners(pin):              # 焊墊加上 PRE_TRACKS 已經直接連好的焊墊
+            cells = set(pin_cells(pin))
+            for nm, a, b in PRE_TRACKS:
+                if nm != name:
+                    continue
+                for p, q in ((a, b), (b, a)):
+                    if inside(pin, p):
+                        for other_pin in pins:
+                            if inside(other_pin, q):
+                                cells |= set(pin_cells(other_pin))
+            return cells
+
+        tree = with_partners(pins[0])
 
         for pin in pins[1:]:
-            target = set(pin_cells(pin))
+            target = with_partners(pin)
             if target & tree:
                 continue
             path = astar(tree, target, blocked, via_ok)

@@ -107,7 +107,7 @@ def note(text, x, y, size=1.8):
 
 G = 2.54
 FP_C0402 = "Capacitor_SMD:C_0402_1005Metric"
-FP_C0603 = "Capacitor_SMD:C_0603_1608Metric"
+FP_C0805 = "Capacitor_SMD:C_0805_2012Metric"
 FP_R0402 = "Resistor_SMD:R_0402_1005Metric"
 FP_SOD = "Diode_SMD:D_SOD-323"
 
@@ -122,39 +122,39 @@ place("Connector_Generic_MountingPin", "Conn_01x24_MountingPin", "J1", "AFC07-S2
 note("pin 1 NC、6 TSCL、7 TSDA 不接；pin 8 BS 接地 = 4 線 SPI", 16 * G, 58 * G, 1.27)
 
 # ---- 排線座（接 MCU）
-note("排線座 J2：JST SH 1.0mm 8P（SM08B-SRSS-TB），腳位順序同 DESPI-C02 的 8pin", 44 * G, 12 * G)
-place("Connector_Generic", "Conn_01x08", "J2", "SM08B-SRSS-TB", "Connector_JST:JST_SH_SM08B-SRSS-TB_1x08-1MP_P1.00mm_Horizontal",
+note("排線焊點 J2：1x8 穿孔、2.0mm 間距，排線直接焊；腳位順序同 DESPI-C02 的 8pin", 44 * G, 12 * G)
+place("Connector_Generic", "Conn_01x08", "J2", "WIRE PADS", "Connector_PinHeader_2.00mm:PinHeader_1x08_P2.00mm_Vertical",
       50 * G, 22 * G, {"1": "3V3", "2": "GND", "3": "SDI", "4": "SCLK", "5": "CS", "6": "DC", "7": "RES", "8": "BUSY"})
 note("ESP32-C3 Super Mini 接法（同 esp32c3_spi_display / epaper_driver.h）：", 44 * G, 34 * G, 1.27)
-note("1 3V3 → 3.3   2 GND → G   3 SDI → IO3   4 SCLK → IO2", 44 * G, 36 * G, 1.27)
+note("1 3V3 → 3.3   2 GND → G   3 SDI → IO3（照 PIN_MIGRATION.md 改腳位後為 IO7）   4 SCLK → IO2", 44 * G, 36 * G, 1.27)
 note("5 CS → IO10   6 DC → IO4   7 RES → IO5   8 BUSY → IO6", 44 * G, 38 * G, 1.27)
-note("J2 的 2 支固定腳（MP）不接", 44 * G, 40 * G, 1.27)
+note("J2 不貼片，排線手焊", 44 * G, 40 * G, 1.27)
 
 # ---- 升壓電路
 note("升壓 / 負壓泵（面板 IC 用 GDR、RESE 控制）", 44 * G, 46 * G)
 place("Device", "L", "L1", "10uH Isat>=1A", "Inductor_SMD:L_1008_2520Metric", 50 * G, 56 * G, {"1": "3V3", "2": "SW"})
-place("Transistor_FET", "Q_NMOS_GSD", "Q1", "Si1308EDL", "Package_TO_SOT_SMD:SOT-323_SC-70", 60 * G, 56 * G,
+place("Transistor_FET", "Q_NMOS_GSD", "Q1", "AO3400A", "Package_TO_SOT_SMD:SOT-23", 60 * G, 56 * G,
       {"1": "GDR", "2": "RESE", "3": "SW"})
 place("Device", "R", "R1", "10k", FP_R0402, 70 * G, 56 * G, {"1": "GDR", "2": "GND"})
 place("Device", "R", "R2", "0.47R 1%", FP_R0402, 78 * G, 56 * G, {"1": "RESE", "2": "GND"})
 place("Device", "D_Schottky", "D3", "B5819WS", FP_SOD, 50 * G, 68 * G, {"2": "SW", "1": "PREVGH"})
-place("Device", "C", "C3", "4.7uF/25V", FP_C0603, 60 * G, 68 * G, {"1": "SW", "2": "NEG"})
+place("Device", "C", "C3", "4.7uF/25V", FP_C0805, 60 * G, 68 * G, {"1": "SW", "2": "NEG"})
 place("Device", "D_Schottky", "D1", "B5819WS", FP_SOD, 70 * G, 68 * G, {"2": "PREVGL", "1": "NEG"})
 place("Device", "D_Schottky", "D2", "B5819WS", FP_SOD, 80 * G, 68 * G, {"2": "NEG", "1": "GND"})
 note("R2 = RESE 電流檢測，固定 0.47Ω（DESPI-C02 DIP 撥 0.47 那側，GDEQ0426T82 實測可用）", 64 * G, 76 * G, 1.27)
-note("D1~D3 原廠 MBR0530（SOD-123）→ B5819WS（SOD-323，40V 1A）", 64 * G, 78 * G, 1.27)
+note("D1~D3 原廠 MBR0530（SOD-123）→ B5819WS（SOD-323，40V 1A）；Q1 原廠 Si1308EDL → AO3400A（SOT-23，JLC Basic）", 64 * G, 78 * G, 1.27)
 
 # ---- 面板電源電容
 note("面板電源電容（靠近 FPC 腳）", 16 * G, 66 * G)
-CAPS = [("C1", "VGL", "4.7uF/25V", FP_C0603), ("C2", "VGH", "4.7uF/25V", FP_C0603),
-        ("C5", "PREVGH", "4.7uF/25V", FP_C0603), ("C11", "PREVGL", "4.7uF/25V", FP_C0603),
-        ("C9", "VSH", "4.7uF/25V", FP_C0603), ("C10", "VSL", "4.7uF/25V", FP_C0603),
+CAPS = [("C1", "VGL", "4.7uF/25V", FP_C0805), ("C2", "VGH", "4.7uF/25V", FP_C0805),
+        ("C5", "PREVGH", "4.7uF/25V", FP_C0805), ("C11", "PREVGL", "4.7uF/25V", FP_C0805),
+        ("C9", "VSH", "4.7uF/25V", FP_C0805), ("C10", "VSL", "4.7uF/25V", FP_C0805),
         ("C7", "VDD", "1uF/25V", FP_C0402), ("C8", "VPP", "1uF/25V", FP_C0402),
         ("C12", "VCOM", "1uF/25V", FP_C0402), ("C6", "3V3", "1uF/25V", FP_C0402),
         ("C4", "3V3", "4.7uF/10V", FP_C0402)]
 for k, (ref, n, val, fp) in enumerate(CAPS):
     place("Device", "C", ref, val, fp, (16 + (k % 6) * 8) * G, (74 + (k // 6) * 12) * G, {"1": n, "2": "GND"})
-note("高壓腳（約 ±20V）用 0603 25V；低壓用 0402。原廠 1uF 為 50V，這裡腳位電壓都低於 10V，用 25V", 16 * G, 98 * G, 1.27)
+note("高壓腳（約 ±20V）用 0805 25V（JLC Basic）；低壓用 0402。原廠 1uF 為 50V，這裡腳位電壓都低於 10V，用 25V", 16 * G, 98 * G, 1.27)
 
 # ------------------------------------------------------------ 寫檔
 lib_syms = "\n".join("\t\t" + blk.replace("\n", "\n\t") for blk in embedded.values())
@@ -165,7 +165,7 @@ doc = f'''(kicad_sch
 	(uuid "{ROOT_UUID}")
 	(paper "A3")
 	(title_block
-		(title "EPD24 Mini Adapter v1.0 (DESPI-C02 mini, JST SH cable)")
+		(title "EPD24 Mini Adapter v1.1 (DESPI-C02 mini, wire pads)")
 		(date "2026-10-30")
 		(rev "1.0")
 		(comment 1 "24-pin SPI e-paper adapter (GDEQ0426T82 / SSD1677), JST SH 8P cable to MCU")
